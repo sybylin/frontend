@@ -1,0 +1,41 @@
+@font-face {
+	font-family: 'Orkney-Light';
+	font-style: normal;
+	font-weight: normal;
+	font-display: swap;
+	src:	url(./orkney-font/Orkney-Light.woff2) format('woff2'),
+				url(./orkney-font/Orkney-Light.woff) format('woff'),
+				url(./orkney-font/Orkney-Light.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Orkney-Regular';
+	font-style: normal;
+	font-weight: normal;
+	font-display: swap;
+	src:	url(./orkney-font/Orkney-Regular.woff2) format('woff2'),
+				url(./orkney-font/Orkney-Regular.woff) format('woff'),
+				url(./orkney-font/Orkney-Regular.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Orkney-Medium';
+	font-style: normal;
+	font-weight: normal;
+	font-display: swap;
+	src:	url(./orkney-font/Orkney-Medium.woff2) format('woff2'),
+				url(./orkney-font/Orkney-Medium.woff) format('woff'),
+				url(./orkney-font/Orkney-Medium.ttf) format('truetype');
+}
+
+.orkney-light {
+	font-family: 'Orkney-Light', Fallback, sans-serif;
+}
+
+.orkney-regular {
+	font-family: 'Orkney-Regular', Fallback, sans-serif;
+}
+
+.orkney-medium {
+	font-family: 'Orkney-Medium', Fallback, sans-serif;
+}

@@ -1,0 +1,43 @@
+* {
+	font-weight: 400
+}
+
+html {
+	scroll-behavior: smooth;
+}
+@media screen and (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+}
+::-webkit-scrollbar-track {
+	background: #383838;
+}
+::-webkit-scrollbar-thumb {
+	background: #939393;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #ababab;
+}
+
+.footer-list > *:not(.q-list) {
+	margin-top: .35em;
+  margin-bottom: .25em;
+}
+.footer-list a {
+	text-decoration: none;
+  color: inherit;
+  padding-left: .7em;
+}
+.footer-list a:hover, .footer-list a:focus {
+	text-decoration: underline;
+  color: inherit;
+}
+
+.q-tab--inactive {
+	opacity: 1 !important;
+}
