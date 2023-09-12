@@ -40,21 +40,16 @@
 		class="bg-light-blue-9 text-white column no-wrap lt-md"
 		side="right"
 	>
-		<q-tabs
-			align="right"
-			outside-arrows
-			inline-label
-		>
-			<q-route-tab
-				icon="account_circle"
-				:to="{ path: $generatePath({ name: 'user' }) }"
-				label="Account"
-			/>
-		</q-tabs>
-		<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
 		<menu-vue :in-drawer="true" />
 		<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
-		<popup style="height: 48px;" />
+		<q-btn
+			square flat color="white"
+			label="User" icon="account_circle"
+			class="btn"
+			:to="{ path: $generatePath({ name: 'user' }) }"
+		/>
+		<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
+		<popup class="btn" />
 	</q-drawer>
 </template>
 
@@ -97,5 +92,8 @@ export default defineComponent({
 }
 .flex {
 	display: inherit;
+}
+.btn {
+	height: 48px;
 }
 </style>

@@ -36,17 +36,17 @@ const routes: RouteRecordRaw[] = [
 						path: '',
 						name: 'user',
 						meta: { requiresAuth: true, level: 'user' },
-						component: () => import('pages/user.vue')
+						component: () => import('pages/user/main.vue')
 					},
 					{
 						path: 'login',
 						name: 'login',
-						component: () => import('pages/login.vue')
+						component: () => import('pages/user/login.vue')
 					},
 					{
 						path: 'creation',
 						name: 'creation',
-						component: () => import('pages/creation.vue')
+						component: () => import('pages/user/creation.vue')
 					}
 				]
 			}

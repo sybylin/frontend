@@ -4,14 +4,29 @@ import localeOptions from 'src/i18n/options';
 import routes from 'src/router/routes';
 import type { RouteRecordRaw } from 'vue-router';
 
-const searchRoute = (childs: RouteRecordRaw[], name: string): RouteRecordRaw | undefined => {
-	for (const r of childs) {
-		if (r.name === name)
-			return r;
-		if (r.children && r.children.length)
-			return searchRoute(r.children, name);
-	}
-	return undefined;
+interface accumulatorRet {
+	name: string;
+	path: string;
+}
+
+const searchRoute = (childs: RouteRecordRaw[], name: string) => {
+	const accumulator: accumulatorRet[] = [];
+	const fnAcc = (chls: RouteRecordRaw[], nm: string, acc: accumulatorRet[]): accumulatorRet | accumulatorRet[] | undefined => {
+		for (const r of chls) {
+			if (r.name === nm) {
+				acc.push({ name: r.name, path: r.path });
+				return { name: r.name, path: r.path };
+			}
+			if (r.children && r.children.length) {
+				acc.push({ name: r.name as string, path: r.path });
+				return fnAcc(r.children, nm, acc);
+			}
+		}
+		return undefined;
+	};
+
+	fnAcc(childs, name, accumulator);
+	return accumulator.filter((e) => e.path !== '/:lang?' && e.path !== '/:catchAll(.*)*');
 };
 
 /**
@@ -23,13 +38,14 @@ export const generatePath = (search: { name?: string, path?: string }): string =
 	if (!search.name && !search.path)
 		throw Error('Search need a name or a path');
 	if (search.name) {
-		const route = searchRoute(routes, search.name);
-		if (!route)
+		const routesList = searchRoute(routes, search.name);
+		const genPath = routesList.reduce((prev, curr) => `${prev}/${curr.path}`, '');
+		if (!routesList.length)
 			throw Error(`Route with name ${search.name} not exist`);
 		const ret = ['/', locale.value];
-		if (route.path.at(0) !== '/')
+		if (genPath.at(0) !== '/')
 			ret.push('/');
-		ret.push(route.path);
+		ret.push(genPath);
 		return ret.join('');
 	}
 	return `/${locale.value}${search.path}`;
