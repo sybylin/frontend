@@ -20,7 +20,8 @@ module.exports = configure(function (/* ctx */) {
 			'custom',
 			'hydratation',
 			'i18n',
-			'route'
+			'route',
+			'authorization'
 		],
 
 		// https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

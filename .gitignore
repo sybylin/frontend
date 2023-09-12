@@ -13,6 +13,7 @@
 **/dist-ssr
 **/temp
 *.local
+.quasar/
 
 # Editor directories and files
 .idea

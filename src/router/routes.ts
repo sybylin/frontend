@@ -13,22 +13,42 @@ const routes: RouteRecordRaw[] = [
 			{
 				path: 'series',
 				name: 'series',
+				meta: { requiresAuth: true, level: 'user' },
 				component: () => import('pages/series.vue')
 			},
 			{
 				path: 'series/:id',
 				name: 'seriesDetail',
+				meta: { requiresAuth: true, level: 'user' },
 				component: () => import('pages/seriesDetail.vue')
 			},
 			{
 				path: 'series/:id/:path',
 				name: 'enigma',
+				meta: { requiresAuth: true, level: 'user' },
 				component: () => import('pages/enigma.vue')
 			},
 			{
 				path: 'user',
-				name: 'user',
-				component: () => import('pages/user.vue')
+				name: 'userMain',
+				children: [
+					{
+						path: '',
+						name: 'user',
+						meta: { requiresAuth: true, level: 'user' },
+						component: () => import('pages/user.vue')
+					},
+					{
+						path: 'login',
+						name: 'login',
+						component: () => import('pages/login.vue')
+					},
+					{
+						path: 'creation',
+						name: 'creation',
+						component: () => import('pages/creation.vue')
+					}
+				]
 			}
 		]
 	}
