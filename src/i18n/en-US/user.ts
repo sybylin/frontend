@@ -1,12 +1,12 @@
 export default {
 	connection: {
-		username: 'username',
+		username: 'pseudonym',
 		lastName: 'last name',
 		email: 'email',
 		password: 'password',
 		passwords: 'passwords',
 		repeatPassword: 'repeat password',
-		alreadyTaken: 'This {key} is already taken',
+		alreadyTaken: 'this {key} is already taken',
 		mandatory: '{key} is mandatory',
 		different: '{key} are different',
 		notExist: '{key} not exist',
