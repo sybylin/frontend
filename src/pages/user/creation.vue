@@ -127,7 +127,7 @@
 							color="light-green-8"
 							size="lg"
 							:label="$capitalize($t('user.connection.step.3.btn'))"
-							:to="{ path: $generatePath({ name: 'user' }) }"
+							:to="{ path: $generatePath({ name: 'login' }) }"
 						/>
 					</div>
 				</q-step>
