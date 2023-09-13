@@ -11,6 +11,10 @@ export default {
 		different: '{key} are different',
 		notExist: '{key} not exist',
 		incorrect: '{key} is incorrect',
+		redirectBtn: {
+			create: 'create a new account',
+			login: 'login to my account'
+		},
 		step: {
 			1: {
 				title: 'create your account',

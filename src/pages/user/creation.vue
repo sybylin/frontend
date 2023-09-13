@@ -105,6 +105,14 @@
 							/>
 						</div>
 					</q-form>
+					<q-separator class="q-mt-lg q-mb-lg" />
+					<div class="row justify-center">
+						<q-btn
+							:label="$capitalize($t('user.connection.redirectBtn.login'))"
+							color="secondary" icon="account_circle"
+							:to="{ path: $generatePath({ name: 'login' }) }"
+						/>
+					</div>
 				</q-step>
 				<q-step
 					:name="2" :done="step > 2"

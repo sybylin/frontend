@@ -3,7 +3,9 @@
 		<header-layout />
 		<q-page-container>
 			<q-page>
-				<router-view />
+				<div>
+					<router-view />
+				</div>
 			</q-page>
 		</q-page-container>
 		<footer-layout />

@@ -2,7 +2,9 @@ import { useI18n } from 'vue-i18n';
 import { boot } from 'quasar/wrappers';
 import localeOptions from 'src/i18n/options';
 import routes from 'src/router/routes';
+
 import type { RouteRecordRaw } from 'vue-router';
+import type { WritableComputedRef } from 'vue';
 
 interface accumulatorRet {
 	name: string;
@@ -30,11 +32,9 @@ const searchRoute = (childs: RouteRecordRaw[], name: string) => {
 };
 
 /**
-  * Generate path with correct lang
-*/
-export const generatePath = (search: { name?: string, path?: string }): string => {
-	const { locale } = useI18n();
-
+ * Generate path with correct lang
+ */
+export const generatePath = (search: { name?: string, path?: string }, locale: WritableComputedRef<string>): string => {
 	if (!search.name && !search.path)
 		throw Error('Search need a name or a path');
 	if (search.name) {
@@ -51,6 +51,11 @@ export const generatePath = (search: { name?: string, path?: string }): string =
 	return `/${locale.value}${search.path}`;
 };
 
+const generatePathForTemplate = (search: { name?: string, path?: string }): string => {
+	const { locale } = useI18n();
+	return generatePath(search, locale);
+};
+
 declare module '@vue/runtime-core' {
 	/**
 	 * Generate path with correct lang
@@ -61,8 +66,8 @@ declare module '@vue/runtime-core' {
 }
 
 export default boot(({ app, router, ssrContext }) => {
-	app.config.globalProperties.$generatePath = generatePath;
-	app.provide('$generatePath', generatePath);
+	app.config.globalProperties.$generatePath = generatePathForTemplate;
+	app.provide('$generatePath', generatePathForTemplate);
 
 	const reg = /^\/(?<lang>[a-zA-Z]{2}-[a-zA-Z]{2})\/?.*$/m;
 	router.beforeEach((to, from, next) => {
