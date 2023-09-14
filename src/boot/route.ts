@@ -39,9 +39,10 @@ export const generatePath = (search: { name?: string, path?: string }, locale: W
 		throw Error('Search need a name or a path');
 	if (search.name) {
 		const routesList = searchRoute(routes, search.name);
-		const genPath = routesList.reduce((prev, curr) => `${prev}/${curr.path}`, '');
+
 		if (!routesList.length)
 			throw Error(`Route with name ${search.name} not exist`);
+		const genPath = routesList.reduce((prev, curr) => `${prev}/${curr.path}`, '');
 		const ret = ['/', locale.value];
 		if (genPath.at(0) !== '/')
 			ret.push('/');
@@ -49,6 +50,19 @@ export const generatePath = (search: { name?: string, path?: string }, locale: W
 		return ret.join('');
 	}
 	return `/${locale.value}${search.path}`;
+};
+
+/**
+ * Check if current path is in target path
+ */
+export const isInCurrentPath = (name: string, fullPath: string, isRoot?: boolean): boolean => {
+	const routesList = searchRoute(routes, name);
+	if (!routesList.length)
+		throw Error(`Route with name ${name} not exist`);
+	const cleanFullPath = fullPath.slice(6);
+	if (isRoot)
+		return cleanFullPath === '/';
+	return cleanFullPath.includes(routesList.reduce((prev, curr) => `${prev}/${curr.path}`, ''));
 };
 
 const generatePathForTemplate = (search: { name?: string, path?: string }): string => {
@@ -62,12 +76,15 @@ declare module '@vue/runtime-core' {
 	 */
   interface ComponentCustomProperties {
 		$generatePath: (search: { name?: string, path?: string }) => string;
+		$isInCurrentPath: (name: string, fullPath: string, isRoot?: boolean) => boolean
   }
 }
 
 export default boot(({ app, router, ssrContext }) => {
 	app.config.globalProperties.$generatePath = generatePathForTemplate;
 	app.provide('$generatePath', generatePathForTemplate);
+	app.config.globalProperties.$isInCurrentPath = isInCurrentPath;
+	app.provide('$isInCurrentPath', isInCurrentPath);
 
 	const reg = /^\/(?<lang>[a-zA-Z]{2}-[a-zA-Z]{2})\/?.*$/m;
 	router.beforeEach((to, from, next) => {

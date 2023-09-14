@@ -1,5 +1,7 @@
 <template>
-	<h1>UserMain</h1>
+	<div class="flex row q-ma-md">
+		<span>Hello</span>
+	</div>
 </template>
 
 <script lang="ts">
