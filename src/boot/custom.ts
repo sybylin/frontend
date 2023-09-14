@@ -1,6 +1,7 @@
 /* eslint-disable eqeqeq */
 import { boot } from 'quasar/wrappers';
 import { api } from 'src/boot/axios';
+import { globalStore } from 'src/stores/global';
 
 /**
  * Capitalize string
@@ -27,8 +28,10 @@ export type authorizationLevel = 'user' | 'moderator' | 'administrator';
 export const checkUserRights = async (role: authorizationLevel): Promise<boolean> => {
 	try {
 		await api.get(`/rights/${role}`);
+		globalStore().setIsConnected(true);
 		return true;
 	} catch (e) {
+		globalStore().setIsConnected(false);
 		return false;
 	}
 };

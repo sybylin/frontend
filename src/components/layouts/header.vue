@@ -15,11 +15,7 @@
 			<template v-if="$q.screen.width > mobileScreen">
 				<menu-vue />
 				<div class="flex">
-					<q-btn
-						square flat size="lg"
-						color="white" icon="account_circle"
-						:to="{ path: $generatePath({ name: 'user' }) }"
-					/>
+					<logout-vue />
 					<q-separator color="white" vertical class="q-mb-sm q-mt-sm" />
 					<popup />
 				</div>
@@ -41,13 +37,8 @@
 		side="right"
 	>
 		<menu-vue :in-drawer="true" />
-		<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
-		<q-btn
-			square flat color="white"
-			label="User" icon="account_circle"
-			class="btn"
-			:to="{ path: $generatePath({ name: 'user' }) }"
-		/>
+		<q-separator v-if="store.isConnected" color="white" inset class="q-mb-sm q-mt-sm" />
+		<logout-vue :in-drawer="true" />
 		<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
 		<popup class="btn" />
 	</q-drawer>
@@ -55,22 +46,27 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { globalStore } from 'src/stores/global';
+import logoutVue from '../menu/logout.vue';
 import menuVue from '../menu/menu.vue';
 import popup from '../menu/popup.vue';
 
 export default defineComponent({
 	name: 'LayoutHeader',
 	components: {
+		logoutVue,
 		menuVue,
 		popup
 	},
 	setup () {
+		const store = globalStore();
 		const openDrawer = ref(false);
 		const mobileScreen = 880;
 
 		const toggleDrawer = () => { openDrawer.value = !openDrawer.value; };
 
 		return {
+			store,
 			openDrawer,
 			mobileScreen,
 			toggleDrawer

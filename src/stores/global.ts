@@ -5,6 +5,7 @@ import type { lang } from 'src/i18n';
 export const globalStore = defineStore('global', () => {
 	const darkMode = ref<boolean>(false);
 	const lang = ref<lang>('en-US');
+	const isConnected = ref<boolean>(false);
 
 	function setDarkMode (val: boolean) {
 		darkMode.value = val;
@@ -16,10 +17,16 @@ export const globalStore = defineStore('global', () => {
 		window.localStorage.setItem('lang', String(val));
 	}
 
+	function setIsConnected (val: boolean) {
+		isConnected.value = val;
+	}
+
 	return {
 		darkMode,
 		lang,
+		isConnected,
 		setDarkMode,
-		setLang
+		setLang,
+		setIsConnected
 	};
 });

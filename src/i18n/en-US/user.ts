@@ -1,4 +1,5 @@
 export default {
+	account: 'account',
 	connection: {
 		username: 'pseudonym',
 		lastName: 'last name',

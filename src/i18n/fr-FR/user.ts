@@ -1,4 +1,5 @@
 export default {
+	account: 'compte',
 	connection: {
 		username: 'pseudonyme',
 		lastName: 'nom de famille',

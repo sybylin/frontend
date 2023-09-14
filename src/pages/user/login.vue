@@ -75,12 +75,14 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { api, xsrfName } from 'src/boot/axios';
 import { generatePath } from 'src/boot/route';
+import { globalStore } from 'src/stores/global';
 
 export default defineComponent({
 	name: 'PageUserLogin',
 	components: {
 	},
 	setup () {
+		const store = globalStore();
 		const router = useRouter();
 		const { locale } = useI18n();
 
@@ -106,14 +108,15 @@ export default defineComponent({
 					.then(async (d) => {
 						try {
 							localStorage.setItem(xsrfName, JSON.stringify(d[xsrfName]));
+							store.setIsConnected(true);
 							await router.push({ path: generatePath({ name: 'user' }, locale) });
 							apiCall.value = false;
 						} catch (e) {
-							console.error('plip', e);
+							console.error('router push to user failed');
 						}
 					})
 					.catch((e) => {
-						console.error(e);
+						console.error('/user/check failed');
 						if (e.response.data.userNotExist)
 							incorrectName.value = true;
 						if (e.response.data.incorrectPassword)
