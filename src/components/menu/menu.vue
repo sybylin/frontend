@@ -3,6 +3,7 @@
 		<template v-for="route in routes" :key="route.name">
 			<div :class="($props.inDrawer) ? 'drawer-btn' : 'btn'">
 				<q-btn
+					v-show="isShow(route)"
 					square flat color="white"
 					:label="$t(route.label)"
 					:icon="route.icon"
@@ -21,6 +22,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { globalStore } from 'src/stores/global';
+
+interface routeList {
+  name: string;
+  icon: string;
+  label: string;
+  isRoot?: boolean;
+  wall?: boolean;
+}
 
 export default defineComponent({
 	name: 'MainMenu',
@@ -32,12 +42,33 @@ export default defineComponent({
 		}
 	},
 	setup () {
+		const store = globalStore();
+
+		const routes: routeList[] = [
+			{
+				name: 'home',
+				icon: 'home',
+				label: 'menu.home',
+				isRoot: true
+			},
+			{
+				name: 'series',
+				icon: 'apps',
+				label: 'menu.series',
+				wall: true
+			},
+			{
+				name: 'account',
+				icon: 'account_circle',
+				label: 'user.account'
+			}
+		];
+
+		const isShow = (route: routeList) => !route.wall || (route.wall && store.isConnected);
+
 		return {
-			routes: [
-				{ name: 'home', icon: 'home', label: 'menu.home', isRoot: true },
-				{ name: 'series', icon: 'apps', label: 'menu.series' },
-				{ name: 'account', icon: 'account_circle', label: 'user.account' }
-			]
+			routes,
+			isShow
 		};
 	}
 });
