@@ -42,7 +42,7 @@
 				</router-link>
 				<div class="q-pa-xs">
 					<q-btn
-						:label="$t('menu.download')"
+						label="tutu"
 						:to="{ path: $generatePath({ name: 'series' }) }"
 						color="light-blue-9"
 						unelevated

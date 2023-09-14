@@ -1,9 +1,16 @@
 <template>
 	<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
 		<template v-for="route in routes" :key="route.name">
-			<div :class="($props.inDrawer) ? 'drawer-btn' : 'btn'">
+			<!--
+			<div
+				v-show="isShow(route)"
+				:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
+			>
+			-->
+			<div
+				:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
+			>
 				<q-btn
-					v-show="isShow(route)"
 					square flat color="white"
 					:label="$t(route.label)"
 					:icon="route.icon"
@@ -11,7 +18,7 @@
 					:to="{ path: $generatePath({ name: route.name }) }"
 				/>
 				<div
-					v-if="$isInCurrentPath(route.name, $route.fullPath, route.isRoot)"
+					v-if="$isInCurrentPath(route.name, $route.path, route.isRoot)"
 					:class="($props.inDrawer) ? 'right-line-if-selected' : 'bottom-line-if-selected'"
 				>
 				</div>
@@ -58,7 +65,7 @@ export default defineComponent({
 				wall: true
 			},
 			{
-				name: 'account',
+				name: 'user',
 				icon: 'account_circle',
 				label: 'user.account'
 			}

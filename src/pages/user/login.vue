@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { api, xsrfName } from 'src/boot/axios';
 import { generatePath } from 'src/boot/route';
@@ -84,6 +84,7 @@ export default defineComponent({
 	setup () {
 		const store = globalStore();
 		const router = useRouter();
+		const route = useRoute();
 		const { locale } = useI18n();
 
 		const name = ref<string | null>(null);
@@ -109,7 +110,10 @@ export default defineComponent({
 						try {
 							localStorage.setItem(xsrfName, JSON.stringify(d[xsrfName]));
 							store.setIsConnected(true);
-							await router.push({ path: generatePath({ name: 'user' }, locale) });
+							if (route.query.redirect)
+								await router.push({ path: route.query.redirect as string });
+							else
+								await router.push({ path: generatePath({ name: 'user' }, locale) });
 							apiCall.value = false;
 						} catch (e) {
 							console.error('router push to user failed');

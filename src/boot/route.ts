@@ -1,68 +1,45 @@
 import { useI18n } from 'vue-i18n';
+import { useLink } from 'vue-router';
 import { boot } from 'quasar/wrappers';
 import localeOptions from 'src/i18n/options';
-import routes from 'src/router/routes';
 
-import type { RouteRecordRaw } from 'vue-router';
 import type { WritableComputedRef } from 'vue';
-
-interface accumulatorRet {
-	name: string;
-	path: string;
-}
-
-const searchRoute = (childs: RouteRecordRaw[], name: string) => {
-	const accumulator: accumulatorRet[] = [];
-	const fnAcc = (chls: RouteRecordRaw[], nm: string, acc: accumulatorRet[]): accumulatorRet | accumulatorRet[] | undefined => {
-		for (const r of chls) {
-			if (r.name === nm) {
-				acc.push({ name: r.name, path: r.path });
-				return { name: r.name, path: r.path };
-			}
-			if (r.children && r.children.length) {
-				acc.push({ name: r.name as string, path: r.path });
-				return fnAcc(r.children, nm, acc);
-			}
-		}
-		return undefined;
-	};
-
-	fnAcc(childs, name, accumulator);
-	return accumulator.filter((e) => e.path !== '/:lang?' && e.path !== '/:catchAll(.*)*');
-};
 
 /**
  * Generate path with correct lang
  */
-export const generatePath = (search: { name?: string, path?: string }, locale: WritableComputedRef<string>): string => {
+export const generatePath = (search: { name?: string, path?: string }, locale: WritableComputedRef<string> | string): string => {
+	const getLocale = (): string => (typeof locale === 'string')
+		? locale
+		: locale.value;
+
 	if (!search.name && !search.path)
 		throw Error('Search need a name or a path');
 	if (search.name) {
-		const routesList = searchRoute(routes, search.name);
-
-		if (!routesList.length)
-			throw Error(`Route with name ${search.name} not exist`);
-		const genPath = routesList.reduce((prev, curr) => `${prev}/${curr.path}`, '');
-		const ret = ['/', locale.value];
-		if (genPath.at(0) !== '/')
-			ret.push('/');
-		ret.push(genPath);
-		return ret.join('');
+		const link = useLink({
+			to: {
+				name: search.name,
+				params: {
+					lang: getLocale()
+				}
+			}
+		});
+		return link.route.value.fullPath;
 	}
-	return `/${locale.value}${search.path}`;
+	return `/${getLocale()}${search.path}`;
 };
 
 /**
- * Check if current path is in target path
+ * Check if user current path is in target path
  */
-export const isInCurrentPath = (name: string, fullPath: string, isRoot?: boolean): boolean => {
-	const routesList = searchRoute(routes, name);
-	if (!routesList.length)
-		throw Error(`Route with name ${name} not exist`);
-	const cleanFullPath = fullPath.slice(6);
+export const isInCurrentPath = (name: string, path: string, isRoot?: boolean): boolean => {
+	const checkPath = useLink({ to: { name } }).route.value.path;
+	let userPath = path.slice(6);
+	if (!userPath.length)
+		userPath = '/';
 	if (isRoot)
-		return cleanFullPath === '/';
-	return cleanFullPath.includes(routesList.reduce((prev, curr) => `${prev}/${curr.path}`, ''));
+		return (userPath === '/');
+	return userPath.startsWith(checkPath);
 };
 
 const generatePathForTemplate = (search: { name?: string, path?: string }): string => {

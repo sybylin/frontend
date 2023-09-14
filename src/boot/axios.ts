@@ -18,9 +18,11 @@ export const api = axios.create({
  */
 api.interceptors.request.use(
 	(c) => {
-		const xsrfHeader = localStorage.getItem(xsrfName);
-		if (xsrfHeader)
-			c.headers.set(xsrfName, JSON.parse(xsrfHeader));
+		if (typeof localStorage !== 'undefined') {
+			const xsrfHeader = localStorage.getItem(xsrfName);
+			if (xsrfHeader)
+				c.headers.set(xsrfName, JSON.parse(xsrfHeader));
+		}
 		return c;
 	},
 	(e) => {

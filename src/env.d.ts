@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { authorizationLevel } from 'src/boot/userRights';
+import type { authorizationLevel } from 'src/boot/authorization';
 
 declare namespace NodeJS {
   interface ProcessEnv {
