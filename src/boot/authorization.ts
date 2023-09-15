@@ -16,8 +16,14 @@ export const checkUserRights = async (role: authorizationLevel): Promise<boolean
 				resolve(true);
 			})
 			.catch((e) => {
-				if (e.response.data.info.code === 'JW_001')
+				switch (e.response.data.info.code) {
+				case 'JW_002':
+					globalStore().setIsConnected(true);
+					break;
+				case 'JW_001':
+				default:
 					globalStore().setIsConnected(false);
+				}
 				resolve(false);
 			});
 	});
@@ -42,30 +48,42 @@ declare module '@vue/runtime-core' {
   }
 }
 
-export default boot(({ app, router }) => {
+export default boot(({ app, router, ssrContext }) => {
 	app.config.globalProperties.$checkUserRight = checkUserRightsBoot;
 	app.provide('$checkUserRight', checkUserRightsBoot);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	router.beforeResolve(async (to, from) => {
-		if (to.meta.requiresAuth && !(await checkUserRights(to.meta.level ?? 'user'))) {
-			if (globalStore().isConnected) {
-				return {
-					...from,
-					query: {
-						to: to.fullPath,
-						error: 'true'
-					}
-				};
-			}
-			return {
-				...from,
-				name: 'login',
-				query: {
-					redirect: to.fullPath
+	/**
+	 * The authorization system must be checked only on the front and not on the
+	 * back, as the back does not have proper access to the browser's cookies and
+	 * storage, and may make a hydration error at any time
+	 */
+	if (!ssrContext) {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		router.beforeResolve(async (to, from) => {
+			if (to.meta.requiresAuth) {
+				const isAuthorization: boolean = await checkUserRights(to.meta.level ?? 'user');
+				const isConnected: boolean = globalStore().isConnected;
+
+				if (!isAuthorization) {
+					return {
+						name: (!isConnected)
+							? 'login'
+							: 'user',
+						params: {
+							lang: to.params.lang ?? globalStore().lang ?? 'en-US'
+						},
+						query: {
+							redirect: (!isConnected)
+								? to.fullPath
+								: undefined,
+							unauthorized: (isConnected)
+								? 'true'
+								: undefined
+						}
+					};
 				}
-			};
-		}
-		return undefined;
-	});
+			}
+			return true;
+		});
+	}
 });

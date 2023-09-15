@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
 					{
 						path: '',
 						name: 'series',
+						meta: { requiresAuth: true, level: 'moderator' },
 						component: () => import('pages/series/main.vue')
 					},
 					{
@@ -35,6 +36,7 @@ const routes: RouteRecordRaw[] = [
 			{
 				path: 'user',
 				name: 'userMain',
+				meta: { noSSR: true },
 				children: [
 					{
 						path: '',

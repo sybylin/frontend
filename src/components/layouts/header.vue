@@ -1,47 +1,49 @@
 <template>
-	<q-header
-		class="bg-light-blue-9 text-white row items-center justify-between"
-		height-hint="98"
-	>
-		<div class="titlebar">
-			<router-link to="/" aria-label="Go to home page">
-				<img
-					src="/imgs/icon.png"
-					alt="Logo of Sibyllin"
-					width="60"
-					height="60"
-				/>
-			</router-link>
-			<template v-if="$q.screen.width > mobileScreen">
-				<menu-vue />
-				<div class="flex">
-					<logout-vue />
-					<q-separator color="white" vertical class="q-mb-sm q-mt-sm" />
-					<popup />
-				</div>
-			</template>
-			<template v-else>
-				<q-btn
-					dense flat
-					size="lg" icon="menu"
-					aria-label="Menu"
-					@click="toggleDrawer"
-				/>
-			</template>
-		</div>
-	</q-header>
-	<q-drawer
-		v-if="$q.screen.width <= mobileScreen"
-		v-model="openDrawer"
-		class="bg-light-blue-9 text-white column no-wrap lt-md"
-		side="right"
-	>
-		<menu-vue :in-drawer="true" />
-		<q-separator v-if="store.isConnected" color="white" inset class="q-mb-sm q-mt-sm" />
-		<logout-vue :in-drawer="true" />
-		<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
-		<popup class="btn" />
-	</q-drawer>
+	<q-no-ssr>
+		<q-header
+			class="bg-light-blue-9 text-white row items-center justify-between"
+			height-hint="98"
+		>
+			<div class="titlebar">
+				<router-link to="/" aria-label="Go to home page">
+					<img
+						src="/imgs/icon.png"
+						alt="Logo of Sibyllin"
+						width="60"
+						height="60"
+					/>
+				</router-link>
+				<template v-if="$q.screen.width > mobileScreen">
+					<menu-vue />
+					<div class="flex">
+						<logout-vue />
+						<q-separator color="white" vertical class="q-mb-sm q-mt-sm" />
+						<popup />
+					</div>
+				</template>
+				<template v-else>
+					<q-btn
+						dense flat
+						size="lg" icon="menu"
+						aria-label="Menu"
+						@click="toggleDrawer"
+					/>
+				</template>
+			</div>
+		</q-header>
+		<q-drawer
+			v-if="$q.screen.width <= mobileScreen"
+			v-model="openDrawer"
+			class="bg-light-blue-9 text-white column no-wrap lt-md"
+			side="right"
+		>
+			<menu-vue :in-drawer="true" />
+			<q-separator v-if="store.isConnected" color="white" inset class="q-mb-sm q-mt-sm" />
+			<logout-vue :in-drawer="true" />
+			<q-separator color="white" inset class="q-mb-sm q-mt-sm" />
+			<popup class="btn" />
+		</q-drawer>
+	</q-no-ssr>
 </template>
 
 <script lang="ts">

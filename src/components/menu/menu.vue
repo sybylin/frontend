@@ -1,13 +1,8 @@
 <template>
 	<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
 		<template v-for="route in routes" :key="route.name">
-			<!--
 			<div
 				v-show="isShow(route)"
-				:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
-			>
-			-->
-			<div
 				:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
 			>
 				<q-btn
