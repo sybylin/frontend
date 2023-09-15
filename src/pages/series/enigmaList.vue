@@ -1,5 +1,16 @@
 <template>
-	<div class="q-pa-xl row items-start q-gutter-md">
+	<div class="row justify-start q-ma-md">
+		<q-btn
+			label="Return"
+			color="secondary"
+			size="1.2em"
+			align="between"
+			unelevated
+			icon="arrow_back"
+			:to="{ name: 'series' }"
+		/>
+	</div>
+	<div class="q-pa-xl row items-center justify-center q-gutter-md">
 		<q-card
 			v-for="(enigma, index) of enigmas" :key="enigma.path"
 			class="card"
@@ -17,7 +28,10 @@
 					:color="(enigma.finish) ? 'orange-7' : 'green-7'"
 					:label="(enigma.finish) ? $t('main.resume') : $t('main.start')"
 					:disable="isDesactivated(enigma, enigmas, index)"
-					:to="!isDesactivated(enigma, enigmas, index) ? { name: 'enigma', params: { id: $route.params.id, path: enigma.path } } : undefined"
+					:to="!isDesactivated(enigma, enigmas, index)
+						? { name: 'enigma', params: { id: $route.params.id, path: enigma.path } }
+						: undefined
+					"
 				/>
 			</q-card-actions>
 		</q-card>

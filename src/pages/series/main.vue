@@ -1,5 +1,5 @@
 <template>
-	<div class="q-pa-xl row items-start q-gutter-md">
+	<div class="q-pa-xl row items-center justify-center q-gutter-md">
 		<q-card
 			v-for="serie of series" :key="serie.id"
 			class="card"
@@ -16,7 +16,7 @@
 					:icon-right="(serie.isStarted) ? 'play_circle' : 'play_arrow'"
 					:color="(serie.isStarted) ? 'green-7' : 'orange-7'"
 					:label="(serie.isStarted) ? $t('main.resume') : $t('main.start')"
-					:to="{ name: 'seriesDetail', params: { id: serie.id } }"
+					:to="{ name: 'enigmaList', params: { id: serie.id } }"
 				/>
 			</q-card-actions>
 		</q-card>

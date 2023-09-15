@@ -13,10 +13,10 @@
 				<div class="col-md-6 col-sm-6 col-12 row justify-end">
 					<div class="column q-mb-md q-pa-xs footer-list width">
 						<span class="text-light-blue-4 text-h6 light">{{ $t('menu.title') }}</span>
-						<router-link :to="{ path: $generatePath({ name: 'home' }) }">
+						<router-link :to="$generatePath({ name: 'home' })">
 							<span>{{ $t('menu.home') }}</span>
 						</router-link>
-						<router-link :to="{ path: $generatePath({ name: 'series' }) }">
+						<router-link :to="$generatePath({ name: 'series' })">
 							<span>{{ $t('menu.series') }}</span>
 						</router-link>
 						<a href="https://discord.gg/PMEFsW3ac9" target="_blank">
@@ -31,7 +31,7 @@
 			<q-separator color="light-blue-8" class="q-mt-md q-mb-md" />
 			<div class="row justify-between items-center q-pl-md q-pr-md">
 				<router-link
-					:to="{ path: $generatePath({ name: 'home' }) }"
+					:to="$generatePath({ name: 'home' })"
 					class="neutral"
 					aria-label="Go to home page"
 				>
@@ -43,7 +43,7 @@
 				<div class="q-pa-xs">
 					<q-btn
 						label="tutu"
-						:to="{ path: $generatePath({ name: 'series' }) }"
+						:to="$generatePath({ name: 'series' })"
 						color="light-blue-9"
 						unelevated
 						rounded

@@ -68,7 +68,7 @@
 					<q-btn
 						:label="$capitalize($t('user.connection.redirectBtn.create'))"
 						color="warning" icon="person_add"
-						:to="{ path: $generatePath({ name: 'creation' }) }"
+						:to="$generatePath({ name: 'creation' })"
 					/>
 				</div>
 			</q-card>
@@ -77,9 +77,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useI18n } from 'vue-i18n';
 import { api, xsrfName } from 'src/boot/axios';
 import { generatePath } from 'src/boot/route';
 import { globalStore } from 'src/stores/global';
@@ -92,7 +91,6 @@ export default defineComponent({
 		const store = globalStore();
 		const router = useRouter();
 		const route = useRoute();
-		const { locale } = useI18n();
 
 		const name = ref<string | null>(null);
 		const incorrectName = ref<boolean>(false);
@@ -120,14 +118,13 @@ export default defineComponent({
 							if (route.query.redirect)
 								await router.push({ path: route.query.redirect as string });
 							else
-								await router.push({ path: generatePath({ name: 'user' }, locale) });
+								await router.push(generatePath({ name: 'user' }, store.lang));
 							apiCall.value = false;
 						} catch (e) {
 							console.error('router push to user failed');
 						}
 					})
 					.catch((e) => {
-						console.error('/user/check failed');
 						if (e.response.data.userNotExist)
 							incorrectName.value = true;
 						if (e.response.data.incorrectPassword)
@@ -136,6 +133,17 @@ export default defineComponent({
 					});
 			}
 		};
+
+		onMounted(() => {
+			watch(name, () => {
+				if (incorrectName.value)
+					incorrectName.value = false;
+			});
+			watch(password, () => {
+				if (incorrectPassword.value)
+					incorrectPassword.value = false;
+			});
+		});
 
 		const onReset = () => {
 			incorrectName.value = false;

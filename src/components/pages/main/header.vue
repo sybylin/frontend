@@ -17,7 +17,7 @@
 						class="q-pa-md q-ma-sm"
 						square color="green-7"
 						:label="$t('menu.series')"
-						:to="{ path: $generatePath({ name: 'series' }) }"
+						:to="$generatePath({ name: 'series' })"
 					/>
 				</div>
 			</div>

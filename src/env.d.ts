@@ -11,8 +11,19 @@ declare namespace NodeJS {
 
 declare module 'vue-router' {
 	interface RouteMeta {
+		/**
+		 * This route requires authentication for access
+		 */
 		requiresAuth?: boolean;
+
+		/**
+		 * The level required for authorization
+		 */
 		level?: authorizationLevel;
+
+		/**
+		 * This route must not be rendered in ssr
+		 */
 		noSSR?: boolean;
 	}
 }

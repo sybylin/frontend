@@ -1,30 +1,33 @@
 <template>
-	<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
-		<template v-for="route in routes" :key="route.name">
-			<div
-				v-show="isShow(route)"
-				:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
-			>
-				<q-btn
-					square flat color="white"
-					:label="$t(route.label)"
-					:icon="route.icon"
-					:class="($props.inDrawer) ? 'drawer-btn-content' : 'btn-content'"
-					:to="{ path: $generatePath({ name: route.name }) }"
-				/>
+	<q-no-ssr>
+		<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
+			<template v-for="route in routes" :key="route.name">
 				<div
-					v-if="$isInCurrentPath(route.name, $route.path, route.isRoot)"
-					:class="($props.inDrawer) ? 'right-line-if-selected' : 'bottom-line-if-selected'"
+					v-show="!route.wall || (route.wall && storeInstance.isConnected)"
+					:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
 				>
+					<q-btn
+						square flat color="white"
+						:label="$t(route.label)"
+						:icon="route.icon"
+						:class="($props.inDrawer) ? 'drawer-btn-content' : 'btn-content'"
+						:to="$generatePath({ name: route.name })"
+					/>
+					<div
+						v-if="$isInCurrentPath(route.name, $route.path, route.isRoot)"
+						:class="($props.inDrawer) ? 'right-line-if-selected' : 'bottom-line-if-selected'"
+					>
+					</div>
 				</div>
-			</div>
-		</template>
-	</div>
+			</template>
+		</div>
+	</q-no-ssr>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, reactive, watch } from 'vue';
 import { globalStore } from 'src/stores/global';
+import { storeToRefs } from 'pinia';
 
 interface routeList {
   name: string;
@@ -44,9 +47,10 @@ export default defineComponent({
 		}
 	},
 	setup () {
-		const store = globalStore();
+		const storeInstance = globalStore();
+		const store = storeToRefs(storeInstance);
 
-		const routes: routeList[] = [
+		const routes = reactive<routeList[]>([
 			{
 				name: 'home',
 				icon: 'home',
@@ -64,13 +68,19 @@ export default defineComponent({
 				icon: 'account_circle',
 				label: 'user.account'
 			}
-		];
+		]);
 
-		const isShow = (route: routeList) => !route.wall || (route.wall && store.isConnected);
+		onMounted(() => {
+			watch(store.isConnected, (v) => {
+				routes[2].name = (v)
+					? 'user'
+					: 'login';
+			});
+		});
 
 		return {
-			routes,
-			isShow
+			storeInstance,
+			routes
 		};
 	}
 });

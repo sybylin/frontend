@@ -110,7 +110,7 @@
 						<q-btn
 							:label="$capitalize($t('user.connection.redirectBtn.login'))"
 							color="secondary" icon="account_circle"
-							:to="{ path: $generatePath({ name: 'login' }) }"
+							:to="$generatePath({ name: 'login' })"
 						/>
 					</div>
 				</q-step>
@@ -135,7 +135,7 @@
 							color="light-green-8"
 							size="lg"
 							:label="$capitalize($t('user.connection.step.3.btn'))"
-							:to="{ path: $generatePath({ name: 'login' }) }"
+							:to="$generatePath({ name: 'login' })"
 						/>
 					</div>
 				</q-step>

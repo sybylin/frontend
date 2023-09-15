@@ -6,6 +6,7 @@ export default {
 	title: 'Sibyllin',
 	catch: 'Enigma',
 	searchError: 'Une erreur s\'est produite lors de la recherche',
+	unauthorized: 'Vous ne disposez pas des droits nécessaires pour accéder à ce contenu',
 	menu: {
 		title: 'Menu',
 		home: 'Accueil',

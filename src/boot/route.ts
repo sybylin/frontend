@@ -3,30 +3,29 @@ import { useLink } from 'vue-router';
 import { boot } from 'quasar/wrappers';
 import localeOptions from 'src/i18n/options';
 
-import type { WritableComputedRef } from 'vue';
-
 /**
  * Generate path with correct lang
+ * Don't forget in setup() to pass user lang
  */
-export const generatePath = (search: { name?: string, path?: string }, locale: WritableComputedRef<string> | string): string => {
-	const getLocale = (): string => (typeof locale === 'string')
-		? locale
-		: locale.value;
+export const generatePath = (
+	search: { name?: string, path?: string },
+	localeLang?: string
+): Record<string, unknown> => {
+	const locale = (localeLang) || useI18n().locale.value;
 
 	if (!search.name && !search.path)
 		throw Error('Search need a name or a path');
 	if (search.name) {
-		const link = useLink({
-			to: {
-				name: search.name,
-				params: {
-					lang: getLocale()
-				}
+		return {
+			name: search.name,
+			params: {
+				lang: locale
 			}
-		});
-		return link.route.value.fullPath;
+		};
 	}
-	return `/${getLocale()}${search.path}`;
+	return {
+		path: `/${locale}${search.path}`
+	};
 };
 
 /**
@@ -42,24 +41,20 @@ export const isInCurrentPath = (name: string, path: string, isRoot?: boolean): b
 	return userPath.startsWith(checkPath);
 };
 
-const generatePathForTemplate = (search: { name?: string, path?: string }): string => {
-	const { locale } = useI18n();
-	return generatePath(search, locale);
-};
-
 declare module '@vue/runtime-core' {
 	/**
 	 * Generate path with correct lang
 	 */
   interface ComponentCustomProperties {
-		$generatePath: (search: { name?: string, path?: string }) => string;
+		$generatePath: (search: { name?: string, path?: string }, localeLang?: string) => Record<string, unknown>;
 		$isInCurrentPath: (name: string, fullPath: string, isRoot?: boolean) => boolean
   }
 }
 
 export default boot(({ app, router, ssrContext }) => {
-	app.config.globalProperties.$generatePath = generatePathForTemplate;
-	app.provide('$generatePath', generatePathForTemplate);
+	app.config.globalProperties.$generatePath = generatePath;
+	app.provide('$generatePath', generatePath);
+
 	app.config.globalProperties.$isInCurrentPath = isInCurrentPath;
 	app.provide('$isInCurrentPath', isInCurrentPath);
 

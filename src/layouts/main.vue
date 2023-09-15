@@ -9,7 +9,7 @@
 						leave-active-class="animated fadeOut"
 					>
 						<div>
-							<template v-if="isRequiresAuth">
+							<template v-if="isRequiresAuth || $route.meta.noSSR === true">
 								<q-no-ssr>
 									<component :is="Component" />
 								</q-no-ssr>
@@ -27,8 +27,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useQuasar } from 'quasar';
 import HeaderLayout from '../components/layouts/header.vue';
 import FooterLayout from '../components/layouts/footer.vue';
 
@@ -40,10 +42,28 @@ export default defineComponent({
 	},
 	setup () {
 		const route = useRoute();
+		const $q = useQuasar();
+		const { t } = useI18n();
+
 		const isRequiresAuth = computed(() => {
 			if (!Object.values(route.meta).length)
 				return false;
 			return (route.meta.noSSR === true || route.meta.requiresAuth === true);
+		});
+
+		onMounted(() => {
+			watch(route, (v) => {
+				console.log('toto');
+				if (Object.keys(v.query).length && Object.prototype.hasOwnProperty.call(v.query, 'unauthorized')) {
+					$q.notify({
+						type: 'negative',
+						icon: 'gpp_maybe',
+						timeout: 5000,
+						position: 'bottom-right',
+						message: t('unauthorized')
+					});
+				}
+			});
 		});
 
 		return {
