@@ -15,23 +15,27 @@
 					<q-input
 						v-model="name"
 						bottom-slots
-						:label="$capitalize($t('user.connection.username'))"
-						:error-message="$capitalize($t('user.connection.notExist', { key: $t('user.connection.username') }))"
-						:error="incorrectName"
 						:disable="apiCall"
-						lazy-rules
-						:rules="[val => val && val.length > 0 || $capitalize($t('user.connection.mandatory', { key: $t('user.connection.username') }))]"
+						:label="$capitalize($t('user.connection.username'))"
+						:error="incorrectName"
+						:error-message="(incorrectName)
+							? $capitalize($t('user.connection.notExist', { key: $t('user.connection.username') }))
+							: undefined
+						"
+						:rules="[val => !incorrectName && val && val.length > 0 || $capitalize($t('user.connection.mandatoryBefore', { key: $t('user.connection.username') }))]"
 					/>
 					<q-input
 						v-model="password"
 						bottom-slots
 						:type="togglePassword ? 'password' : 'text'"
-						:label="$capitalize($t('user.connection.password'))"
-						:error-message="$capitalize($t('user.connection.incorrect', { key: $t('user.connection.password') }))"
-						:error="incorrectPassword"
 						:disable="apiCall"
-						lazy-rules
-						:rules="[val => val && val.length > 0 || $capitalize($t('user.connection.mandatory', { key: $t('user.connection.password') }))]"
+						:label="$capitalize($t('user.connection.password'))"
+						:error="incorrectPassword"
+						:error-message="(incorrectPassword)
+							? $capitalize($t('user.connection.incorrect', { key: $t('user.connection.password') }))
+							: undefined
+						"
+						:rules="[val => !incorrectPassword && val && val.length > 0 || $capitalize($t('user.connection.mandatoryBefore', { key: $t('user.connection.password') }))]"
 					>
 						<template v-slot:append>
 							<q-icon
@@ -42,15 +46,18 @@
 							/>
 						</template>
 					</q-input>
-					<q-toggle v-model="remember" label="Remember me for 7 days" />
+					<q-toggle
+						v-model="remember"
+						:label="$capitalize($t('user.connection.rememberMe'))"
+					/>
 					<div class="row justify-end">
 						<q-btn
-							label="Submit" type="submit"
+							:label="$capitalize($t('user.connection.step.1.submit'))" type="submit"
 							color="primary" size="md"
 							:loading="apiCall"
 						/>
 						<q-btn
-							label="Reset" type="reset"
+							:label="$capitalize($t('user.connection.step.1.reset'))" type="reset"
 							color="primary" flat class="q-ml-sm"
 							:disable="apiCall"
 						/>

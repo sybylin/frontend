@@ -1,6 +1,6 @@
 import main from './main';
 import error from './error';
-// import download from './download';
+import user from './user';
 
 export default {
 	title: 'Sibyllin',
@@ -17,6 +17,6 @@ export default {
 		dark: 'Mode sombre'
 	},
 	main,
-	error
-	// download
+	error,
+	user
 };

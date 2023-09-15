@@ -73,7 +73,7 @@ export default boot(({ app, router, ssrContext }) => {
 							lang: to.params.lang ?? globalStore().lang ?? 'en-US'
 						},
 						query: {
-							redirect: (!isConnected)
+							redirect: (!isConnected && to.name !== 'user')
 								? to.fullPath
 								: undefined,
 							unauthorized: (isConnected)
