@@ -1,7 +1,5 @@
 <template>
-	<div class="flex row q-ma-md">
-		<span>Hello</span>
-	</div>
+	<components-pages-user-profil />
 </template>
 
 <script lang="ts">
@@ -10,9 +8,12 @@ import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
 import meta from 'src/meta';
 
+import ComponentsPagesUserProfil from 'components/pages/user/profil.vue';
+
 export default defineComponent({
 	name: 'PageUserMain',
 	components: {
+		ComponentsPagesUserProfil
 	},
 	setup () {
 		const { t } = useI18n();

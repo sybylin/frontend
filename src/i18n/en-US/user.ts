@@ -21,7 +21,10 @@ export default {
 		password: 'password',
 		passwords: 'passwords',
 		rememberMe: 'remember me for 7 days',
+		forgot: 'i forgot my password',
 		repeatPassword: 'repeat password',
+		newPassword: 'new password',
+		newPasswordRepeat: 'new repeat password',
 		alreadyTaken: 'this {key} is already taken',
 		mandatory: '{key} is mandatory',
 		mandatoryBefore: 'the {key} is mandatory',
@@ -31,6 +34,12 @@ export default {
 		redirectBtn: {
 			create: 'create a new account',
 			login: 'login to my account'
+		},
+		reset: {
+			newPassword: 'enter your new password',
+			start: 'to reset your password, enter the e-mail address linked to your account',
+			startBanner: 'you will received an e-mail containing the link to reset your password',
+			banner: 'your password has been successfully modified'
 		},
 		step: {
 			1: {

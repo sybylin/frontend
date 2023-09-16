@@ -200,8 +200,8 @@ export default defineComponent({
 				}
 				if (isError)
 					return;
+				apiCall.value = true;
 				if (lastName.value) {
-					apiCall.value = true;
 					setTimeout(() => { apiCall.value = false; step.value = 2; }, Math.random() * (1243 - 2549) + 2549);
 					return;
 				}

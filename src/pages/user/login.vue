@@ -67,8 +67,15 @@
 				<div class="row justify-center">
 					<q-btn
 						:label="$capitalize($t('user.connection.redirectBtn.create'))"
-						color="warning" icon="person_add"
+						color="green-7" icon="person_add"
 						:to="$generatePath({ name: 'creation' })"
+					/>
+				</div>
+				<div class="row justify-center q-mt-lg">
+					<q-btn
+						:label="$capitalize($t('user.connection.forgot'))" type="submit"
+						color="warning" size="md"
+						:to="$generatePath({ name: 'resetPassword' })"
 					/>
 				</div>
 			</q-card>

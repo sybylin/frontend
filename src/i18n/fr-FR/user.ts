@@ -21,7 +21,10 @@ export default {
 		password: 'mot de passe',
 		passwords: 'mots de passe',
 		rememberMe: 'se souvenir de moi pendant 7 jours',
+		forgot: 'j\'ai oublié mon mot de passe',
 		repeatPassword: 'répéter le mot de passe',
+		newPassword: 'nouveau mot de passe',
+		newPasswordRepeat: 'répéter le nouveau mot de passe',
 		alreadyTaken: 'cette {key} est déjà prise',
 		mandatory: '{before}{key} est obligatoire',
 		mandatoryBefore: 'le {key} est obligatoire',
@@ -31,6 +34,12 @@ export default {
 		redirectBtn: {
 			create: 'créer un nouveau compte',
 			login: 'se connecter à mon compte'
+		},
+		reset: {
+			newPassword: 'entrez votre nouveau mot de passe',
+			start: 'pour réinitialiser votre mot de passe, entrez l\'adresse e-mail liée à votre compte',
+			startBanner: 'vous recevrez un e-mail contenant le lien pour réinitialiser votre mot de passe',
+			banner: 'votre mot de passe a été modifié avec succès'
 		},
 		step: {
 			1: {
