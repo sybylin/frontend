@@ -53,7 +53,6 @@ export default defineComponent({
 
 		onMounted(() => {
 			watch(route, (v) => {
-				console.log('toto');
 				if (Object.keys(v.query).length && Object.prototype.hasOwnProperty.call(v.query, 'unauthorized')) {
 					$q.notify({
 						type: 'negative',

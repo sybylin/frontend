@@ -146,6 +146,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useMeta } from 'quasar';
+import meta from 'src/meta';
 import isEmail from 'validator/lib/isEmail';
 import { api } from 'src/boot/axios';
 
@@ -157,6 +160,7 @@ export default defineComponent({
 		ComponentsPagesUserTokenValidation
 	},
 	setup () {
+		const { t } = useI18n();
 		const step = ref<number>(1);
 
 		const name = ref<string | null>(null);
@@ -233,6 +237,28 @@ export default defineComponent({
 			password.value = null;
 			repeatPassword.value = null;
 		};
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: t('user.meta.creation.title'),
+					description: t('user.meta.creation.description'),
+					keywords: ['Sibyllin', 'user', 'creation']
+				},
+				og: {
+					url: 'https://sibyllin.app/user/creation',
+					title: t('user.meta.creation.title'),
+					description: t('user.meta.creation.description'),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/user/creation',
+					title: t('user.meta.creation.title'),
+					description: t('user.meta.creation.description'),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		return {
 			mobileScreen: 880,

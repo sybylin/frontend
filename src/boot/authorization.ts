@@ -1,5 +1,5 @@
 import { boot } from 'quasar/wrappers';
-import { api } from 'src/boot/axios';
+import { api, xsrfName } from 'src/boot/axios';
 import { globalStore } from 'src/stores/global';
 
 export type authorizationLevel = 'user' | 'moderator' | 'administrator';
@@ -62,7 +62,7 @@ export default boot(({ app, router, ssrContext }) => {
 		router.beforeResolve(async (to, from) => {
 			if (to.meta.requiresAuth) {
 				const isAuthorization: boolean = await checkUserRights(to.meta.level ?? 'user');
-				const isConnected: boolean = globalStore().isConnected;
+				const isConnected = globalStore().isConnected;
 
 				if (!isAuthorization) {
 					return {
@@ -82,7 +82,11 @@ export default boot(({ app, router, ssrContext }) => {
 						}
 					};
 				}
-			}
+			} else if (
+				!globalStore().isConnected &&
+				typeof window.localStorage !== 'undefined' && localStorage.getItem(xsrfName)
+			)
+				await checkUserRights('user');
 			return true;
 		});
 	}

@@ -79,6 +79,9 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useMeta } from 'quasar';
+import meta from 'src/meta';
 import { api, xsrfName } from 'src/boot/axios';
 import { generatePath } from 'src/boot/route';
 import { globalStore } from 'src/stores/global';
@@ -91,6 +94,7 @@ export default defineComponent({
 		const store = globalStore();
 		const router = useRouter();
 		const route = useRoute();
+		const { t } = useI18n();
 
 		const name = ref<string | null>(null);
 		const incorrectName = ref<boolean>(false);
@@ -134,6 +138,35 @@ export default defineComponent({
 			}
 		};
 
+		const onReset = () => {
+			incorrectName.value = false;
+			incorrectPassword.value = false;
+			name.value = null;
+			password.value = null;
+		};
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: t('user.meta.login.title'),
+					description: t('user.meta.login.description'),
+					keywords: ['Sibyllin', 'user', 'login']
+				},
+				og: {
+					url: 'https://sibyllin.app/user/login',
+					title: t('user.meta.login.title'),
+					description: t('user.meta.login.description'),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/user/login',
+					title: t('user.meta.login.title'),
+					description: t('user.meta.login.description'),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
+
 		onMounted(() => {
 			watch(name, () => {
 				if (incorrectName.value)
@@ -144,13 +177,6 @@ export default defineComponent({
 					incorrectPassword.value = false;
 			});
 		});
-
-		const onReset = () => {
-			incorrectName.value = false;
-			incorrectPassword.value = false;
-			name.value = null;
-			password.value = null;
-		};
 
 		return {
 			mobileScreen: 880,

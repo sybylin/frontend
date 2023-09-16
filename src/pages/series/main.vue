@@ -25,11 +25,39 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useMeta } from 'quasar';
+import meta from 'src/meta';
+
 import { series } from 'src/store';
 
 export default defineComponent({
 	name: 'SeriesPages',
 	setup () {
+		const { t } = useI18n();
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: t('series.meta.main.title'),
+					description: t('series.meta.main.description'),
+					keywords: ['Sibyllin', 'series', 'enigmas', 'selection']
+				},
+				og: {
+					url: 'https://sibyllin.app/series',
+					title: t('series.meta.main.title'),
+					description: t('series.meta.main.description'),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/series',
+					title: t('series.meta.main.title'),
+					description: t('series.meta.main.description'),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
+
 		return {
 			series
 		};

@@ -1,4 +1,18 @@
 export default {
+	meta: {
+		main: {
+			title: 'Account',
+			description: 'Manage your account and much more'
+		},
+		login: {
+			title: 'Login',
+			description: 'Log in into your account'
+		},
+		creation: {
+			title: 'Account creation',
+			description: 'Create a new account'
+		}
+	},
 	account: 'account',
 	connection: {
 		username: 'pseudonym',
