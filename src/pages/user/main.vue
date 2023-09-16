@@ -1,14 +1,15 @@
 <template>
-	<components-pages-user-profil />
+	<components-pages-user-profil :user="user" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
 import meta from 'src/meta';
+import { api } from 'src/boot/axios';
 
-import ComponentsPagesUserProfil from 'components/pages/user/profil.vue';
+import ComponentsPagesUserProfil, { user } from 'src/components/pages/user/profil.vue';
 
 export default defineComponent({
 	name: 'PageUserMain',
@@ -17,6 +18,7 @@ export default defineComponent({
 	},
 	setup () {
 		const { t } = useI18n();
+		const user = ref<user>({} as user);
 
 		useMeta(() => {
 			return meta({
@@ -40,8 +42,15 @@ export default defineComponent({
 			});
 		});
 
+		onMounted(() => {
+			api.get('/user')
+				.then((d) => {
+					user.value = d.data.user;
+				});
+		});
+
 		return {
-			mobileScreen: 880
+			user
 		};
 	}
 });
