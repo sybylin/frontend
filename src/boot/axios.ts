@@ -1,7 +1,9 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
+import { hasAchievement } from './custom';
 
 export const xsrfName = 'x-xsrf-token';
+export const achievementName = 'x-achievement';
 
 export const api = axios.create({
 	baseURL: (import.meta.env.DEV)
@@ -27,7 +29,16 @@ api.interceptors.request.use(
 	},
 	(e) => {
 		if (import.meta.env.DEV)
-			console.error('Axios interceptor', e);
+			console.error('Axios interceptor request', e);
+	}
+);
+
+api.interceptors.response.use(
+	(c) => {
+		const achievementHeader = c.headers[achievementName] as string | null;
+		if (achievementHeader)
+			hasAchievement(achievementHeader);
+		return c;
 	}
 );
 

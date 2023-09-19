@@ -67,6 +67,7 @@ module.exports = configure(function (/* ctx */) {
 			plugins: [
 				'AppFullscreen',
 				'Cookies',
+				'Dialog',
 				'Loading',
 				'LocalStorage',
 				'SessionStorage',

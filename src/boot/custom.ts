@@ -1,5 +1,7 @@
 /* eslint-disable eqeqeq */
 import { boot } from 'quasar/wrappers';
+import { Dialog } from 'quasar';
+import ComponentsAchievementIsEarned from 'components/achievement/isEarned.vue';
 
 /**
  * Capitalize string
@@ -17,6 +19,15 @@ export const os = (): osType => {
 	if (navigator.userAgent.indexOf('Android') != -1) return 'android';
 	if (navigator.userAgent.indexOf('like Mac') != -1) return 'ios';
 	return undefined;
+};
+
+export const hasAchievement = (id: string) => {
+	Dialog.create({
+		component: ComponentsAchievementIsEarned,
+		componentProps: {
+			id
+		}
+	});
 };
 
 declare module '@vue/runtime-core' {

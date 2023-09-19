@@ -2,6 +2,7 @@ import main from './main';
 import error from './error';
 import user from './user';
 import series from './series';
+import achievement from './achievement';
 
 export default {
 	title: 'Sibyllin',
@@ -21,5 +22,6 @@ export default {
 	main,
 	error,
 	user,
-	series
+	series,
+	achievement
 };
