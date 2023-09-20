@@ -14,6 +14,8 @@ export default {
 		}
 	},
 	account: 'account',
+	verify: 'this account is verified',
+	unverify: 'this account is unverified',
 	connection: {
 		username: 'pseudonym',
 		lastName: 'last name',

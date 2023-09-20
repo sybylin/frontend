@@ -1,5 +1,31 @@
 <template>
 	<components-pages-user-profil :user="user" />
+	<q-tabs
+		v-model="tab"
+		class="full-width"
+	>
+		<q-tab name="series" label="Series" />
+		<q-tab name="achievement" label="Achievement" />
+	</q-tabs>
+	<q-tab-panels
+		v-model="tab"
+		keep-alive
+		animated
+		swipeable
+		transition-prev="fade"
+		transition-next="fade"
+	>
+		<q-tab-panel name="series">
+			<div class="text-h4 q-mb-md">
+				series
+			</div>
+		</q-tab-panel>
+		<q-tab-panel name="achievement">
+			<div class="text-h4 q-mb-md">
+				<components-achievement-list :user="true" />
+			</div>
+		</q-tab-panel>
+	</q-tab-panels>
 </template>
 
 <script lang="ts">
@@ -10,15 +36,18 @@ import meta from 'src/meta';
 import { api } from 'src/boot/axios';
 
 import ComponentsPagesUserProfil, { user } from 'src/components/pages/user/profil.vue';
+import ComponentsAchievementList from 'components/achievement/list.vue';
 
 export default defineComponent({
 	name: 'PageUserMain',
 	components: {
-		ComponentsPagesUserProfil
+		ComponentsPagesUserProfil,
+		ComponentsAchievementList
 	},
 	setup () {
 		const { t } = useI18n();
 		const user = ref<user>({} as user);
+		const tab = ref<'series' | 'achievement'>('series');
 
 		useMeta(() => {
 			return meta({
@@ -50,7 +79,8 @@ export default defineComponent({
 		});
 
 		return {
-			user
+			user,
+			tab
 		};
 	}
 });

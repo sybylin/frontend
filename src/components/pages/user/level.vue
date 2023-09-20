@@ -12,8 +12,8 @@
 			</div>
 		</q-linear-progress>
 		<div class="row justify-between full-width q-pl-md q-pr-md q-pt-xs">
-			<span>{{ minLevel }}</span>
-			<span>{{ maxLevel }}</span>
+			<span class="text-weight-bold text-body1">{{ minLevel }}</span>
+			<span class="text-weight-bold text-body1">{{ maxLevel }}</span>
 		</div>
 	</div>
 </template>

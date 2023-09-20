@@ -1,0 +1,152 @@
+<template>
+	<q-input
+		v-model="search"
+		:loading="isSearch"
+		debounce="500"
+		filled type="search"
+		class="q-pb-md"
+	>
+		<template v-slot:append>
+			<q-icon name="search" />
+		</template>
+	</q-input>
+	<div
+		v-if="error"
+		class="row justify-center text-center"
+	>
+		<span class="text-body2">
+			{{ $t('error.api.fail') }}
+		</span>
+	</div>
+	<div
+		v-else
+		class="fit row wrap justify-evenly items-center content-end q-gutter-md"
+	>
+		<q-card
+			v-for="el in achievementsSearch"
+			:key="el.achievement.name"
+			flat
+			bordered
+			style="width: 17em; height: 5.5em;"
+		>
+			<div class="full-width full-height inline row justify-between">
+				<q-img
+					v-if="$q.screen.gt.xs"
+					loading="lazy"
+					radio="1"
+					fit="contain"
+					width="5.5em"
+					height="5.5em"
+					class="q-ml-sm"
+					:alt="`Image of ${el.achievement.name} achievement`"
+					:src="`/imgs/achievement/${el.achievement.name}.png`"
+				/>
+				<div
+					:style="$q.screen.lt.sm ? 'width: 100%' : 'width: calc(100% - 6em)'"
+					class="column justify-between text-center q-pa-sm"
+				>
+					<div
+						class="column justify-evenly"
+						style="height: 88%;"
+					>
+						<span class="text-h4 text-weight-light">
+							{{ $capitalize($t(`achievement.list.${el.achievement.name}.title`)) }}
+						</span>
+						<span class="text-body1">
+							{{ $capitalize($t(`achievement.list.${el.achievement.name}.description`)) }}
+						</span>
+					</div>
+					<span class="row justify-end text-caption">
+						{{ calcDate(el.unlocking_date) }}
+					</span>
+				</div>
+			</div>
+		</q-card>
+	</div>
+</template>
+
+<script lang=ts>
+import { defineComponent, onMounted, ref, watch } from 'vue';
+import { api } from 'src/boot/axios';
+import { useI18n } from 'vue-i18n';
+
+interface achievementRet {
+	unlocking_date: Date;
+  achievement: {
+		tradName: string;
+		name: string;
+		points: number;
+	};
+}
+
+export default defineComponent({
+	name: 'ComponentsAchievementList',
+	props: {
+		user: {
+			type: Boolean,
+			required: false,
+			default: false
+		}
+	},
+	setup (props) {
+		const { t, locale } = useI18n();
+
+		const error = ref<boolean>(false);
+		const search = ref<string | null>(null);
+		const isSearch = ref<boolean>(false);
+		const achievements = ref<achievementRet[] | null>(null);
+		const achievementsSearch = ref<achievementRet[] | null>(null);
+
+		const calcDate = (d: Date) => {
+			const date = new Date(Date.parse(d as any));
+			return `${date.toLocaleDateString()}, ${date.toLocaleTimeString()}`;
+		};
+
+		onMounted(() => {
+			api.get((props.user)
+				? '/achievement/user/all'
+				: '/achievement/all'
+			)
+				.then((d) => {
+					achievements.value = d.data.list.map((e: any) => ({
+						unlocking_date: e.unlocking_date,
+						achievement: {
+							tradName: t(`achievement.list.${e.achievement.name}.title`),
+							name: e.achievement.name,
+							points: e.achievement.points
+						}
+					}));
+					achievementsSearch.value = achievements.value;
+				})
+				.catch(() => {
+					error.value = true;
+				});
+
+			watch(search, (v) => {
+				isSearch.value = true;
+				if (!v)
+					achievementsSearch.value = achievements.value;
+				else
+					achievementsSearch.value = achievements.value?.filter((e) => (e.achievement.tradName as string).toLowerCase().includes(v.toLowerCase())) ?? null;
+				isSearch.value = false;
+			});
+
+			watch(locale, () => {
+				console.log('lang change');
+				achievements.value?.forEach((e) => {
+					e.achievement.tradName = t(`achievement.list.${e.achievement.name}.title`);
+				});
+			});
+		});
+
+		return {
+			error,
+			search,
+			isSearch,
+			achievements,
+			achievementsSearch,
+			calcDate
+		};
+	}
+});
+</script>

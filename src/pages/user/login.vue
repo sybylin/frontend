@@ -74,7 +74,7 @@
 				<div class="row justify-center q-mt-lg">
 					<q-btn
 						:label="$capitalize($t('user.connection.forgot'))" type="submit"
-						color="warning" size="md"
+						color="warning" icon="no_accounts"
 						:to="$generatePath({ name: 'resetPassword' })"
 					/>
 				</div>

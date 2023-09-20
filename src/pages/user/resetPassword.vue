@@ -123,6 +123,14 @@
 						/>
 					</div>
 				</q-form>
+				<q-separator class="q-mt-md q-mb-md" />
+				<div class="row justify-center">
+					<q-btn
+						:label="$capitalize($t('user.connection.redirectBtn.login'))"
+						color="secondary" icon="account_circle"
+						:to="$generatePath({ name: 'login' })"
+					/>
+				</div>
 			</template>
 		</q-card>
 	</div>

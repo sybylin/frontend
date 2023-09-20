@@ -10,6 +10,9 @@
 					:name="1" :done="step > 1"
 					title="" icon="person_add"
 				>
+					<q-banner v-if="incorrectPost" class="text-white bg-red text-center">
+						<span>{{ (incorrectPost.info.code === 'GE_002') ? $t('error.api.mail') : $t('error.api.db') }}</span>
+					</q-banner>
 					<div class="row justify-center">
 						<span class="text-h5">{{ $capitalize($t('user.connection.step.1.title')) }}</span>
 					</div>
@@ -176,6 +179,7 @@ export default defineComponent({
 		const incorrectEmail = ref<boolean | 'alreadyTaken'>(false);
 		const incorrectPassword = ref<boolean | 'notTheSame'>(false);
 		const incorrectRepeatPassword = ref<boolean | 'notTheSame'>(false);
+		const incorrectPost = ref<any | null>(null);
 
 		const activateSubmitButton = computed(() =>
 			name.value && email.value && password.value && repeatPassword.value
@@ -220,6 +224,8 @@ export default defineComponent({
 							incorrectName.value = 'alreadyTaken';
 						if (e.response.data.incorrectPassword)
 							incorrectPassword.value = true;
+						if (!incorrectEmail.value && !incorrectName.value && !incorrectPassword.value)
+							incorrectPost.value = e.response.data;
 					})
 					.finally(() => {
 						apiCall.value = false;
@@ -232,6 +238,7 @@ export default defineComponent({
 			incorrectEmail.value = false;
 			incorrectPassword.value = false;
 			incorrectRepeatPassword.value = false;
+			incorrectPost.value = null;
 			name.value = null;
 			email.value = null;
 			password.value = null;
@@ -277,6 +284,7 @@ export default defineComponent({
 			incorrectEmail,
 			incorrectPassword,
 			incorrectRepeatPassword,
+			incorrectPost,
 
 			activateSubmitButton,
 			onSubmit,

@@ -4,16 +4,20 @@
   "editor.detectIndentation": false,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
+	"javascript.format.enable": false,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "editor.codeActionsOnSave": [
-    "source.fixAll.eslint"
-  ],
+  "editor.codeActionsOnSave": {
+		"source.fixAll": true,
+	},
   "eslint.validate": [
+		"html",
     "javascript",
-    "javascriptreact",
     "typescript",
-    "vue"
+		"vue"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"[vue]": {
+		"editor.defaultFormatter": "Vue.volar"
+	}
 }
