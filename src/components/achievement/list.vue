@@ -27,7 +27,11 @@
 			:key="el.achievement.name"
 			flat
 			bordered
-			style="width: 17em; height: 5.5em;"
+			:class="{
+				'card': true,
+				'background--dark': $q.dark.isActive,
+				'background': !$q.dark.isActive
+			}"
 		>
 			<div class="full-width full-height inline row justify-between">
 				<q-img
@@ -47,7 +51,7 @@
 				>
 					<div
 						class="column justify-evenly"
-						style="height: 88%;"
+						style="height: 83%;"
 					>
 						<span class="text-h4 text-weight-light">
 							{{ $capitalize($t(`achievement.list.${el.achievement.name}.title`)) }}
@@ -56,9 +60,17 @@
 							{{ $capitalize($t(`achievement.list.${el.achievement.name}.description`)) }}
 						</span>
 					</div>
-					<span class="row justify-end text-caption">
-						{{ calcDate(el.unlocking_date) }}
-					</span>
+					<div class="row justify-between items-center" :class="{ 'truncate-chip-labels': true }">
+						<q-chip
+							dense
+							color="deep-orange" text-color="white"
+							icon="paid"
+							:clickable="false"
+							:ripple="false"
+							:label="el.achievement.points"
+						/>
+						<span class="text-caption">{{ calcDate(el.unlocking_date) }}</span>
+					</div>
 				</div>
 			</div>
 		</q-card>
@@ -150,3 +162,16 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style scoped>
+.card {
+	width: 17em;
+	height: 5.5em;
+}
+.background {
+	background-color: #f2f2f2;
+}
+.background--dark {
+	background-color: #2d2d2d;
+}
+</style>
