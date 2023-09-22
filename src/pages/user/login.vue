@@ -132,7 +132,7 @@ export default defineComponent({
 								await router.push(generatePath({ name: 'user' }, store.lang));
 							apiCall.value = false;
 						} catch (e) {
-							console.error('router push to user failed');
+							// console.error('router push to user failed');
 						}
 					})
 					.catch((e) => {

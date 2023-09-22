@@ -144,7 +144,6 @@ export default defineComponent({
 			});
 
 			watch(locale, () => {
-				console.log('lang change');
 				achievements.value?.forEach((e) => {
 					e.achievement.tradName = t(`achievement.list.${e.achievement.name}.title`);
 				});

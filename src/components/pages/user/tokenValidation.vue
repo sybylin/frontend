@@ -55,9 +55,8 @@ export default defineComponent({
 				token
 			})
 				.then(() => emit('complete'))
-				.catch((e) => {
+				.catch(() => {
 					error.value = true;
-					console.error(e.response);
 				})
 				.finally(() => {
 					apiCall.value = false;

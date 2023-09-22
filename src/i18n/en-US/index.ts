@@ -4,6 +4,8 @@ import user from './user';
 import series from './series';
 import achievement from './achievement';
 
+import builder from './builder';
+
 export default {
 	title: 'Sibyllin',
 	catch: 'Enigma',
@@ -23,5 +25,7 @@ export default {
 	error,
 	user,
 	series,
-	achievement
+	achievement,
+
+	builder
 };

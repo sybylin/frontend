@@ -183,7 +183,6 @@ export default defineComponent({
 						success.value = true;
 					})
 					.catch((e) => {
-						console.error(e.response.data);
 						if (e.response.data.resetTokenIsInvalid)
 							error.value = 'resetTokenIsInvalid';
 						else if (e.response.data.differentPassword)

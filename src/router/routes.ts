@@ -11,6 +11,12 @@ const routes: RouteRecordRaw[] = [
 				component: () => import('pages/main.vue')
 			},
 			{
+				path: 'builder',
+				name: 'builder',
+				meta: { noSSR: true },
+				component: () => import('pages/builder.vue')
+			},
+			{
 				path: 'series',
 				name: 'seriesMain',
 				meta: { requiresAuth: true, level: 'user' },
@@ -61,18 +67,7 @@ const routes: RouteRecordRaw[] = [
 				]
 			}
 		]
-	}
-];
-
-if (import.meta.env.MODE !== 'production' && process.env.MODE !== 'ssr') {
-	routes.push({
-		path: '/:lang?/search',
-		name: 'search',
-		component: () => import('pages/search.vue')
-	});
-}
-
-routes.push(
+	},
 	{
 		path: '/500',
 		name: '500',
@@ -89,6 +84,6 @@ routes.push(
 			}
 		]
 	}
-);
+];
 
 export default routes;

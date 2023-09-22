@@ -27,6 +27,7 @@ module.exports = configure(function (/* ctx */) {
 		// https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
 		css: [
 			'app.scss',
+			'builder.scss',
 			'font/orkney.scss'
 		],
 

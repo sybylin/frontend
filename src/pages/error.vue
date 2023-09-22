@@ -48,7 +48,7 @@ import { useMeta } from 'quasar';
 import meta from '../meta';
 
 export default defineComponent({
-	name: 'ErrorPage',
+	name: 'PageError',
 	setup () {
 		const { t, locale } = useI18n({ useScope: 'global' });
 

@@ -30,7 +30,7 @@ import { useMeta } from 'quasar';
 import meta from '../meta';
 
 export default defineComponent({
-	name: 'Error500',
+	name: 'PageError500',
 	setup () {
 		const lamp = ref<HTMLDivElement | null>(null);
 		let interval: NodeJS.Timer; // eslint-disable-line no-undef

@@ -1,5 +1,8 @@
 <template>
-	<q-btn square flat color="white" label="Options" icon="settings">
+	<q-btn
+		square flat color="white"
+		label="Options" icon="settings"
+	>
 		<q-popup-proxy style="box-shadow: none" :offset="[-10, 10]">
 			<q-card square flat class="card">
 				<lang />

@@ -26,10 +26,6 @@ api.interceptors.request.use(
 				c.headers.set(xsrfName, JSON.parse(xsrfHeader));
 		}
 		return c;
-	},
-	(e) => {
-		if (import.meta.env.DEV)
-			console.error('Axios interceptor request', e);
 	}
 );
 
