@@ -65,6 +65,18 @@ const routes: RouteRecordRaw[] = [
 						component: () => import('pages/user/creation.vue')
 					}
 				]
+			},
+			{
+				path: 'creation',
+				name: 'creationMain',
+				meta: { requiresAuth: true, level: 'user' },
+				children: [
+					{
+						path: '',
+						name: 'creationPanel',
+						component: () => import('pages/creation/main.vue')
+					}
+				]
 			}
 		]
 	},

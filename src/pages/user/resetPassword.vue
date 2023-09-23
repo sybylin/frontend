@@ -1,5 +1,5 @@
 <template>
-	<div class="row justify-center items-center height">
+	<div class="row justify-center items-center q-pt-xl q-pb-xl height">
 		<q-card
 			class="q-pa-md"
 			flat
@@ -317,6 +317,6 @@ export default defineComponent({
 
 <style scoped>
 .height {
-	height: calc(100vh - 5em);
+	min-height: calc(100vh - 5em);
 }
 </style>
