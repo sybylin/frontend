@@ -30,15 +30,17 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		category,
 		content: {
 			tagName: 'div',
-			type: 'container',
-			attributes: { class: 'q-pa-xs full-width' },
-			components: [
-				{
-					tagName: 'audio',
-					type: 'audio',
-					attributes: { class: 'full-width' }
+			attributes: { class: 'full-width' },
+			components: {
+				tagName: 'audio',
+				type: 'audio',
+				attributes: {
+					class: 'full-width',
+					controls: true,
+					preload: 'metadata',
+					src: '/audio/toony.mp3'
 				}
-			]
+			}
 		}
 	});
 

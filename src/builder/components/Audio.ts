@@ -19,7 +19,9 @@ export default (editor: Editor, _opts: PluginOptions) => {
 				draggable: true,
 				stylable: false,
 				attributes: {
+					class: 'full-width',
 					controls: true,
+					preload: 'metadata',
 					src: '/audio/toony.mp3'
 				}
 			}

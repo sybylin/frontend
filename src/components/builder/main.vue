@@ -1,6 +1,5 @@
 <template>
-	<div ref="editor" class="builderEditor">
-	</div>
+	<div ref="editor" class="builderEditor"></div>
 </template>
 
 <script lang="ts">
@@ -16,7 +15,7 @@ export default defineComponent({
 		const editor = ref<HTMLElement | null>(null);
 
 		onMounted(() => {
-			initGrapeJs(editor.value as HTMLElement);
+			grapesjsInstance.value = initGrapeJs(editor.value as HTMLElement);
 		});
 
 		return {
