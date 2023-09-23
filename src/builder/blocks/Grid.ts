@@ -29,15 +29,21 @@ export default (editor: Editor, _opts: PluginOptions) => {
 			category,
 			content: {
 				tagName: 'div',
-				type: 'default',
-				attributes: { class: 'row q-pa-sm', style: 'min-height: 4em' },
-				components: (nms[reg] === 1)
-					? undefined
-					: new Array(nms[reg]).fill({
-						tagName: 'div',
-						type: 'default',
-						attributes: { class: `col-${size}`, style: 'min-height: 3em' }
-					})
+				type: 'container',
+				attributes: {
+					class: 'row q-pa-sm',
+					style: 'min-height: 4em'
+				},
+				components: new Array(nms[reg]).fill({
+					tagName: 'div',
+					type: 'default',
+					attributes: {
+						class: `col-${size} ${nms[reg] === 1
+							? 'full-width'
+							: ''}`,
+						style: 'min-height: 3em'
+					}
+				})
 			}
 		});
 	}

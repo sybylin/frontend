@@ -4,7 +4,8 @@ export default {
 			title: 'Base',
 			image: 'Image',
 			audio: 'Audio',
-			video: 'Vidéo'
+			video: 'Vidéo',
+			card: 'Carte'
 		},
 		grid: {
 			title: 'Grille',

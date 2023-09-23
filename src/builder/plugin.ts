@@ -1,17 +1,18 @@
 import type { Editor } from 'grapesjs';
 import type { PluginOptions } from './interface';
 import Blocks from './blocks';
+import Components from './components';
 
 export const blocksList = {
 	Grid: ['one-column', 'two-column', 'three-column', 'four-column'],
 	Header: ['header-1', 'header-2', 'header-3', 'header-4', 'header-5', 'header-6'],
 	Text: ['text-1', 'text-2'],
-	Basic: ['image', 'audio', 'video']
+	Basic: ['image', 'audio', 'video', 'card']
 };
 
-export const mediaIcon = (name: string, span: boolean = false) => `<i aria-hidden="true" role="presentation" class="q-icon notranslate material-icons ${span
+export const mediaIcon = (name: string, span: boolean = false) => `<span aria-hidden="true" role="presentation" class="q-icon notranslate material-icons ${span
 	? 'material-symbols-outlined'
-	: undefined}" style="font-size: 4.4em;">${name}</i>`;
+	: undefined}" style="font-size: 4.4em;">${name}</span>`;
 
 export default (editor: Editor, opt: Record<string, unknown>) => {
 	const options: PluginOptions = {
@@ -51,6 +52,7 @@ export default (editor: Editor, opt: Record<string, unknown>) => {
     editor.Parser.getConfig().optionsHtml!.htmlType = 'text/xml';
 
 	[
-		Blocks
+		Blocks,
+		Components
 	].forEach((m) => m(editor, options));
 };
