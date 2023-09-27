@@ -67,14 +67,19 @@ const routes: RouteRecordRaw[] = [
 				]
 			},
 			{
-				path: 'creation',
-				name: 'creationMain',
+				path: 'create',
+				name: 'createMain',
 				meta: { requiresAuth: true, level: 'user' },
 				children: [
 					{
 						path: '',
-						name: 'creationPanel',
-						component: () => import('pages/creation/main.vue')
+						name: 'selectSerie',
+						component: () => import('pages/create/selectSerie.vue')
+					},
+					{
+						path: ':serieId',
+						name: 'editSerie',
+						component: () => import('pages/create/editSerie.vue')
 					}
 				]
 			}

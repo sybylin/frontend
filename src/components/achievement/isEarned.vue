@@ -19,11 +19,11 @@
 					alt="Profil"
 					fit="cover"
 					class="image"
-					:src="`/imgs/achievement/${$props.id}.png`"
+					:src="`/imgs/achievement/${$props.name}.png`"
 				/>
 				<div class="text column justify-center items-center">
-					<span class="text-h4 q-pb-lg">{{ $capitalize($t(`achievement.list.${$props.id}.title`)) }}</span>
-					<span class="text-body1">{{ $capitalize($t(`achievement.list.${$props.id}.description`)) }}</span>
+					<span class="text-h4 q-pb-lg">{{ $capitalize($t(`achievement.list.${$props.name}.title`)) }}</span>
+					<span class="text-body1">{{ $capitalize($t(`achievement.list.${$props.name}.description`)) }}</span>
 				</div>
 			</q-card-section>
 			<q-separator class="q-mt-sm" />
@@ -41,8 +41,12 @@ import { useDialogPluginComponent } from 'quasar';
 export default defineComponent({
 	name: 'ComponentsAchievementIsEarned',
 	props: {
-		id: {
+		name: {
 			type: String,
+			required: true
+		},
+		timestamp: {
+			type: Date,
 			required: true
 		}
 	},

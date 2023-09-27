@@ -3,7 +3,7 @@ import error from './error';
 import user from './user';
 import series from './series';
 import achievement from './achievement';
-
+import create from './create';
 import builder from './builder';
 
 export default {
@@ -26,6 +26,6 @@ export default {
 	user,
 	series,
 	achievement,
-
+	create,
 	builder
 };

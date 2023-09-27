@@ -2,9 +2,8 @@ import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
 import { hasAchievement } from './custom';
 
+export type serverAchievement = { name: string, timestamp: Date };
 export const xsrfName = 'x-xsrf-token';
-export const achievementName = 'x-achievement';
-
 export const api = axios.create({
 	baseURL: (import.meta.env.DEV)
 		? 'http://localhost:3000'
@@ -29,11 +28,26 @@ api.interceptors.request.use(
 	}
 );
 
+/**
+ * Intercept achievements send by server to client
+ */
+const sortAchievements = (a: serverAchievement, b: serverAchievement): number => {
+	const aTime = new Date(a.timestamp).getTime(), bTime = new Date(b.timestamp).getTime();
+
+	if (aTime < bTime)
+		return -1;
+	if (aTime > bTime)
+		return 1;
+	return 0;
+};
+
 api.interceptors.response.use(
 	(c) => {
-		const achievementHeader = c.headers[achievementName] as string | null;
-		if (achievementHeader)
-			hasAchievement(achievementHeader);
+		if (c.data && Object.prototype.hasOwnProperty.call(c.data, 'achievements')) {
+			const achievements = (c.data.achievements as { name: string, timestamp: Date }[]).sort(sortAchievements);
+			for (const achievement of achievements)
+				hasAchievement(achievement);
+		}
 		return c;
 	}
 );

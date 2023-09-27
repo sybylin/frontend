@@ -2,6 +2,7 @@
 import { boot } from 'quasar/wrappers';
 import { Dialog } from 'quasar';
 import ComponentsAchievementIsEarned from 'components/achievement/isEarned.vue';
+import type { serverAchievement } from './axios';
 
 /**
  * Capitalize string
@@ -21,11 +22,12 @@ export const os = (): osType => {
 	return undefined;
 };
 
-export const hasAchievement = (id: string) => {
+export const hasAchievement = (achievement: serverAchievement) => {
 	Dialog.create({
 		component: ComponentsAchievementIsEarned,
 		componentProps: {
-			id
+			name: achievement.name,
+			timestamp: new Date(achievement.timestamp)
 		}
 	});
 };

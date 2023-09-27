@@ -8,7 +8,7 @@
 						enter-active-class="animated fadeIn"
 						leave-active-class="animated fadeOut"
 					>
-						<div>
+						<div style="min-height: inherit;">
 							<template v-if="isRequiresAuth || $route.meta.noSSR === true">
 								<q-no-ssr>
 									<component :is="Component" />
