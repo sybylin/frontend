@@ -63,6 +63,12 @@ const routes: RouteRecordRaw[] = [
 						path: 'creation',
 						name: 'creation',
 						component: () => import('pages/user/creation.vue')
+					},
+					{
+						path: 'verify',
+						name: 'verify',
+						meta: { noSSR: true },
+						component: () => import('pages/user/verify.vue')
 					}
 				]
 			},

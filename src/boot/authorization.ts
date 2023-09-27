@@ -29,6 +29,36 @@ export const checkUserRights = async (role: authorizationLevel): Promise<boolean
 	});
 };
 
+const checkUserRightsAndVerify = async (role: authorizationLevel): Promise<{ hasRight: boolean, isVerify: boolean }> => {
+	return new Promise((resolve) => {
+		api.get(`/rights/${role}`)
+			.then((d) => {
+				if (d.data.info.code === 'JW_101')
+					globalStore().setIsConnected(true);
+				resolve({ hasRight: true, isVerify: d.data.userIsVerify });
+			})
+			.catch((e) => {
+				switch (e.response.data.info.code) {
+				case 'JW_002':
+					globalStore().setIsConnected(true);
+					break;
+				case 'JW_001':
+				default:
+					globalStore().setIsConnected(false);
+				}
+				resolve({ hasRight: false, isVerify: false });
+			});
+	});
+};
+
+const genName = (isConnected: boolean, isAuthorization: { hasRight: boolean; isVerify: boolean }) => {
+	if (!isConnected)
+		return 'login';
+	if (!isAuthorization.isVerify)
+		return 'verify';
+	return 'user';
+};
+
 const checkUserRightsBoot = {
 	user: () => checkUserRights('user'),
 	moderator: () => checkUserRights('moderator'),
@@ -59,16 +89,14 @@ export default boot(({ app, router, ssrContext }) => {
 	 */
 	if (!ssrContext) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		router.beforeResolve(async (to, from) => {
+		router.beforeResolve(async (to, _from) => {
 			if (to.meta.requiresAuth) {
-				const isAuthorization: boolean = await checkUserRights(to.meta.level ?? 'user');
+				const isAuthorization = await checkUserRightsAndVerify(to.meta.level ?? 'user');
 				const isConnected = globalStore().isConnected;
 
-				if (!isAuthorization) {
+				if (!isAuthorization.hasRight) {
 					return {
-						name: (!isConnected)
-							? 'login'
-							: 'user',
+						name: genName(isConnected, isAuthorization),
 						params: {
 							lang: to.params.lang ?? globalStore().lang ?? 'en-US'
 						},
@@ -79,6 +107,13 @@ export default boot(({ app, router, ssrContext }) => {
 							unauthorized: (isConnected)
 								? 'true'
 								: undefined
+						}
+					};
+				} else if (!isAuthorization.isVerify) {
+					return {
+						name: 'verify',
+						params: {
+							lang: to.params.lang ?? globalStore().lang ?? 'en-US'
 						}
 					};
 				}
