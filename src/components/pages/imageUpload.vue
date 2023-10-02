@@ -80,7 +80,7 @@ export default defineComponent({
 				Object.assign({ image: file.value.files[0] }, props.apiData)
 			)
 				.then((d) => {
-					inputUrl.value = d.data.path;
+					inputUrl.value = `${baseURL}${d.data.path}`;
 				})
 				.catch((e) => $q.notify({ type: 'error', message: e.response.data.info.message }));
 		};
