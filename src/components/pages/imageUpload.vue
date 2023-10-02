@@ -6,7 +6,7 @@
 			:ratio="1"
 			fit="cover"
 			:class="{ rounded: $props.rounded }"
-			:src="(inputUrl) ? inputUrl : '/imgs/background.jpg'"
+			:src="inputUrl ?? '/imgs/background.jpg'"
 		/>
 		<div
 			class="select row justify-center items-center"
@@ -19,6 +19,7 @@
 		ref="file"
 		type="file"
 		class="hidden"
+		name="file"
 		accept="image/png, image/jpeg"
 		@change="onChange"
 	/>
@@ -26,6 +27,8 @@
 
 <script lang="ts">
 import { PropType, defineComponent, onMounted, ref, watch } from 'vue';
+import { useQuasar } from 'quasar';
+import { baseURL, api } from 'src/boot/axios';
 import type { QImg } from 'quasar';
 
 export default defineComponent({
@@ -36,6 +39,15 @@ export default defineComponent({
 			required: false,
 			default: ''
 		},
+		apiPath: {
+			type: String,
+			required: true
+		},
+		apiData: {
+			type: Object as PropType<unknown>,
+			required: false,
+			default: () => ({})
+		},
 		rounded: {
 			type: Boolean,
 			required: false,
@@ -44,9 +56,13 @@ export default defineComponent({
 	},
 	emits: ['update:modelValue'],
 	setup (props, { emit }) {
+		const $q = useQuasar();
 		const image = ref<QImg | null>(null);
 		const file = ref<HTMLInputElement | null>(null);
 		const inputUrl = ref<string | null>(props.modelValue ?? null);
+
+		if (inputUrl.value)
+			inputUrl.value = `${baseURL}${inputUrl.value}`;
 
 		const click = () => {
 			if (!file.value)
@@ -59,11 +75,14 @@ export default defineComponent({
 				inputUrl.value = null;
 				return;
 			}
-			const reader = new FileReader();
-			reader.readAsDataURL(file.value.files[0]);
-			reader.addEventListener('load', () => {
-				inputUrl.value = reader.result as string;
-			});
+			api.postForm(
+				props.apiPath,
+				Object.assign({ image: file.value.files[0] }, props.apiData)
+			)
+				.then((d) => {
+					inputUrl.value = d.data.path;
+				})
+				.catch((e) => $q.notify({ type: 'error', message: e.response.data.info.message }));
 		};
 
 		onMounted(() => {

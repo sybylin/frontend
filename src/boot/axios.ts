@@ -4,10 +4,11 @@ import { hasAchievement } from './custom';
 
 export type serverAchievement = { name: string, timestamp: Date };
 export const xsrfName = 'x-xsrf-token';
+export const baseURL = (import.meta.env.DEV)
+	? 'http://localhost:3000'
+	: 'https://api.sibyllin.app';
 export const api = axios.create({
-	baseURL: (import.meta.env.DEV)
-		? 'http://localhost:3000'
-		: 'https://api.sibyllin.app',
+	baseURL,
 	proxy: (import.meta.env.DEV)
 		? false
 		: undefined,
