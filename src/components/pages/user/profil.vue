@@ -5,11 +5,16 @@
 	>
 		<q-spinner-cube v-if="!Object.keys($props.user).length" color="primary" size="6em" />
 		<template v-else>
-			<q-img
-				v-if="$q.screen.gt.xs"
-				alt="Profil" fit="cover" class="profil-image"
-				:src="$props.user.avatar ?? '/imgs/background.jpg'"
-			/>
+			<div class="profil-image">
+				<image-upload
+					v-if="$q.screen.gt.xs"
+					v-model="$props.user.avatar"
+					alt="Profil"
+					api-path="/user/image"
+					:put-method="true"
+					:rounded="true"
+				/>
+			</div>
 			<div
 				class="full-height column justify-around items-center"
 				:style="$q.screen.lt.sm ? 'width: 100%' : 'width: calc(100% - 15em); padding-left: 48px'"
@@ -38,8 +43,9 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, ref } from 'vue';
-import ComponentsPagesUserLevel from './level.vue';
 import { api } from 'src/boot/axios';
+import ComponentsPagesUserLevel from './level.vue';
+import ImageUpload from 'components/pages/imageUpload.vue';
 
 export interface user {
 	name: string;
@@ -54,7 +60,8 @@ export interface user {
 export default defineComponent({
 	name: 'ComponentsPagesUserProfil',
 	components: {
-		ComponentsPagesUserLevel
+		ComponentsPagesUserLevel,
+		ImageUpload
 	},
 	props: {
 		user: {
@@ -91,7 +98,6 @@ export default defineComponent({
 .profil-image {
 	height: 15em;
 	width: 15em;
-	border-radius: 50% !important;
 }
 
 .profil-text {

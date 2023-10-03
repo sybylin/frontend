@@ -4,12 +4,19 @@
 			ref="image"
 			loading="lazy"
 			:ratio="1"
+			:alt="$props.alt"
 			fit="cover"
 			:class="{ rounded: $props.rounded }"
 			:src="inputUrl ?? '/imgs/background.jpg'"
 		/>
 		<div
-			class="select row justify-center items-center"
+			:class="{
+				select: true,
+				row: true,
+				'justify-center': true,
+				'items-center': true,
+				rounded: $props.rounded
+			}"
 			@click="click"
 		>
 			<q-icon class="icon" name="add_photo_alternate" size="4em" />
@@ -48,6 +55,16 @@ export default defineComponent({
 			required: false,
 			default: () => ({})
 		},
+		putMethod: {
+			type: Boolean,
+			required: false,
+			default: false
+		},
+		alt: {
+			type: String,
+			required: false,
+			default: 'image'
+		},
 		rounded: {
 			type: Boolean,
 			required: false,
@@ -75,7 +92,10 @@ export default defineComponent({
 				inputUrl.value = null;
 				return;
 			}
-			api.postForm(
+
+			api[props.putMethod
+				? 'putForm'
+				: 'postForm'](
 				props.apiPath,
 				Object.assign({ image: file.value.files[0] }, props.apiData)
 			)

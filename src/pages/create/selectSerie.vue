@@ -15,7 +15,7 @@
 		>
 			<q-img
 				loading="lazy"
-				:src="(serie.image) ? serie.image : '/imgs/background.jpg'"
+				:src="(serie.image) ? `${baseURL}${serie.image}` : '/imgs/background.jpg'"
 				style="height: 65%"
 			/>
 			<q-card-section class="row full-width justify-center">
@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue';
-import { api } from 'src/boot/axios';
+import { baseURL, api } from 'src/boot/axios';
 import ComponentsPagesCreationDialogCreateSerie from 'components/pages/creation/dialogCreateSerie.vue';
 
 export interface serieElement {
@@ -117,6 +117,7 @@ export default defineComponent({
 		});
 
 		return {
+			baseURL,
 			seriesList,
 			selectedSerie,
 			openCreationDialog,

@@ -37,7 +37,7 @@
 					<q-tab name="options" icon="settings" :label="$t('create.main.serie.options')" />
 				</q-tabs>
 				<q-separator />
-				<q-tab-panels v-model="tab" animated>
+				<q-tab-panels v-model="tab" animated class="transparent">
 					<q-tab-panel name="enigmas">
 						<components-pages-creation-serie-enigmas-list />
 					</q-tab-panel>
@@ -107,3 +107,9 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style scoped>
+.transparent {
+	background-color: transparent;
+}
+</style>

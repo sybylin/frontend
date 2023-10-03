@@ -11,7 +11,7 @@
 				</div>
 			</div>
 			<div class="col-sm-8 col-xs-12 q-pl-sm q-pr-sm">
-				<div class="column">
+				<div class="column full-height justify-center">
 					<q-input
 						v-model="title"
 						debounce="500"
@@ -37,17 +37,18 @@
 						:error-message="$capitalize($t('create.main.serie.incorrect', { key: $t('create.main.serie.title') }))"
 						autogrow
 					/>
-					<q-input
+					<q-slider
 						v-model.number="points"
+						class="q-pt-xl"
 						debounce="500"
 						bottom-slots
-						:loading="apiWait"
-						:disable="apiWait"
-						:label="$capitalize($t('create.main.serie.points'))"
-						type="number"
-						min="0"
-						max="2000"
-						step="1"
+						:min="0"
+						:max="1500"
+						:step="10"
+						label
+						:label-value="`${points} ${$t('create.main.serie.points')}`"
+						label-always
+						color="light-blue-8"
 					/>
 				</div>
 			</div>
