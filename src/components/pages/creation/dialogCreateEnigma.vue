@@ -5,7 +5,7 @@
 	>
 		<q-card class="card">
 			<q-card-section class="row items-center">
-				<span class="text-h5">{{ $capitalize($t('create.dialogCreateSerie.name')) }}</span>
+				<span class="text-h5">{{ $capitalize($t('create.dialogCreateEnigma.name')) }}</span>
 				<q-space />
 				<q-btn
 					v-close-popup
@@ -20,20 +20,20 @@
 				<q-card-section class="q-pt-none">
 					<q-input
 						v-model="title"
-						:label="$capitalize($t('create.dialogCreateSerie.title'))"
+						:label="$capitalize($t('create.dialogCreateEnigma.title'))"
 						:disable="loading"
 						:error="titleError"
 						:error-message="(titleError)
-							? $capitalize($t('create.dialogCreateSerie.titleError'))
+							? $capitalize($t('create.dialogCreateEnigma.titleError'))
 							: undefined
 						"
-						:rules="[val => val && val.length || $capitalize($t('create.dialogCreateSerie.required'))]"
+						:rules="[val => val && val.length || $capitalize($t('create.dialogCreateEnigma.required'))]"
 					/>
 					<q-input
 						v-model="description"
-						:label="$capitalize($t('create.dialogCreateSerie.description'))"
+						:label="$capitalize($t('create.dialogCreateEnigma.description'))"
 						:disable="loading"
-						:rules="[val => val && val.length || $capitalize($t('create.dialogCreateSerie.required'))]"
+						:rules="[val => val && val.length || $capitalize($t('create.dialogCreateEnigma.required'))]"
 					/>
 				</q-card-section>
 
@@ -58,21 +58,23 @@ import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 
 export default defineComponent({
-	name: 'ComponentsPagesCreationDialogCreateSerie',
+	name: 'ComponentsPagesCreationDialogCreateEnigma',
 	props: {
 		modelValue: {
 			type: Boolean,
+			required: true
+		},
+		serieId: {
+			type: Number,
 			required: true
 		}
 	},
 	emits: ['update:modelValue', 'validate', 'quit'],
 	setup (props, { emit }) {
 		const dialog = ref<boolean>(props.modelValue);
-
 		const title = ref<string | null>(null);
 		const titleError = ref<boolean>(false);
 		const description = ref<string | null>(null);
-
 		const loading = ref<boolean>(false);
 		const disabled = computed(() => {
 			if (title.value && title.value.length && description.value && description.value.length)
@@ -82,18 +84,18 @@ export default defineComponent({
 
 		const onReset = () => {
 			title.value = null;
-			description.value = null;
 		};
 
 		const onSubmit = () => {
 			if (title.value && description.value && !isEmpty(title.value) && !isEmpty(description.value)) {
-				api.post('/serie/create', {
+				api.post('/enigma/create', {
+					serie_id: props.serieId,
 					title: title.value,
 					description: description.value
 				})
 					.then((d) => d.data)
 					.then((d) => {
-						emit('validate', d.serie);
+						emit('validate', d.enigma);
 					})
 					.catch((e) => {
 						if (e.response.data.info.code === 'SE_001')
@@ -116,6 +118,7 @@ export default defineComponent({
 			description,
 			loading,
 			disabled,
+
 			onReset,
 			onSubmit
 		};

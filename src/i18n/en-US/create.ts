@@ -22,5 +22,12 @@ export default {
 		description: 'description of serie',
 		titleError: 'a serie already exists with this name',
 		required: 'is required'
+	},
+	dialogCreateEnigma: {
+		name: 'create new enigma',
+		title: 'title of enigma',
+		description: 'description of enigma',
+		titleError: 'a enigma already exists with this name',
+		required: 'is required'
 	}
 };

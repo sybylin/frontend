@@ -83,6 +83,11 @@ const routes: RouteRecordRaw[] = [
 						component: () => import('pages/create/selectSerie.vue')
 					},
 					{
+						path: ':serieId/:enigmaId',
+						name: 'editEnigma',
+						component: () => import('pages/create/editEnigma.vue')
+					},
+					{
 						path: ':serieId',
 						name: 'editSerie',
 						component: () => import('pages/create/editSerie.vue')

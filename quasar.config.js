@@ -45,7 +45,7 @@ module.exports = configure(function (/* ctx */) {
 				node: 'node18'
 			},
 			vueRouterMode: 'history',
-			vueOptionsAPI: false,
+			vueOptionsAPI: true,
 			rebuildCache: true,
 			minify: true,
 			vitePlugins: [

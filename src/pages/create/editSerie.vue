@@ -39,7 +39,10 @@
 				<q-separator />
 				<q-tab-panels v-model="tab" animated class="transparent">
 					<q-tab-panel name="enigmas">
-						<components-pages-creation-serie-enigmas-list />
+						<components-pages-creation-serie-enigmas-list
+							v-model="serie"
+							@update="updateEnigmas"
+						/>
 					</q-tab-panel>
 					<q-tab-panel name="options">
 						<components-pages-creation-serie-option v-model="serie" />
@@ -54,9 +57,11 @@
 import { defineComponent, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from 'src/boot/axios';
-import type { serieElement } from './selectSerie.vue';
 import ComponentsPagesCreationSerieOption from 'components/pages/creation/serieOption.vue';
 import ComponentsPagesCreationSerieEnigmasList from 'components/pages/creation/serieEnigmasList.vue';
+
+import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
+import type { serieElement } from './selectSerie.vue';
 
 export default defineComponent({
 	name: 'PagesCreateEditSerie',
@@ -83,6 +88,23 @@ export default defineComponent({
 				});
 		};
 
+		const updateEnigmas = (enigmasList: enigma[]) => {
+			if (!serie.value)
+				return;
+			enigmasList.forEach((v, i) => {
+				(serie.value as serieElement).serie_enigma_order[i].enigma = v;
+				(serie.value as serieElement).serie_enigma_order[i].enigma_id = v.id;
+			});
+
+			api.post('/serie/update/order', {
+				serie_id: Number(route.params.serieId),
+				order: enigmasList.map((v) => ({ serie_id: v.serie_id, enigma_id: v.id }))
+			})
+				.catch(() => {
+					///
+				});
+		};
+
 		onBeforeMount(() => {
 			api.post('/serie/isCreatedByUser', {
 				serie_id: Number(route.params.serieId)
@@ -102,7 +124,8 @@ export default defineComponent({
 		return {
 			isCheck,
 			serie,
-			tab
+			tab,
+			updateEnigmas
 		};
 	}
 });

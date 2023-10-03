@@ -65,6 +65,7 @@ export interface serieElement {
 	points: number;
 	creation_date: Date;
 	modification_date: Date;
+	serie_enigma_order: any[];
 }
 
 export default defineComponent({
@@ -154,5 +155,4 @@ export default defineComponent({
 	border: .35em dashed #dadada;
 	color: #dadada;
 }
-
 </style>
