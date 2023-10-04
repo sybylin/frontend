@@ -72,6 +72,7 @@
 	<components-pages-creation-dialog-create-enigma
 		v-model="openCreationDialog"
 		:serie-id="$props.modelValue.id"
+		:order="enigmas.length"
 		@validate="addEnigmaToList"
 	/>
 </template>

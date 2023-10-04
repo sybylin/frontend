@@ -15,6 +15,7 @@ export default {
 		title: 'Menu',
 		home: 'Home',
 		series: 'Series',
+		create: 'Create',
 		license: 'License',
 		documentation: 'Documentation',
 		discord: 'Discord',

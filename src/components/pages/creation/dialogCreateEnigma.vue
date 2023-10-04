@@ -67,6 +67,10 @@ export default defineComponent({
 		serieId: {
 			type: Number,
 			required: true
+		},
+		order: {
+			type: Number,
+			required: true
 		}
 	},
 	emits: ['update:modelValue', 'validate', 'quit'],
@@ -84,6 +88,8 @@ export default defineComponent({
 
 		const onReset = () => {
 			title.value = null;
+			titleError.value = false;
+			description.value = null;
 		};
 
 		const onSubmit = () => {
@@ -91,14 +97,13 @@ export default defineComponent({
 				api.post('/enigma/create', {
 					serie_id: props.serieId,
 					title: title.value,
-					description: description.value
+					description: description.value,
+					order: props.order + 1
 				})
 					.then((d) => d.data)
-					.then((d) => {
-						emit('validate', d.enigma);
-					})
+					.then((d) => emit('validate', d.enigma))
 					.catch((e) => {
-						if (e.response.data.info.code === 'SE_001')
+						if (e.response.data.info.code === 'EN_004')
 							titleError.value = true;
 					});
 			}

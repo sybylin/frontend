@@ -56,6 +56,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useQuasar } from 'quasar';
 import { api } from 'src/boot/axios';
 import ComponentsPagesCreationSerieOption from 'components/pages/creation/serieOption.vue';
 import ComponentsPagesCreationSerieEnigmasList from 'components/pages/creation/serieEnigmasList.vue';
@@ -70,6 +71,7 @@ export default defineComponent({
 		ComponentsPagesCreationSerieEnigmasList
 	},
 	setup () {
+		const $q = useQuasar();
 		const isCheck = ref<boolean | 'unauthorized'>(false);
 		const serie = ref<serieElement | null>(null);
 		const tab = ref<'enigmas' | 'options'>('enigmas');
@@ -83,26 +85,31 @@ export default defineComponent({
 				.then((d) => {
 					serie.value = d.serie;
 				})
-				.catch(() => {
-					///
-				});
+				.catch((e) => $q.notify(e.response.info.message));
 		};
 
 		const updateEnigmas = (enigmasList: enigma[]) => {
 			if (!serie.value)
 				return;
 			enigmasList.forEach((v, i) => {
-				(serie.value as serieElement).serie_enigma_order[i].enigma = v;
-				(serie.value as serieElement).serie_enigma_order[i].enigma_id = v.id;
+				if ((serie.value as serieElement).serie_enigma_order[i]) {
+					(serie.value as serieElement).serie_enigma_order[i].enigma = v;
+					(serie.value as serieElement).serie_enigma_order[i].enigma_id = v.id;
+				} else {
+					(serie.value as serieElement).serie_enigma_order.push({
+						serie_id: serie.value?.id,
+						enigma_id: v.id,
+						enigma: v,
+						order: i + 1
+					});
+				}
 			});
 
 			api.post('/serie/update/order', {
 				serie_id: Number(route.params.serieId),
 				order: enigmasList.map((v) => ({ serie_id: v.serie_id, enigma_id: v.id }))
 			})
-				.catch(() => {
-					///
-				});
+				.catch((e) => $q.notify(e.response.info.message));
 		};
 
 		onBeforeMount(() => {
@@ -116,9 +123,7 @@ export default defineComponent({
 						? true
 						: 'unauthorized';
 				})
-				.catch(() => {
-					///
-				});
+				.catch((e) => $q.notify(e.response.info.message));
 		});
 
 		return {

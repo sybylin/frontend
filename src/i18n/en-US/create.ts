@@ -14,6 +14,14 @@ export default {
 			points: 'points',
 			incorrect: '{key} is incorrect',
 			mandatory: '{key} is mandatory'
+		},
+		delete: 'delete',
+		deleteDialog: {
+			title: 'delete serie',
+			description: 'you\'re about to delete the entire series, this action is irreversible',
+			explanation: 'to delete this series, enter its name and confirm the request',
+			label: 'enter name of serie',
+			error: 'the name doesn\'t match'
 		}
 	},
 	dialogCreateSerie: {

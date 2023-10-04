@@ -39,7 +39,7 @@
 					/>
 					<q-slider
 						v-model.number="points"
-						class="q-pt-xl"
+						class="q-pt-xl q-pb-md"
 						debounce="500"
 						bottom-slots
 						:min="0"
@@ -50,15 +50,82 @@
 						label-always
 						color="light-blue-8"
 					/>
+					<q-separator />
+					<div class="q-pt-md row reverse">
+						<q-btn color="red-7" :label="$t('create.main.delete')" @click="deleteDialog = true" />
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<q-dialog
+		v-model="deleteDialog"
+		@hide="onResetDelete"
+	>
+		<q-card style="width: 700px; max-width: 80vw;">
+			<q-card-section class="relative-position">
+				<span class="row justify-center text-h6">
+					{{ $capitalize($t('create.main.deleteDialog.title')) }}
+				</span>
+				<q-btn
+					v-close-popup
+					icon="close" flat
+					round dense
+					class="absolute closeBtn"
+				/>
+			</q-card-section>
+			<q-separator />
+			<q-card-section class="text-center">
+				<p class="text-body1">
+					{{ $capitalize($t('create.main.deleteDialog.description')) }}
+				</p>
+				<p class="text-body1">
+					{{ $capitalize($t('create.main.deleteDialog.explanation')) }}
+				</p>
+				<div class="bg-indigo-6 text-white">
+					<p class="text-h5">
+						{{ $props.modelValue.title }}
+					</p>
+				</div>
+			</q-card-section>
+			<q-card-section>
+				<q-form
+					@submit="onSubmitDelete"
+					@reset="onResetDelete"
+				>
+					<q-input
+						v-model="deleteName"
+						bottom-slots
+						outlined
+						:label="$capitalize($t('create.main.deleteDialog.label'))"
+						lazy-rules
+						:rules="[ val => val && val.length > 0 && val.localeCompare($props.modelValue.title) === 0 || $capitalize($t('create.main.deleteDialog.error'))]"
+					/>
+					<div class="row reverse">
+						<q-btn
+							:label="$capitalize($t('user.connection.step.1.submit'))"
+							type="submit"
+							color="red-7"
+							:disable="!deleteName || deleteName.localeCompare($props.modelValue.title) !== 0"
+							class="q-ml-sm"
+						/>
+						<q-btn
+							:label="$capitalize($t('user.connection.step.1.reset'))"
+							type="reset"
+							color="red-7"
+							flat
+						/>
+					</div>
+				</q-form>
+			</q-card-section>
+		</q-card>
+	</q-dialog>
 </template>
 
 <script lang="ts">
 import { PropType, defineComponent, onMounted, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 import ImageUpload from '../imageUpload.vue';
@@ -78,7 +145,9 @@ export default defineComponent({
 	emits: ['update:modelValue', 'wait'],
 	setup (props, { emit }) {
 		const $q = useQuasar();
+		const router = useRouter();
 
+		const deleteDialog = ref<boolean>(false);
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
@@ -89,6 +158,8 @@ export default defineComponent({
 		const descriptionError = ref<boolean>(false);
 		const pointsError = ref<boolean>(false);
 
+		const deleteName = ref<string | null>(null);
+
 		const sendEmit = (part: 'title' | 'description' | 'points' | 'image', val: unknown) => {
 			const modelValue = props.modelValue;
 			modelValue[part] = val as never;
@@ -98,6 +169,18 @@ export default defineComponent({
 		const setWait = (set: boolean) => {
 			apiWait.value = set;
 			emit('wait', set);
+		};
+
+		const onSubmitDelete = () => {
+			if (!deleteName.value || deleteName.value.localeCompare(props.modelValue.title) !== 0)
+				return;
+			api.delete(`/serie/${props.modelValue.id}`)
+				.then(() => router.push({ name: 'selectSerie' }))
+				.catch((e) => $q.notify(e.response.info.message));
+		};
+
+		const onResetDelete = () => {
+			deleteName.value = null;
 		};
 
 		onMounted(() => {
@@ -140,12 +223,11 @@ export default defineComponent({
 					.finally(() => setWait(false));
 			});
 
-			watch(image, (i) => {
-				console.log(i);
-			});
+			watch(image, (i) => sendEmit('image', i));
 		});
 
 		return {
+			deleteDialog,
 			apiWait,
 			title,
 			description,
@@ -154,8 +236,20 @@ export default defineComponent({
 
 			titleError,
 			descriptionError,
-			pointsError
+			pointsError,
+
+			deleteName,
+
+			onSubmitDelete,
+			onResetDelete
 		};
 	}
 });
 </script>
+
+<style>
+.closeBtn {
+	right: 1.1em;
+	top: 1.1em;
+}
+</style>

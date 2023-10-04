@@ -1,6 +1,6 @@
 <template>
-	<q-no-ssr>
-		<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
+	<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
+		<q-no-ssr>
 			<template v-for="route in routes" :key="route.name">
 				<div
 					v-show="!route.wall || (route.wall && storeInstance.isConnected)"
@@ -20,8 +20,8 @@
 					</div>
 				</div>
 			</template>
-		</div>
-	</q-no-ssr>
+		</q-no-ssr>
+	</div>
 </template>
 
 <script lang="ts">
@@ -60,7 +60,12 @@ export default defineComponent({
 			{
 				name: 'series',
 				icon: 'apps',
-				label: 'menu.series',
+				label: 'menu.series'
+			},
+			{
+				name: 'selectSerie',
+				icon: 'design_services',
+				label: 'menu.create',
 				wall: true
 			},
 			{
@@ -72,7 +77,7 @@ export default defineComponent({
 
 		onMounted(() => {
 			watch(store.isConnected, (v) => {
-				routes[2].name = (v)
+				routes[3].name = (v)
 					? 'user'
 					: 'login';
 			});

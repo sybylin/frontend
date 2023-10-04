@@ -7,7 +7,7 @@
 			:alt="$props.alt"
 			fit="cover"
 			:class="{ rounded: $props.rounded }"
-			:src="inputUrl ?? '/imgs/background.jpg'"
+			:src="inputUrl ? `${baseURL}${inputUrl}` : '/imgs/background.jpg'"
 		/>
 		<div
 			:class="{
@@ -78,9 +78,6 @@ export default defineComponent({
 		const file = ref<HTMLInputElement | null>(null);
 		const inputUrl = ref<string | null>(props.modelValue ?? null);
 
-		if (inputUrl.value)
-			inputUrl.value = `${baseURL}${inputUrl.value}`;
-
 		const click = () => {
 			if (!file.value)
 				return;
@@ -100,7 +97,7 @@ export default defineComponent({
 				Object.assign({ image: file.value.files[0] }, props.apiData)
 			)
 				.then((d) => {
-					inputUrl.value = `${baseURL}${d.data.path}`;
+					inputUrl.value = d.data.path;
 				})
 				.catch((e) => $q.notify({ type: 'error', message: e.response.data.info.message }));
 		};
@@ -110,6 +107,7 @@ export default defineComponent({
 		});
 
 		return {
+			baseURL,
 			image,
 			file,
 			inputUrl,
