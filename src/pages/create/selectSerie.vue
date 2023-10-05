@@ -56,6 +56,7 @@
 import { defineComponent, onBeforeMount, ref, watch } from 'vue';
 import { baseURL, api } from 'src/boot/axios';
 import ComponentsPagesCreationDialogCreateSerie from 'components/pages/creation/dialogCreateSerie.vue';
+import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
 
 export interface serieElement {
 	id: number;
@@ -65,7 +66,7 @@ export interface serieElement {
 	points: number;
 	creation_date: Date;
 	modification_date: Date;
-	serie_enigma_order: any[];
+	serie_enigma_order: enigma[];
 }
 
 export default defineComponent({

@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue';
+import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 import ComponentsPagesUserTokenValidation from 'components/pages/user/tokenValidation.vue';
@@ -50,6 +51,7 @@ export default defineComponent({
 		ComponentsPagesUserTokenValidation
 	},
 	setup () {
+		const $q = useQuasar();
 		const router = useRouter();
 		const isVerify = ref<boolean | null>(null);
 		const accountName = ref<string | null>(null);
@@ -69,13 +71,13 @@ export default defineComponent({
 
 			watch(isVerify, (iV) => {
 				if (iV === false) {
-					try {
-						api.post('/user/token', {
-							name: accountName.value
-						});
-					} catch {
-						///
-					}
+					api.post('/user/token', {
+						name: accountName.value
+					})
+						.catch((e) => $q.notify({
+							type: 'negative',
+							message: e.response.data.info.message
+						}));
 				}
 			});
 		});
