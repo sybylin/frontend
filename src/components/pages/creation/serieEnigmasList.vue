@@ -26,7 +26,7 @@
 					<div class="img">
 						<q-img
 							loading="lazy"
-							:src="element.image ?? '/imgs/background.jpg'"
+							:src="(element.image) ? `${baseURL}${element.image}` : '/imgs/background.jpg' "
 							style="height: 100%"
 						/>
 						<div class="row justify-between img-top">
@@ -79,6 +79,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
+import { baseURL } from 'src/boot/axios';
 import draggable from 'zhyswan-vuedraggable';
 import ComponentsPagesCreationDialogCreateEnigma from 'src/components/pages/creation/dialogCreateEnigma.vue';
 import type { serieElement } from 'src/pages/create/selectSerie.vue';
@@ -111,7 +112,7 @@ export default defineComponent({
 	setup (props, { emit }) {
 		const openCreationDialog = ref<boolean>(false);
 		const drag = ref<boolean>(false);
-		const enigmas = ref(props.modelValue.serie_enigma_order.map((e) => e.enigma) as enigma[] ?? []);
+		const enigmas = ref(props.modelValue.serie_enigma_order.map((e: any) => e.enigma) as enigma[] ?? []);
 
 		const initDebounce = () => {
 			let timeout: any | null = null;
@@ -132,6 +133,7 @@ export default defineComponent({
 		});
 
 		return {
+			baseURL,
 			openCreationDialog,
 			drag,
 			enigmas,

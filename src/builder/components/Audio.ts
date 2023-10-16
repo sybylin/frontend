@@ -1,8 +1,12 @@
+import { useI18n } from 'vue-i18n';
+import { frontBaseUrl } from 'src/boot/axios';
 import type { Editor, AddComponentTypeOptions } from 'grapesjs';
 import type { PluginOptions } from '../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (editor: Editor, _opts: PluginOptions) => {
+	const { t } = useI18n();
+
 	editor.DomComponents.addType('audio', {
 		isComponent: el => el.tagName === 'AUDIO',
 		model: {
@@ -10,7 +14,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 				traits: [
 					{
 						type: 'text',
-						label: 'Souce',
+						label: t('builder.components.audio'),
 						name: 'src'
 					}
 				],
@@ -22,7 +26,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 					class: 'full-width',
 					controls: true,
 					preload: 'metadata',
-					src: '/audio/toony.mp3'
+					src: `${frontBaseUrl}/audio/toony.mp3`
 				}
 			}
 		}

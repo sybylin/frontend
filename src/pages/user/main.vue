@@ -2,7 +2,10 @@
 	<components-pages-user-profil :user="user" />
 	<q-tabs
 		v-model="tab"
-		class="full-width"
+		align="justify"
+		class="text-teal"
+		active-color="secondary"
+		indicator-color="secondary"
 	>
 		<q-tab name="series" label="Series" />
 		<q-tab name="achievement" label="Achievement" />
@@ -11,7 +14,6 @@
 		v-model="tab"
 		keep-alive
 		animated
-		swipeable
 		transition-prev="fade"
 		transition-next="fade"
 	>

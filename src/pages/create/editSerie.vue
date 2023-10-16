@@ -8,7 +8,7 @@
 			style="min-height: inherit"
 			class="row items-center justify-center full-width"
 		>
-			<span>{{ $capitalize($t('create.main.serie.unauthorized')) }}</span>
+			<span class="text-h4">{{ $capitalize($t('create.main.serie.unauthorized')) }}</span>
 		</div>
 		<div v-else class="q-pa-sm">
 			<div v-if="!serie" class="row justify-center items-center q-pt-xl q-pb-xl">
@@ -37,7 +37,13 @@
 					<q-tab name="options" icon="settings" :label="$t('create.main.serie.options')" />
 				</q-tabs>
 				<q-separator />
-				<q-tab-panels v-model="tab" animated class="transparent">
+				<q-tab-panels
+					v-model="tab"
+					animated
+					transition-prev="jump-left"
+					transition-next="jump-right"
+					class="transparent"
+				>
 					<q-tab-panel name="enigmas">
 						<components-pages-creation-serie-enigmas-list
 							v-model="serie"

@@ -5,8 +5,8 @@
 				<div class="row full-height justify-center items-center">
 					<image-upload
 						v-model="image"
-						api-path="/serie/update/image"
-						:api-data="{ serie_id: $props.modelValue.id }"
+						api-path="/enigma/update/image"
+						:api-data="{ enigma_id: $props.modelValue.id }"
 					/>
 				</div>
 			</div>
@@ -52,20 +52,20 @@
 					/>
 					<q-separator />
 					<div class="q-pt-md row reverse">
-						<q-btn color="red-7" :label="$t('create.main.delete')" @click="deleteDialog = true" />
+						<q-btn color="red-7" :label="$t('create.main.delete')" @click="deleteEnigma = true" />
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<q-dialog
-		v-model="deleteDialog"
+		v-model="deleteEnigma"
 		@hide="onResetDelete"
 	>
 		<q-card style="width: 700px; max-width: 80vw;">
 			<q-card-section class="relative-position">
 				<span class="row justify-center text-h6">
-					{{ $capitalize($t('create.main.deleteDialog.title')) }}
+					{{ $capitalize($t('create.main.deleteEnigma.title')) }}
 				</span>
 				<q-btn
 					v-close-popup
@@ -77,10 +77,10 @@
 			<q-separator />
 			<q-card-section class="text-center">
 				<p class="text-body1">
-					{{ $capitalize($t('create.main.deleteDialog.description')) }}
+					{{ $capitalize($t('create.main.deleteEnigma.description')) }}
 				</p>
 				<p class="text-body1">
-					{{ $capitalize($t('create.main.deleteDialog.explanation')) }}
+					{{ $capitalize($t('create.main.deleteEnigma.explanation')) }}
 				</p>
 				<div class="bg-indigo-6 text-white">
 					<p class="text-h5">
@@ -97,9 +97,9 @@
 						v-model="deleteName"
 						bottom-slots
 						outlined
-						:label="$capitalize($t('create.main.deleteDialog.label'))"
+						:label="$capitalize($t('create.main.deleteEnigma.label'))"
 						lazy-rules
-						:rules="[ val => val && val.length > 0 && val.localeCompare($props.modelValue.title) === 0 || $capitalize($t('create.main.deleteDialog.error'))]"
+						:rules="[ val => val && val.length > 0 && val.localeCompare($props.modelValue.title) === 0 || $capitalize($t('create.main.deleteEnigma.error'))]"
 					/>
 					<div class="row reverse">
 						<q-btn
@@ -129,16 +129,16 @@ import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 import ImageUpload from '../imageUpload.vue';
-import type { serieElement } from 'src/pages/create/selectSerie.vue';
+import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
 
 export default defineComponent({
-	name: 'ComponentsPagesCreationSerieOption',
+	name: 'ComponentsPagesCreationEnigmaInfo',
 	components: {
 		ImageUpload
 	},
 	props: {
 		modelValue: {
-			type: Object as PropType<serieElement>,
+			type: Object as PropType<enigma>,
 			required: true
 		}
 	},
@@ -147,7 +147,7 @@ export default defineComponent({
 		const $q = useQuasar();
 		const router = useRouter();
 
-		const deleteDialog = ref<boolean>(false);
+		const deleteEnigma = ref<boolean>(false);
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
@@ -174,7 +174,7 @@ export default defineComponent({
 		const onSubmitDelete = () => {
 			if (!deleteName.value || deleteName.value.localeCompare(props.modelValue.title) !== 0)
 				return;
-			api.delete(`/serie/${props.modelValue.id}`)
+			api.delete(`/enigma/${props.modelValue.id}`)
 				.then(() => router.push({ name: 'selectSerie' }))
 				.catch((e) => $q.notify(e.response.info.message));
 		};
@@ -188,8 +188,8 @@ export default defineComponent({
 				if (titleError.value || !t || isEmpty(t))
 					return;
 				setWait(true);
-				api.post('/serie/update/title', {
-					serie_id: props.modelValue.id,
+				api.post('/enigma/update/title', {
+					enigma_id: props.modelValue.id,
 					title: t
 				})
 					.then(() => sendEmit('title', t))
@@ -201,8 +201,8 @@ export default defineComponent({
 				if (descriptionError.value || !d || isEmpty(d))
 					return;
 				setWait(true);
-				api.post('/serie/update/description', {
-					serie_id: props.modelValue.id,
+				api.post('/enigma/update/description', {
+					enigma_id: props.modelValue.id,
 					description: d
 				})
 					.then(() => sendEmit('description', d))
@@ -214,8 +214,8 @@ export default defineComponent({
 				if (pointsError.value || !p || typeof p !== 'number' || p < 0 || p > 5000)
 					return;
 				setWait(true);
-				api.post('/serie/update/points', {
-					serie_id: props.modelValue.id,
+				api.post('/enigma/update/points', {
+					enigma_id: props.modelValue.id,
 					points: p
 				})
 					.then(() => sendEmit('points', p))
@@ -227,7 +227,7 @@ export default defineComponent({
 		});
 
 		return {
-			deleteDialog,
+			deleteEnigma,
 			apiWait,
 			title,
 			description,

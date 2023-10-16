@@ -1,7 +1,8 @@
-import type { Editor } from 'grapesjs';
-import type { PluginOptions } from '../interface';
 import { blocksList, mediaIcon } from '../plugin';
 import { useI18n } from 'vue-i18n';
+import { frontBaseUrl } from 'src/boot/axios';
+import type { Editor } from 'grapesjs';
+import type { PluginOptions } from '../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (editor: Editor, _opts: PluginOptions) => {
@@ -15,12 +16,36 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		media: mediaIcon('image'),
 		category,
 		content: {
-			tagName: 'img',
-			type: 'image',
-			attributes: {
-				src: 'https://via.placeholder.com/350x250/78c5d6/fff',
-				loading: 'lazy'
-			}
+			tagName: 'div',
+			droppable: false,
+			attributes: { class: 'q-img', 'aria-label': 'image' },
+			components: [
+				{
+					tagName: 'div',
+					attributes: { style: 'padding-bottom: 100%' }
+				},
+				{
+					tagName: 'div',
+					attributes: { class: 'q-img__container absolute-full' },
+					components: {
+						tagName: 'img',
+						type: 'image',
+						attributes: {
+							src: `${frontBaseUrl}/public/imgs/builder/default.png`,
+							loading: 'lazy',
+							fetchpriority: 'auto',
+							'aria-hidden': 'true',
+							draggable: 'false',
+							class: 'q-img__image q-img__image--with-transition q-img__image--loaded',
+							style: 'object-fit: cover; object-position: 50% 50%;'
+						}
+					}
+				},
+				{
+					tagName: 'div',
+					attributes: { class: 'q-img__content absolute-full q-anchor--skip' }
+				}
+			]
 		}
 	});
 
@@ -30,6 +55,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		category,
 		content: {
 			tagName: 'div',
+			droppable: false,
 			attributes: { class: 'full-width' },
 			components: {
 				tagName: 'audio',
@@ -38,7 +64,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 					class: 'full-width',
 					controls: true,
 					preload: 'metadata',
-					src: '/audio/toony.mp3'
+					src: `${frontBaseUrl}/public/audio/toony.mp3`
 				}
 			}
 		}
@@ -51,11 +77,12 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		content: {
 			tagName: 'video',
 			type: 'video',
+			droppable: false,
 			attributes: {
 				control: true,
 				preload: 'metadata',
 				width: 620,
-				src: '/video/builder.mp4'
+				src: `${frontBaseUrl}/public/video/builder.mp4`
 			}
 		}
 	});
@@ -67,12 +94,13 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		content: {
 			tagName: 'div',
 			type: 'container',
+			droppable: false,
 			attributes: { class: 'q-card', style: 'min-width: 250px' },
 			components: [
 				{
 					tagName: 'img',
 					type: 'image',
-					attributes: { src: 'https://via.placeholder.com/350x250/78c5d6/fff' }
+					attributes: { src: `${frontBaseUrl}/public/imgs/builder/default.png` }
 				},
 				{
 					tagName: 'div',

@@ -1,5 +1,6 @@
 export default {
 	components: {
+		audio: 'Audio',
 		basic: {
 			title: 'Base',
 			image: 'Image',

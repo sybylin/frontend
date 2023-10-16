@@ -1,7 +1,7 @@
-import type { Editor } from 'grapesjs';
-import type { PluginOptions } from '../interface';
 import { blocksList } from '../plugin';
 import { useI18n } from 'vue-i18n';
+import type { Editor } from 'grapesjs';
+import type { PluginOptions } from '../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (editor: Editor, _opts: PluginOptions) => {

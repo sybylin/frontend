@@ -1,7 +1,7 @@
-import type { Editor } from 'grapesjs';
-import type { PluginOptions } from '../interface';
 import { blocksList, mediaIcon } from '../plugin';
 import { useI18n } from 'vue-i18n';
+import type { Editor } from 'grapesjs';
+import type { PluginOptions } from '../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (editor: Editor, _opts: PluginOptions) => {
@@ -21,7 +21,8 @@ export default (editor: Editor, _opts: PluginOptions) => {
 			content: {
 				tagName: `h${reg}`,
 				type: 'text',
-				content: 'Placeholder'
+				content: 'Placeholder',
+				droppable: false
 			}
 		});
 	}

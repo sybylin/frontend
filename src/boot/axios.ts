@@ -4,6 +4,9 @@ import { hasAchievement } from './custom';
 
 export type serverAchievement = { name: string, timestamp: Date };
 export const xsrfName = 'x-xsrf-token';
+export const frontBaseUrl = (import.meta.env.DEV)
+	? 'http://localhost:9100'
+	: 'https://sibyllin.app';
 export const baseURL = (import.meta.env.DEV)
 	? 'http://localhost:3000'
 	: 'https://api.sibyllin.app';

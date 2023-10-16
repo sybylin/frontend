@@ -99,7 +99,7 @@ export default defineComponent({
 				.then((d) => {
 					inputUrl.value = d.data.path;
 				})
-				.catch((e) => $q.notify({ type: 'error', message: e.response.data.info.message }));
+				.catch((e) => $q.notify({ type: 'negative', message: e.response.data.info.message }));
 		};
 
 		onMounted(() => {
