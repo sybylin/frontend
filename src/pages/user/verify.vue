@@ -22,7 +22,7 @@
 					<div class="row full-width justify-center q-mt-md">
 						<q-btn
 							color="secondary"
-							:label="$t('create.main.serie.return')"
+							:label="$t('create.main.series.return')"
 							icon="arrow_back"
 							@click="$router.back()"
 						/>

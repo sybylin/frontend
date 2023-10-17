@@ -87,13 +87,13 @@ export default defineComponent({
 
 		const onSubmit = () => {
 			if (title.value && description.value && !isEmpty(title.value) && !isEmpty(description.value)) {
-				api.post('/serie/create', {
+				api.post('/series/create', {
 					title: title.value,
 					description: description.value
 				})
 					.then((d) => d.data)
 					.then((d) => {
-						emit('validate', d.serie);
+						emit('validate', d.series);
 					})
 					.catch((e) => {
 						if (e.response.data.info.code === 'SE_001')

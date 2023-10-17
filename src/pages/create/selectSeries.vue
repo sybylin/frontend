@@ -7,20 +7,20 @@
 	</div>
 	<div v-else class="fit row wrap justify-center q-pt-xl q-pb-xl">
 		<q-card
-			v-for="serie of seriesList"
-			:key="serie.id"
+			v-for="series of seriesList"
+			:key="series.id"
 			flat
 			bordered
 			class="card q-ma-sm"
 		>
 			<q-img
 				loading="lazy"
-				:src="(serie.image) ? `${baseURL}${serie.image}` : '/imgs/background.jpg'"
+				:src="(series.image) ? `${baseURL}${series.image}` : '/imgs/background.jpg'"
 				style="height: 65%"
 			/>
 			<q-card-section class="row full-width justify-center">
 				<div class="text-h6">
-					<span>{{ serie.title }}</span>
+					<span>{{ series.title }}</span>
 				</div>
 			</q-card-section>
 			<q-card-actions class="reverse row">
@@ -28,7 +28,7 @@
 					color="deep-purple-6"
 					:label="$t('create.main.list.edit')"
 					icon-right="edit"
-					:to="{ name: 'editSerie', params: { serieId: serie.id } }"
+					:to="{ name: 'editSerie', params: { seriesId: series.id } }"
 				/>
 			</q-card-actions>
 		</q-card>
@@ -46,7 +46,7 @@
 			</q-card-section>
 		</q-card>
 	</div>
-	<components-pages-creation-dialog-create-serie
+	<components-pages-creation-dialog-create-series
 		v-model="openCreationDialog"
 		@validate="addSerieToList"
 	/>
@@ -55,31 +55,32 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue';
 import { baseURL, api } from 'src/boot/axios';
-import ComponentsPagesCreationDialogCreateSerie from 'components/pages/creation/dialogCreateSerie.vue';
-import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
+import ComponentsPagesCreationDialogCreateSeries from 'components/pages/creation/dialogCreateSerie.vue';
+import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
 
-export interface serieElement {
+export interface seriesElement {
 	id: number;
 	title: string;
 	image: string | null;
 	description: string;
 	points: number;
+	published: boolean;
 	creation_date: Date;
 	modification_date: Date;
-	serie_enigma_order: enigma[];
+	series_enigma_order: enigma[];
 }
 
 export default defineComponent({
 	name: 'PagesCreateMain',
 	components: {
-		ComponentsPagesCreationDialogCreateSerie
+		ComponentsPagesCreationDialogCreateSeries
 	},
 	setup () {
-		const seriesList = ref<serieElement[] | null>(null);
-		const selectedSerie = ref<serieElement | null>(null);
+		const seriesList = ref<seriesElement[] | null>(null);
+		const selectedSerie = ref<seriesElement | null>(null);
 		const openCreationDialog = ref<boolean>(false);
 
-		const selectSerieEvent = (s: serieElement) => {
+		const selectSerieEvent = (s: seriesElement) => {
 			selectedSerie.value = s;
 		};
 
@@ -87,12 +88,12 @@ export default defineComponent({
 			selectedSerie.value = null;
 		};
 
-		const addSerieToList = (s: serieElement) => {
+		const addSerieToList = (s: seriesElement) => {
 			seriesList.value?.push(s);
 			openCreationDialog.value = false;
 		};
 
-		const editSerie = (s: serieElement) => {
+		const editSerie = (s: seriesElement) => {
 			if (!seriesList.value)
 				return;
 			for (const i in seriesList.value) {
@@ -104,7 +105,7 @@ export default defineComponent({
 		};
 
 		onBeforeMount(() => {
-			api.get('serie/createByUser')
+			api.get('/series/createByUser')
 				.then((d) => d.data)
 				.then((d) => {
 					seriesList.value = d.series;

@@ -46,7 +46,7 @@
 							color="deep-purple-6"
 							:label="$t('create.main.list.edit')"
 							icon-right="edit"
-							:to="{ name: 'editEnigma', params: { serieId: $props.modelValue.id, enigmaId: element.id } }"
+							:to="{ name: 'editEnigma', params: { seriesId: $props.modelValue.id, enigmaId: element.id } }"
 						/>
 					</q-card-actions>
 				</q-card>
@@ -71,7 +71,7 @@
 	</draggable>
 	<components-pages-creation-dialog-create-enigma
 		v-model="openCreationDialog"
-		:serie-id="$props.modelValue.id"
+		:series-id="$props.modelValue.id"
 		:order="enigmas.length"
 		@validate="addEnigmaToList"
 	/>
@@ -82,11 +82,11 @@ import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
 import { baseURL } from 'src/boot/axios';
 import draggable from 'zhyswan-vuedraggable';
 import ComponentsPagesCreationDialogCreateEnigma from 'src/components/pages/creation/dialogCreateEnigma.vue';
-import type { serieElement } from 'src/pages/create/selectSerie.vue';
+import type { seriesElement } from 'src/pages/create/selectSeries.vue';
 
 export interface enigma {
 	id: number;
-	serie_id: number;
+	series_id: number;
 	title: string;
 	image: string | null;
 	description: string;
@@ -104,7 +104,7 @@ export default defineComponent({
 	},
 	props: {
 		modelValue: {
-			type: Object as PropType<serieElement>,
+			type: Object as PropType<seriesElement>,
 			required: true
 		}
 	},
@@ -112,7 +112,7 @@ export default defineComponent({
 	setup (props, { emit }) {
 		const openCreationDialog = ref<boolean>(false);
 		const drag = ref<boolean>(false);
-		const enigmas = ref(props.modelValue.serie_enigma_order.map((e: any) => e.enigma) as enigma[] ?? []);
+		const enigmas = ref(props.modelValue.series_enigma_order.map((e: any) => e.enigma) as enigma[] ?? []);
 
 		const initDebounce = () => {
 			let timeout: any | null = null;

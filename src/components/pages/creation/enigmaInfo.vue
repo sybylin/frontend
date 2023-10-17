@@ -18,13 +18,13 @@
 						bottom-slots
 						:loading="apiWait"
 						:disable="apiWait"
-						:label="$capitalize($t('create.main.serie.title'))"
+						:label="$capitalize($t('create.main.series.title'))"
 						:error="titleError === true || titleError === 'isExist'"
 						:error-message="titleError === 'isExist'
 							? $capitalize($t('create.dialogCreateSerie.titleError'))
-							: $capitalize($t('create.main.serie.incorrect', { key: $t('create.main.serie.title') }))
+							: $capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))
 						"
-						:rules="[(v) => !titleError && v && v.length > 0 || $t('create.main.serie.mandatory', { key: $t('create.main.serie.title') })]"
+						:rules="[(v) => !titleError && v && v.length > 0 || $t('create.main.series.mandatory', { key: $t('create.main.series.title') })]"
 					/>
 					<q-input
 						v-model="description"
@@ -32,9 +32,9 @@
 						bottom-slots
 						:loading="apiWait"
 						:disable="apiWait"
-						:label="$capitalize($t('create.main.serie.description'))"
+						:label="$capitalize($t('create.main.series.description'))"
 						:error="descriptionError === true"
-						:error-message="$capitalize($t('create.main.serie.incorrect', { key: $t('create.main.serie.title') }))"
+						:error-message="$capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))"
 						autogrow
 					/>
 					<q-slider
@@ -46,7 +46,7 @@
 						:max="1500"
 						:step="10"
 						label
-						:label-value="`${points} ${$t('create.main.serie.points')}`"
+						:label-value="`${points} ${$t('create.main.series.points')}`"
 						label-always
 						color="light-blue-8"
 					/>
@@ -129,7 +129,7 @@ import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 import ImageUpload from '../imageUpload.vue';
-import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
+import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
 
 export default defineComponent({
 	name: 'ComponentsPagesCreationEnigmaInfo',

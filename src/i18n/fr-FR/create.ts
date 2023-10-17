@@ -4,7 +4,7 @@ export default {
 			title: 'mes séries',
 			edit: 'éditer'
 		},
-		serie: {
+		series: {
 			return: 'retour',
 			unauthorized: 'vous n\'êtes pas autorisé à éditer cette série',
 			enigmas: 'énigmes',
@@ -13,7 +13,9 @@ export default {
 			description: 'description',
 			points: 'points',
 			incorrect: '{key} est incorrecte',
-			mandatory: '{key} est obligatoire'
+			mandatory: '{key} est obligatoire',
+			publish: 'publier la série',
+			publishTooltip: 'rend la série visible au public et consultable'
 		},
 		delete: 'supprimer',
 		deleteDialog: {

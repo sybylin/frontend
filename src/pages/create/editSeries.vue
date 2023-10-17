@@ -8,21 +8,21 @@
 			style="min-height: inherit"
 			class="row items-center justify-center full-width"
 		>
-			<span class="text-h4">{{ $capitalize($t('create.main.serie.unauthorized')) }}</span>
+			<span class="text-h4">{{ $capitalize($t('create.main.series.unauthorized')) }}</span>
 		</div>
 		<div v-else class="q-pa-sm">
-			<div v-if="!serie" class="row justify-center items-center q-pt-xl q-pb-xl">
+			<div v-if="!series" class="row justify-center items-center q-pt-xl q-pb-xl">
 				<q-spinner-cube color="deep-purple-6" size="6em" />
 			</div>
 			<template v-else>
 				<div class="row no-wrap justify-between q-pl-sm q-pr-sm">
 					<q-btn
 						color="secondary"
-						:label="$t('create.main.serie.return')"
+						:label="$t('create.main.series.return')"
 						icon="arrow_back"
 						:to="{ name: 'selectSerie' }"
 					/>
-					<span class="text-h5">{{ serie.title }}</span>
+					<span class="text-h5">{{ series.title }}</span>
 					<span></span>
 				</div>
 				<q-tabs
@@ -33,8 +33,8 @@
 					indicator-color="secondary"
 					align="justify"
 				>
-					<q-tab name="enigmas" icon="reorder" :label="$t('create.main.serie.enigmas')" />
-					<q-tab name="options" icon="settings" :label="$t('create.main.serie.options')" />
+					<q-tab name="enigmas" icon="reorder" :label="$t('create.main.series.enigmas')" />
+					<q-tab name="options" icon="settings" :label="$t('create.main.series.options')" />
 				</q-tabs>
 				<q-separator />
 				<q-tab-panels
@@ -45,13 +45,13 @@
 					class="transparent"
 				>
 					<q-tab-panel name="enigmas">
-						<components-pages-creation-serie-enigmas-list
-							v-model="serie"
+						<components-pages-creation-series-enigmas-list
+							v-model="series"
 							@update="updateEnigmas"
 						/>
 					</q-tab-panel>
 					<q-tab-panel name="options">
-						<components-pages-creation-serie-option v-model="serie" />
+						<components-pages-creation-series-option v-model="series" />
 					</q-tab-panel>
 				</q-tab-panels>
 			</template>
@@ -64,46 +64,46 @@ import { defineComponent, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { api } from 'src/boot/axios';
-import ComponentsPagesCreationSerieOption from 'components/pages/creation/serieOption.vue';
-import ComponentsPagesCreationSerieEnigmasList from 'components/pages/creation/serieEnigmasList.vue';
+import ComponentsPagesCreationSeriesOption from 'components/pages/creation/seriesOption.vue';
+import ComponentsPagesCreationSeriesEnigmasList from 'components/pages/creation/seriesEnigmasList.vue';
 
-import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
-import type { serieElement } from './selectSerie.vue';
+import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
+import type { seriesElement } from './selectSeries.vue';
 
 export default defineComponent({
 	name: 'PagesCreateEditSerie',
 	components: {
-		ComponentsPagesCreationSerieOption,
-		ComponentsPagesCreationSerieEnigmasList
+		ComponentsPagesCreationSeriesOption,
+		ComponentsPagesCreationSeriesEnigmasList
 	},
 	setup () {
 		const $q = useQuasar();
 		const isCheck = ref<boolean | 'unauthorized'>(false);
-		const serie = ref<serieElement | null>(null);
+		const series = ref<seriesElement | null>(null);
 		const tab = ref<'enigmas' | 'options'>('enigmas');
 		const route = useRoute();
 
 		const getSerie = () => {
-			api.post('/serie/one', {
-				serie_id: Number(route.params.serieId)
+			api.post('/series/one', {
+				series_id: Number(route.params.seriesId)
 			})
 				.then((d) => d.data)
 				.then((d) => {
-					serie.value = d.serie;
+					series.value = d.series;
 				})
 				.catch((e) => $q.notify(e.response.info.message));
 		};
 
 		const updateEnigmas = (enigmasList: enigma[]) => {
-			if (!serie.value)
+			if (!series.value)
 				return;
 			enigmasList.forEach((v, i) => {
-				if ((serie.value as serieElement).serie_enigma_order[i]) {
-					(serie.value as serieElement).serie_enigma_order[i].enigma = v;
-					(serie.value as serieElement).serie_enigma_order[i].enigma_id = v.id;
+				if ((series.value as seriesElement).series_enigma_order[i]) {
+					(series.value as seriesElement).series_enigma_order[i].enigma = v;
+					(series.value as seriesElement).series_enigma_order[i].enigma_id = v.id;
 				} else {
-					(serie.value as serieElement).serie_enigma_order.push({
-						serie_id: serie.value?.id,
+					(series.value as seriesElement).series_enigma_order.push({
+						series_id: series.value?.id ?? 0,
 						enigma_id: v.id,
 						enigma: v,
 						order: i + 1
@@ -111,16 +111,16 @@ export default defineComponent({
 				}
 			});
 
-			api.post('/serie/update/order', {
-				serie_id: Number(route.params.serieId),
-				order: enigmasList.map((v) => ({ serie_id: v.serie_id, enigma_id: v.id }))
+			api.post('/series/update/order', {
+				series_id: Number(route.params.seriesId),
+				order: enigmasList.map((v) => ({ series_id: v.series_id, enigma_id: v.id }))
 			})
 				.catch((e) => $q.notify(e.response.info.message));
 		};
 
 		onBeforeMount(() => {
-			api.post('/serie/isCreatedByUser', {
-				serie_id: Number(route.params.serieId)
+			api.post('/series/isCreatedByUser', {
+				series_id: Number(route.params.seriesId)
 			})
 				.then((d) => d.data)
 				.then((d) => {
@@ -134,7 +134,7 @@ export default defineComponent({
 
 		return {
 			isCheck,
-			serie,
+			series,
 			tab,
 			updateEnigmas
 		};

@@ -64,7 +64,7 @@ export default defineComponent({
 			type: Boolean,
 			required: true
 		},
-		serieId: {
+		seriesId: {
 			type: Number,
 			required: true
 		},
@@ -95,7 +95,7 @@ export default defineComponent({
 		const onSubmit = () => {
 			if (title.value && description.value && !isEmpty(title.value) && !isEmpty(description.value)) {
 				api.post('/enigma/create', {
-					serie_id: props.serieId,
+					series_id: props.seriesId,
 					title: title.value,
 					description: description.value,
 					order: props.order + 1

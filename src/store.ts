@@ -13,12 +13,12 @@ export interface interfaceEnigmas {
 
 export const series = [
 	{
-		title: 'First serie',
+		title: 'First series',
 		id: 1,
 		isStarted: false
 	},
 	{
-		title: 'Second serie',
+		title: 'Second series',
 		id: 2,
 		isStarted: true
 	}

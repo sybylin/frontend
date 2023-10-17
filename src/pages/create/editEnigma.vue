@@ -8,15 +8,15 @@
 			style="min-height: inherit"
 			class="row items-center justify-center full-width"
 		>
-			<span class="text-h4">{{ $capitalize($t('create.main.serie.unauthorized')) }}</span>
+			<span class="text-h4">{{ $capitalize($t('create.main.series.unauthorized')) }}</span>
 		</div>
 		<div v-else class="q-pa-sm" style="min-height: inherit;">
 			<div class="row no-wrap justify-between q-pl-sm q-pr-sm">
 				<q-btn
 					color="secondary"
-					:label="$t('create.main.serie.return')"
+					:label="$t('create.main.series.return')"
 					icon="arrow_back"
-					:to="{ name: 'editSerie', params: { serieId: $route.params.serieId } }"
+					:to="{ name: 'editSerie', params: { seriesId: $route.params.seriseId } }"
 				/>
 				<span class="text-h5">{{ enigma?.title }}</span>
 				<span></span>
@@ -64,7 +64,7 @@ import { api } from 'src/boot/axios';
 import ComponentsBuilderMain from 'components/builder/main.vue';
 import EnigmaInfo from 'components/pages/creation/enigmaInfo.vue';
 import EnigmaSolution from 'components/pages/creation/enigmaSolution.vue';
-import type { enigma } from 'src/components/pages/creation/serieEnigmasList.vue';
+import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
 
 export default defineComponent({
 	name: 'PagesCreateEditEnigma',

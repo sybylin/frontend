@@ -5,8 +5,8 @@
 				<div class="row full-height justify-center items-center">
 					<image-upload
 						v-model="image"
-						api-path="/serie/update/image"
-						:api-data="{ serie_id: $props.modelValue.id }"
+						api-path="/series/update/image"
+						:api-data="{ series_id: $props.modelValue.id }"
 					/>
 				</div>
 			</div>
@@ -18,13 +18,13 @@
 						bottom-slots
 						:loading="apiWait"
 						:disable="apiWait"
-						:label="$capitalize($t('create.main.serie.title'))"
+						:label="$capitalize($t('create.main.series.title'))"
 						:error="titleError === true || titleError === 'isExist'"
 						:error-message="titleError === 'isExist'
 							? $capitalize($t('create.dialogCreateSerie.titleError'))
-							: $capitalize($t('create.main.serie.incorrect', { key: $t('create.main.serie.title') }))
+							: $capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))
 						"
-						:rules="[(v) => !titleError && v && v.length > 0 || $t('create.main.serie.mandatory', { key: $t('create.main.serie.title') })]"
+						:rules="[(v) => !titleError && v && v.length > 0 || $t('create.main.series.mandatory', { key: $t('create.main.series.title') })]"
 					/>
 					<q-input
 						v-model="description"
@@ -32,9 +32,9 @@
 						bottom-slots
 						:loading="apiWait"
 						:disable="apiWait"
-						:label="$capitalize($t('create.main.serie.description'))"
+						:label="$capitalize($t('create.main.series.description'))"
 						:error="descriptionError === true"
-						:error-message="$capitalize($t('create.main.serie.incorrect', { key: $t('create.main.serie.title') }))"
+						:error-message="$capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))"
 						autogrow
 					/>
 					<q-slider
@@ -46,10 +46,32 @@
 						:max="1500"
 						:step="10"
 						label
-						:label-value="`${points} ${$t('create.main.serie.points')}`"
+						:label-value="`${points} ${$t('create.main.series.points')}`"
 						label-always
 						color="light-blue-8"
 					/>
+					<div class="row no-wrap justify-end items-center">
+						<span class="text-body-1">
+							{{ $capitalize($t('create.main.series.publish')) }}
+							<q-icon name="help" size="sm" color="light-blue-8">
+								<q-tooltip
+									anchor="bottom middle" self="bottom middle" class="bg-light-blue-8 text-body2 text-center"
+									:offset="[0,40]"
+								>
+									{{ $capitalize($t('create.main.series.publishTooltip')) }}
+								</q-tooltip>
+							</q-icon>
+						</span>
+						<q-toggle
+							v-model="published"
+							:disable="apiWait"
+							size="xl"
+							color="green"
+							keep-color
+							checked-icon="public"
+							unchecked-icon="lock"
+						/>
+					</div>
 					<q-separator />
 					<div class="q-pt-md row reverse">
 						<q-btn color="red-7" :label="$t('create.main.delete')" @click="deleteDialog = true" />
@@ -129,7 +151,7 @@ import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 import ImageUpload from '../imageUpload.vue';
-import type { serieElement } from 'src/pages/create/selectSerie.vue';
+import type { seriesElement } from 'src/pages/create/selectSeries.vue';
 
 export default defineComponent({
 	name: 'ComponentsPagesCreationSerieOption',
@@ -138,7 +160,7 @@ export default defineComponent({
 	},
 	props: {
 		modelValue: {
-			type: Object as PropType<serieElement>,
+			type: Object as PropType<seriesElement>,
 			required: true
 		}
 	},
@@ -152,6 +174,7 @@ export default defineComponent({
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
 		const points = ref<number | null>(props.modelValue.points);
+		const published = ref<boolean>(props.modelValue.published);
 		const image = ref<string | null>(props.modelValue.image);
 
 		const titleError = ref<boolean | 'isExist'>(false);
@@ -160,7 +183,7 @@ export default defineComponent({
 
 		const deleteName = ref<string | null>(null);
 
-		const sendEmit = (part: 'title' | 'description' | 'points' | 'image', val: unknown) => {
+		const sendEmit = (part: 'title' | 'description' | 'points' | 'image' | 'published', val: unknown) => {
 			const modelValue = props.modelValue;
 			modelValue[part] = val as never;
 			emit('update:modelValue', modelValue);
@@ -174,7 +197,7 @@ export default defineComponent({
 		const onSubmitDelete = () => {
 			if (!deleteName.value || deleteName.value.localeCompare(props.modelValue.title) !== 0)
 				return;
-			api.delete(`/serie/${props.modelValue.id}`)
+			api.delete(`/series/${props.modelValue.id}`)
 				.then(() => router.push({ name: 'selectSerie' }))
 				.catch((e) => $q.notify(e.response.info.message));
 		};
@@ -188,8 +211,8 @@ export default defineComponent({
 				if (titleError.value || !t || isEmpty(t))
 					return;
 				setWait(true);
-				api.post('/serie/update/title', {
-					serie_id: props.modelValue.id,
+				api.post('/series/update/title', {
+					series_id: props.modelValue.id,
 					title: t
 				})
 					.then(() => sendEmit('title', t))
@@ -201,8 +224,8 @@ export default defineComponent({
 				if (descriptionError.value || !d || isEmpty(d))
 					return;
 				setWait(true);
-				api.post('/serie/update/description', {
-					serie_id: props.modelValue.id,
+				api.post('/series/update/description', {
+					series_id: props.modelValue.id,
 					description: d
 				})
 					.then(() => sendEmit('description', d))
@@ -214,11 +237,22 @@ export default defineComponent({
 				if (pointsError.value || !p || typeof p !== 'number' || p < 0 || p > 5000)
 					return;
 				setWait(true);
-				api.post('/serie/update/points', {
-					serie_id: props.modelValue.id,
+				api.post('/series/update/points', {
+					series_id: props.modelValue.id,
 					points: p
 				})
 					.then(() => sendEmit('points', p))
+					.catch((e) => $q.notify(e.response.info.message))
+					.finally(() => setWait(false));
+			});
+
+			watch(published, (p) => {
+				setWait(true);
+				api.post('/series/update/published', {
+					series_id: props.modelValue.id,
+					published: p
+				})
+					.then(() => sendEmit('published', p))
 					.catch((e) => $q.notify(e.response.info.message))
 					.finally(() => setWait(false));
 			});
@@ -232,6 +266,7 @@ export default defineComponent({
 			title,
 			description,
 			points,
+			published,
 			image,
 
 			titleError,
