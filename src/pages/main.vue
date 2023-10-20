@@ -14,7 +14,7 @@ import meta from '../meta';
 import mainHeader from '../components/pages/main/header.vue';
 
 export default defineComponent({
-	name: 'MainPage',
+	name: 'PageMain',
 	components: {
 		mainHeader
 	},

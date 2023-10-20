@@ -28,15 +28,13 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { inlineContent } from 'juice';
 import { useQuasar } from 'quasar';
 import { api } from 'src/boot/axios';
+import { brotliCompress } from 'src/boot/brotli';
 import initGrapeJs from 'src/builder';
 import 'grapesjs/dist/css/grapes.min.css';
 import type { Editor } from 'grapesjs';
-
-interface CSSStyleRule extends CSSRule {
-	selectorText: string
-}
 
 export default defineComponent({
 	name: 'ComponentsBuilderMain',
@@ -53,7 +51,7 @@ export default defineComponent({
 		const editor = ref<HTMLElement | null>(null);
 		const isLoad = ref<boolean>(false);
 
-		const generateAndSaveHTML = () => {
+		const generateAndSaveHTML = async () => {
 			const generateData: { html: string, css: string[] } = {
 				html: '',
 				css: []
@@ -72,7 +70,7 @@ export default defineComponent({
 				}
 			}
 
-			const genHtml = grapesjsInstance.value?.getHtml();
+			const genHtml = grapesjsInstance.value?.getHtml({ cleanId: true });
 			if (genHtml) {
 				const domParser = new DOMParser().parseFromString(genHtml, 'text/html');
 				const htmlTag = document.createElement('div');
@@ -84,14 +82,20 @@ export default defineComponent({
 				generateData.html = htmlTag.outerHTML;
 			}
 
+			const data = await brotliCompress(
+				inlineContent(generateData.html, generateData.css.join(' '))
+			);
+			if (!data)
+				return;
+
 			api.post('/enigma/update/page/prod', {
 				enigma_id: props.id,
-				editor_data: JSON.stringify({
-					html: generateData.html,
-					css: generateData.css.join(' ')
-				})
+				editor_data: data
 			})
-				.catch((e) => $q.notify({ type: 'failed', message: e.response.info.message }));
+				.catch((e) => {
+					console.error(e.response.data);
+					$q.notify({ type: 'failed', message: e.response.info.message });
+				});
 		};
 
 		onMounted(() => {

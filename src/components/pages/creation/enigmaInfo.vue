@@ -129,7 +129,7 @@ import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 import ImageUpload from '../imageUpload.vue';
-import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
+import type { enigma } from 'src/types';
 
 export default defineComponent({
 	name: 'ComponentsPagesCreationEnigmaInfo',
@@ -175,7 +175,7 @@ export default defineComponent({
 			if (!deleteName.value || deleteName.value.localeCompare(props.modelValue.title) !== 0)
 				return;
 			api.delete(`/enigma/${props.modelValue.id}`)
-				.then(() => router.push({ name: 'selectSerie' }))
+				.then(() => router.push({ name: 'editSeries', params: { seriesId: props.modelValue.series_id } }))
 				.catch((e) => $q.notify(e.response.info.message));
 		};
 

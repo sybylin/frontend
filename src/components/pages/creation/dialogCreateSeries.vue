@@ -58,7 +58,7 @@ import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 
 export default defineComponent({
-	name: 'ComponentsPagesCreationDialogCreateSerie',
+	name: 'ComponentsPagesCreationDialogCreateSeries',
 	props: {
 		modelValue: {
 			type: Boolean,

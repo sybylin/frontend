@@ -4,21 +4,15 @@
 		<q-page-container>
 			<q-page>
 				<router-view v-slot="{ Component }">
-					<transition
-						enter-active-class="animated fadeIn"
-						leave-active-class="animated fadeOut"
-					>
-						<div style="min-height: inherit;">
-							<template v-if="isRequiresAuth || $route.meta.noSSR === true">
-								<q-no-ssr>
-									<component :is="Component" />
-								</q-no-ssr>
-							</template>
-							<template v-else>
-								<component :is="Component" />
-							</template>
-						</div>
-					</transition>
+					<div class="page">
+						<q-no-ssr
+							v-if="isRequiresAuth || $route.meta.noSSR === true"
+							placeholder="This part is rendered on client"
+						>
+							<component :is="Component" />
+						</q-no-ssr>
+						<component :is="Component" v-else />
+					</div>
 				</router-view>
 			</q-page>
 		</q-page-container>
@@ -71,3 +65,9 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style scoped>
+.page {
+	min-height: inherit;
+}
+</style>

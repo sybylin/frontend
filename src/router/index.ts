@@ -8,9 +8,6 @@ import {
 import routes from './routes';
 
 export default route(() => {
-	const goToTop = (path: string) => /^\/\w{1,2}-\w{1,2}\/docs.*$/m.test(path)
-		? 64
-		: 0;
 	const createHistory = process.env.SERVER
 		? createMemoryHistory
 		: (process.env.VUE_ROUTER_MODE === 'history'
@@ -27,7 +24,7 @@ export default route(() => {
 					el: to.hash,
 					behavior: 'smooth',
 					left: 0,
-					top: goToTop(to.path)
+					top: 0
 				};
 			}
 
@@ -38,7 +35,7 @@ export default route(() => {
 							el: to.hash,
 							behavior: 'smooth',
 							left: 0,
-							top: goToTop(to.path)
+							top: 0
 						});
 					}, 500);
 				});

@@ -151,16 +151,16 @@ import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
 import ImageUpload from '../imageUpload.vue';
-import type { seriesElement } from 'src/pages/create/selectSeries.vue';
+import type { series } from 'src/types';
 
 export default defineComponent({
-	name: 'ComponentsPagesCreationSerieOption',
+	name: 'ComponentsPagesCreationSeriesOption',
 	components: {
 		ImageUpload
 	},
 	props: {
 		modelValue: {
-			type: Object as PropType<seriesElement>,
+			type: Object as PropType<series>,
 			required: true
 		}
 	},
@@ -198,7 +198,7 @@ export default defineComponent({
 			if (!deleteName.value || deleteName.value.localeCompare(props.modelValue.title) !== 0)
 				return;
 			api.delete(`/series/${props.modelValue.id}`)
-				.then(() => router.push({ name: 'selectSerie' }))
+				.then(() => router.push({ name: 'selectSeries' }))
 				.catch((e) => $q.notify(e.response.info.message));
 		};
 

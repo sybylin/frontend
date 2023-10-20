@@ -28,7 +28,7 @@
 					color="deep-purple-6"
 					:label="$t('create.main.list.edit')"
 					icon-right="edit"
-					:to="{ name: 'editSerie', params: { seriesId: series.id } }"
+					:to="{ name: 'editSeries', params: { seriesId: series.id } }"
 				/>
 			</q-card-actions>
 		</q-card>
@@ -55,32 +55,20 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue';
 import { baseURL, api } from 'src/boot/axios';
-import ComponentsPagesCreationDialogCreateSeries from 'components/pages/creation/dialogCreateSerie.vue';
-import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
-
-export interface seriesElement {
-	id: number;
-	title: string;
-	image: string | null;
-	description: string;
-	points: number;
-	published: boolean;
-	creation_date: Date;
-	modification_date: Date;
-	series_enigma_order: enigma[];
-}
+import ComponentsPagesCreationDialogCreateSeries from 'components/pages/creation/dialogCreateSeries.vue';
+import type { series } from 'src/types';
 
 export default defineComponent({
-	name: 'PagesCreateMain',
+	name: 'SelectSeries',
 	components: {
 		ComponentsPagesCreationDialogCreateSeries
 	},
 	setup () {
-		const seriesList = ref<seriesElement[] | null>(null);
-		const selectedSerie = ref<seriesElement | null>(null);
+		const seriesList = ref<series[] | null>(null);
+		const selectedSerie = ref<series | null>(null);
 		const openCreationDialog = ref<boolean>(false);
 
-		const selectSerieEvent = (s: seriesElement) => {
+		const selectSerieEvent = (s: series) => {
 			selectedSerie.value = s;
 		};
 
@@ -88,12 +76,12 @@ export default defineComponent({
 			selectedSerie.value = null;
 		};
 
-		const addSerieToList = (s: seriesElement) => {
+		const addSerieToList = (s: series) => {
 			seriesList.value?.push(s);
 			openCreationDialog.value = false;
 		};
 
-		const editSerie = (s: seriesElement) => {
+		const editSeries = (s: series) => {
 			if (!seriesList.value)
 				return;
 			for (const i in seriesList.value) {
@@ -128,7 +116,7 @@ export default defineComponent({
 			selectSerieEvent,
 			returnToSeries,
 			addSerieToList,
-			editSerie
+			editSeries
 		};
 	}
 });

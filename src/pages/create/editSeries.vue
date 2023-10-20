@@ -20,11 +20,12 @@
 						color="secondary"
 						:label="$t('create.main.series.return')"
 						icon="arrow_back"
-						:to="{ name: 'selectSerie' }"
+						:to="{ name: 'selectSeries' }"
 					/>
 					<span class="text-h5">{{ series.title }}</span>
 					<span></span>
 				</div>
+
 				<q-tabs
 					v-model="tab"
 					dense
@@ -67,11 +68,10 @@ import { api } from 'src/boot/axios';
 import ComponentsPagesCreationSeriesOption from 'components/pages/creation/seriesOption.vue';
 import ComponentsPagesCreationSeriesEnigmasList from 'components/pages/creation/seriesEnigmasList.vue';
 
-import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
-import type { seriesElement } from './selectSeries.vue';
+import type { enigma, series } from 'src/types';
 
 export default defineComponent({
-	name: 'PagesCreateEditSerie',
+	name: 'PagesCreateEditSeries',
 	components: {
 		ComponentsPagesCreationSeriesOption,
 		ComponentsPagesCreationSeriesEnigmasList
@@ -79,7 +79,7 @@ export default defineComponent({
 	setup () {
 		const $q = useQuasar();
 		const isCheck = ref<boolean | 'unauthorized'>(false);
-		const series = ref<seriesElement | null>(null);
+		const series = ref<series | null>(null);
 		const tab = ref<'enigmas' | 'options'>('enigmas');
 		const route = useRoute();
 
@@ -98,11 +98,11 @@ export default defineComponent({
 			if (!series.value)
 				return;
 			enigmasList.forEach((v, i) => {
-				if ((series.value as seriesElement).series_enigma_order[i]) {
-					(series.value as seriesElement).series_enigma_order[i].enigma = v;
-					(series.value as seriesElement).series_enigma_order[i].enigma_id = v.id;
+				if ((series.value as series).series_enigma_order[i]) {
+					(series.value as series).series_enigma_order[i].enigma = v;
+					(series.value as series).series_enigma_order[i].enigma_id = v.id;
 				} else {
-					(series.value as seriesElement).series_enigma_order.push({
+					(series.value as series).series_enigma_order.push({
 						series_id: series.value?.id ?? 0,
 						enigma_id: v.id,
 						enigma: v,

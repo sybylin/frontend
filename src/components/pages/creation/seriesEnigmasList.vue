@@ -82,29 +82,17 @@ import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
 import { baseURL } from 'src/boot/axios';
 import draggable from 'zhyswan-vuedraggable';
 import ComponentsPagesCreationDialogCreateEnigma from 'src/components/pages/creation/dialogCreateEnigma.vue';
-import type { seriesElement } from 'src/pages/create/selectSeries.vue';
-
-export interface enigma {
-	id: number;
-	series_id: number;
-	title: string;
-	image: string | null;
-	description: string;
-	points: number;
-	creation_date: Date | null;
-	modification_date: Date | null;
-	add?: boolean;
-}
+import type { enigma, series } from 'src/types';
 
 export default defineComponent({
-	name: 'ComponentsPagesCreationSerieEnigmasList',
+	name: 'ComponentsPagesCreationSeriesEnigmasList',
 	components: {
 		draggable,
 		ComponentsPagesCreationDialogCreateEnigma
 	},
 	props: {
 		modelValue: {
-			type: Object as PropType<seriesElement>,
+			type: Object as PropType<series>,
 			required: true
 		}
 	},
@@ -129,7 +117,9 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			watch(enigmas, (newEnigmas) => watchDebounce(() => emit('update', newEnigmas)));
+			watch(enigmas, (newEnigmas) => {
+				watchDebounce(() => emit('update', newEnigmas));
+			}, { deep: true });
 		});
 
 		return {

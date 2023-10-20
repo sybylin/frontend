@@ -63,7 +63,7 @@ export default defineComponent({
 				label: 'menu.series'
 			},
 			{
-				name: 'selectSerie',
+				name: 'selectSeries',
 				icon: 'design_services',
 				label: 'menu.create',
 				wall: true

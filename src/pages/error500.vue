@@ -56,7 +56,7 @@ export default defineComponent({
 			}, 500);
 		});
 
-		onUnmounted(() => clearInterval(interval));
+		onUnmounted(() => clearInterval(interval as any));
 
 		return {
 			lamp

@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
 						component: () => import('pages/series/main.vue')
 					},
 					{
-						path: ':id/(\\d+)/:path',
+						path: ':id(\\d+)/:enigmaId(\\d+)',
 						name: 'enigma',
 						component: () => import('pages/series/enigma.vue')
 					},
@@ -79,8 +79,8 @@ const routes: RouteRecordRaw[] = [
 				children: [
 					{
 						path: '',
-						name: 'selectSerie',
-						component: () => import('pages/create/selectSerie.vue')
+						name: 'selectSeries',
+						component: () => import('pages/create/selectSeries.vue')
 					},
 					{
 						path: ':seriesId/:enigmaId',
@@ -89,8 +89,8 @@ const routes: RouteRecordRaw[] = [
 					},
 					{
 						path: ':seriesId',
-						name: 'editSerie',
-						component: () => import('pages/create/editSerie.vue')
+						name: 'editSeries',
+						component: () => import('pages/create/editSeries.vue')
 					}
 				]
 			}

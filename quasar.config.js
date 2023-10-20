@@ -17,6 +17,7 @@ module.exports = configure(function (/* ctx */) {
 		// https://v2.quasar.dev/quasar-cli-vite/boot-files
 		boot: [
 			'axios',
+			'brotli',
 			'custom',
 			'hydratation',
 			'i18n',
@@ -39,6 +40,17 @@ module.exports = configure(function (/* ctx */) {
 
 		// Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
 		build: {
+			extendViteConf: (config) => {
+				config.optimizeDeps.exclude = (!config.optimizeDeps.exclude)
+					? [
+						'brotli-wasm',
+						'brotli-wasm/pkg.bundler/brotli_wasm_bg.wasm'
+					]
+					: config.optimizeDeps.exclude.push([
+						'brotli-wasm',
+						'brotli-wasm/pkg.bundler/brotli_wasm_bg.wasm'
+					]);
+			},
 			polyfillModulePreload: true,
 			target: {
 				browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],

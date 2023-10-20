@@ -16,7 +16,7 @@
 					color="secondary"
 					:label="$t('create.main.series.return')"
 					icon="arrow_back"
-					:to="{ name: 'editSerie', params: { seriesId: $route.params.seriseId } }"
+					:to="{ name: 'editSeries', params: { seriesId: $route.params.seriseId } }"
 				/>
 				<span class="text-h5">{{ enigma?.title }}</span>
 				<span></span>
@@ -64,7 +64,7 @@ import { api } from 'src/boot/axios';
 import ComponentsBuilderMain from 'components/builder/main.vue';
 import EnigmaInfo from 'components/pages/creation/enigmaInfo.vue';
 import EnigmaSolution from 'components/pages/creation/enigmaSolution.vue';
-import type { enigma } from 'src/components/pages/creation/seriesEnigmasList.vue';
+import type { enigma } from 'src/types';
 
 export default defineComponent({
 	name: 'PagesCreateEditEnigma',

@@ -1,55 +1,148 @@
 <template>
-	<div class="row justify-start q-ma-md">
-		<q-btn
-			label="Return"
-			color="secondary"
-			size="1.2em"
-			align="between"
-			unelevated
-			icon="arrow_back"
-			:to="{ name: 'series' }"
-		/>
+	<div v-if="!series" class="row justify-center items-center q-pt-xl q-pb-xl">
+		<q-spinner-cube color="deep-purple-6" size="6em" />
 	</div>
-	<div class="q-pa-xl row items-center justify-center q-gutter-md">
-		<q-card
-			v-for="(enigma, index) of enigmas" :key="enigma.path"
-			class="card"
-			flat bordered square
-		>
-			<q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-				<div class="absolute-bottom">
-					<span class="text-h6">{{ enigma.title }}</span>
-				</div>
-			</q-img>
-			<q-card-actions class="row reverse">
-				<q-btn
-					unelevated square
-					:icon-right="(enigma.finish) ? 'play_circle' : 'play_arrow'"
-					:color="(enigma.finish) ? 'orange-7' : 'green-7'"
-					:label="(enigma.finish) ? $t('main.resume') : $t('main.start')"
-					:disable="isDesactivated(enigma, enigmas, index)"
-					:to="!isDesactivated(enigma, enigmas, index)
-						? { name: 'enigma', params: { id: $route.params.id, path: enigma.path } }
-						: undefined
-					"
+	<template v-else>
+		<div class="row no-wrap justify-between q-pa-sm">
+			<q-btn
+				label="Return"
+				color="secondary"
+				align="between"
+				unelevated
+				icon="arrow_back"
+				:to="{ name: 'series' }"
+			/>
+			<span class="text-h5">{{ series.title }}</span>
+			<div
+				v-if="!seriesRating"
+				class="row items-center q-pr-md"
+			>
+				<q-spinner-puff
+					color="primary"
+					size="2.5em"
 				/>
-			</q-card-actions>
-		</q-card>
-	</div>
+			</div>
+			<q-rating
+				v-else
+				v-model="seriesRating"
+				:disable="seriesRatingUpdate"
+				color="yellow-8"
+				icon="star_border"
+				icon-selected="star"
+				size="2em"
+				:max="5"
+			/>
+		</div>
+		<q-separator class="q-ml-sm q-mr-sm" />
+		<div class="row justify-center">
+			<blockquote class="text-body1">
+				{{ series.description }}
+			</blockquote>
+		</div>
+		<q-separator class="q-ml-sm q-mr-sm" />
+		<div class="q-pa-xl row items-center justify-center q-gutter-md">
+			<q-card
+				v-for="(enigma, index) of enigmas" :key="enigma.id"
+				class="card"
+				flat bordered square
+			>
+				<q-img
+					loading="lazy"
+					style="height: 19em;"
+					:src="(enigma.image) ? `${baseURL}${enigma.image}` : '/imgs/background.jpg' "
+				>
+					<div class="absolute-bottom">
+						<span class="text-h6">{{ enigma.title }}</span>
+					</div>
+				</q-img>
+				<q-card-actions class="row reverse">
+					<q-btn
+						unelevated square
+						:icon-right="(enigma.finish) ? 'play_circle' : 'play_arrow'"
+						:color="(enigma.finish) ? 'orange-7' : 'green-7'"
+						:label="(enigma.finish) ? $t('main.resume') : $t('main.start')"
+						:disable="isDesactivated(enigma, enigmas, index)"
+						:to="!isDesactivated(enigma, enigmas, index)
+							? {
+								name: 'enigma',
+								params: {
+									id: $route.params.id,
+									enigmaId: enigma.id
+								}
+							}
+							: undefined
+						"
+					/>
+				</q-card-actions>
+			</q-card>
+		</div>
+	</template>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { enigmas } from 'src/store';
+import { defineComponent, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useQuasar } from 'quasar';
+import { api, baseURL } from 'src/boot/axios';
+import type { enigma, series } from 'src/types';
 
 export default defineComponent({
 	name: 'SeriesDetailPage',
 	setup () {
+		const $q = useQuasar();
+		const route = useRoute();
+		const series = ref<series | null>(null);
+		const enigmas = ref<enigma[] | null>(null);
+		const seriesRating = ref<number | null>(null);
+		const seriesRatingUpdate = ref<boolean>(false);
 		const isDesactivated = (enigma: any, enigmas: any, index: number) => !enigma.finish && index > 1 && !enigmas[index - 1].finish;
 
+		onMounted(() => {
+			api.post('/series/one/rating/user', {
+				series_id: Number(route.params.id)
+			})
+				.then((d) => d.data)
+				.then((d) => {
+					seriesRating.value = Number(d.rating);
+					watch(seriesRating, (n, o) => {
+						if (o && n && o !== n) {
+							seriesRatingUpdate.value = true;
+							api.put('/series/one/rating', {
+								series_id: series.value?.id,
+								rating: n
+							})
+								.finally(() => {
+									seriesRatingUpdate.value = false;
+								});
+						}
+					});
+				})
+				.catch((e) => {
+					console.error(e.response);
+					$q.notify(e.response.info.message);
+				});
+
+			api.post('/series/one', {
+				series_id: Number(route.params.id)
+			})
+				.then((d) => d.data)
+				.then((d) => {
+					series.value = d.series;
+					enigmas.value = d.series.series_enigma_order.map((e: any) => e.enigma) as enigma[];
+				})
+				.catch((e) => {
+					console.error(e);
+					$q.notify(e.response.info.message);
+				});
+		});
+
 		return {
-			isDesactivated,
-			enigmas
+			baseURL,
+			series,
+			enigmas,
+			seriesRating,
+			seriesRatingUpdate,
+			isDesactivated
 		};
 	}
 });

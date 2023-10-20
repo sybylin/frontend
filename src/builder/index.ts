@@ -3,6 +3,7 @@ import enUS from 'grapesjs/locale/en';
 import frFR from 'grapesjs/locale/fr';
 import plugin from './plugin';
 import { api, baseURL } from 'src/boot/axios';
+import { stringCompress, stringDecompress } from 'src/boot/brotli';
 import { Notify } from 'quasar';
 
 const uploadCheckMimetype = (mimetype: string) => ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype.trim().toLowerCase());
@@ -122,11 +123,10 @@ export default (container: HTMLElement, id: number) => {
 			try {
 				if (!savedAssets)
 					savedAssets = (await api.get('/enigma/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
-				loadData = JSON.parse(
-					(await api.post('/enigma/page/get/dev', {
-						enigma_id: id
-					}))
-						.data.enigma);
+				loadData = JSON.parse(stringDecompress(
+					(await api.post('/enigma/page/get/dev', { enigma_id: id })).data.enigma
+				));
+				console.log(loadData);
 				loadData.assets = savedAssets;
 			} catch (e: any) {
 				Notify.create({ type: 'failed', message: e.response.info.message });
@@ -140,7 +140,7 @@ export default (container: HTMLElement, id: number) => {
 
 			api.post('/enigma/update/page/dev', {
 				enigma_id: id,
-				editor_data: JSON.stringify(saveData)
+				editor_data: stringCompress(JSON.stringify(saveData))
 			})
 				.catch((e) => Notify.create({ type: 'failed', message: e.response.info.message }));
 		}
