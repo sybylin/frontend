@@ -26,3 +26,16 @@ export interface series {
 		enigma: enigma
 	}[];
 }
+
+export interface devArraySolution {
+	keepOrder: boolean;
+	list: {
+		id?: string;
+		keyword: string;
+	}[];
+}
+
+export interface prodArraySolution {
+	keepOrder: boolean;
+	list: string[];
+}

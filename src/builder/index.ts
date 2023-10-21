@@ -3,8 +3,8 @@ import enUS from 'grapesjs/locale/en';
 import frFR from 'grapesjs/locale/fr';
 import plugin from './plugin';
 import { api, baseURL } from 'src/boot/axios';
-import { stringCompress, stringDecompress } from 'src/boot/brotli';
 import { Notify } from 'quasar';
+import { stringCompress, stringDecompress } from 'src/boot/brotli';
 
 const uploadCheckMimetype = (mimetype: string) => ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype.trim().toLowerCase());
 
@@ -123,12 +123,14 @@ export default (container: HTMLElement, id: number) => {
 			try {
 				if (!savedAssets)
 					savedAssets = (await api.get('/enigma/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
-				loadData = JSON.parse(stringDecompress(
-					(await api.post('/enigma/page/get/dev', { enigma_id: id })).data.enigma
-				));
-				console.log(loadData);
+				const serverData = await api.post('/enigma/page/get/dev', { enigma_id: id });
+				if (serverData.data.enigma && (serverData.data.enigma as string).length)
+					loadData = JSON.parse(stringDecompress(serverData.data.enigma));
+				else
+					loadData = editor.getProjectData();
 				loadData.assets = savedAssets;
 			} catch (e: any) {
+				console.log(e);
 				Notify.create({ type: 'failed', message: e.response.info.message });
 			}
 			return loadData;

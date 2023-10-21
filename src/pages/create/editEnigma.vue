@@ -30,9 +30,9 @@
 				indicator-color="secondary"
 				align="justify"
 			>
-				<q-tab name="info" icon="info" label="Info" />
-				<q-tab name="editor" icon="wysiwyg" label="Editor" />
-				<q-tab name="solution" icon="emoji_objects" label="Solution" />
+				<q-tab name="info" icon="info" :label="$t('create.main.tab.info')" />
+				<q-tab name="editor" icon="wysiwyg" :label="$t('create.main.tab.editor')" />
+				<q-tab name="solution" icon="emoji_objects" :label="$t('create.main.tab.solution')" />
 			</q-tabs>
 			<q-tab-panels
 				v-model="tabs"
@@ -49,7 +49,7 @@
 					<components-builder-main v-if="enigma" :id="enigma.id" />
 				</q-tab-panel>
 				<q-tab-panel name="solution">
-					<enigma-solution />
+					<enigma-solution v-if="enigma" :id="enigma.id" />
 				</q-tab-panel>
 			</q-tab-panels>
 		</div>

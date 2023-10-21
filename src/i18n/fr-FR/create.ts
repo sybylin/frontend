@@ -4,6 +4,11 @@ export default {
 			title: 'mes séries',
 			edit: 'éditer'
 		},
+		tab: {
+			info: 'info',
+			editor: 'éditeur',
+			solution: 'solution'
+		},
 		series: {
 			return: 'retour',
 			unauthorized: 'vous n\'êtes pas autorisé à éditer cette série',
@@ -31,6 +36,11 @@ export default {
 			explanation: 'pour supprimer cette énigme, saisissez son nom et confirmez la demande',
 			label: 'saisir le nom de l\'énigme',
 			error: 'le nom ne correspond pas'
+		},
+		solution: {
+			sentence: 'phrase',
+			keywords: 'mots-clés',
+			keyvalues: 'clés valeurs'
 		}
 	},
 	mobile: 'Vous êtes sur mobile, l\'éditeur d\'énigme est plus compliqué sur celui-ci. Veuillez passer sur un ordinateur de bureau',
