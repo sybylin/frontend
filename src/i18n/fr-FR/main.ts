@@ -3,6 +3,6 @@ export default {
 		desc: 'Mapcraft est un logiciel pour Minecraft qui augmente les possibilités des mapmakers sans installation complexe',
 		readMore: 'En savoir plus'
 	},
-	resume: 'Continuer',
+	resume: 'Recommencer',
 	start: 'Commencer'
 };

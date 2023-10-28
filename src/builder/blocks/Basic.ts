@@ -16,9 +16,20 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		media: mediaIcon('image'),
 		category,
 		content: {
-			tagName: 'div',
+			tagName: 'img',
+			type: 'image',
 			droppable: false,
-			attributes: { class: 'q-img', 'aria-label': 'image' },
+			attributes: {
+				'aria-label': 'image',
+				alt: 'Enigma image',
+				class: 'responsive-img',
+				src: `${frontBaseUrl}/public/imgs/builder/default.png`,
+				loading: 'lazy',
+				fetchpriority: 'auto',
+				'aria-hidden': 'true',
+				draggable: 'false'
+			}
+			/*
 			components: [
 				{
 					tagName: 'div',
@@ -46,6 +57,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 					attributes: { class: 'q-img__content absolute-full q-anchor--skip' }
 				}
 			]
+			*/
 		}
 	});
 
@@ -80,6 +92,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 			droppable: false,
 			attributes: {
 				control: true,
+				class: 'builder-video',
 				preload: 'metadata',
 				width: 620,
 				src: `${frontBaseUrl}/public/video/builder.mp4`

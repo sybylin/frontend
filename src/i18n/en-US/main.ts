@@ -3,6 +3,6 @@ export default {
 		desc: 'Mapcraft is a software for Minecraft that increases the possibilities of mapmakers without complex installation',
 		readMore: 'Read more'
 	},
-	resume: 'Resume',
+	resume: 'Restart',
 	start: 'Start'
 };

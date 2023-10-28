@@ -44,9 +44,10 @@ export default {
 			sentenceKeywords: 'the list of keywords must be complete, and can either be in order or not',
 			toggleHelpKeywords: 'users must enter the keywords exactly in this order for the solution to be valid',
 			toggleKeywords: 'keep keywords order',
-
+			key: 'key',
+			value: 'value',
 			keyvalues: 'key values',
-			sentenceKeyvalues: ''
+			sentenceKeyvalues: 'an object that can contain as many sub-objects as required; order within an object is not mandatory'
 		}
 	},
 	mobile: 'You\'re on mobile, enigma editor is more complicated on it. Please switch to desktop',

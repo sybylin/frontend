@@ -38,7 +38,7 @@ export default (editor: Editor, _opts: PluginOptions) => {
 					tagName: 'div',
 					type: 'default',
 					attributes: {
-						class: `col-${size} ${nms[reg] === 1
+						class: `col-sm-${size} col-xs-12 ${nms[reg] === 1
 							? 'full-width'
 							: ''}`,
 						style: 'min-height: 3em'

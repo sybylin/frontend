@@ -58,11 +58,11 @@
 				<q-card-actions class="row reverse">
 					<q-btn
 						unelevated square
-						:icon-right="(enigma.finish) ? 'play_circle' : 'play_arrow'"
-						:color="(enigma.finish) ? 'orange-7' : 'green-7'"
-						:label="(enigma.finish) ? $t('main.resume') : $t('main.start')"
-						:disable="isDesactivated(enigma, enigmas, index)"
-						:to="!isDesactivated(enigma, enigmas, index)
+						:icon-right="(startResumeOrUnauthorized(index) === 3) ? 'play_circle' : 'play_arrow'"
+						:color="(startResumeOrUnauthorized(index) === 3) ? 'secondary' : 'green-7'"
+						:label="(startResumeOrUnauthorized(index) === 3) ? $t('main.resume') : $t('main.start')"
+						:disable="(startResumeOrUnauthorized(index) === 2)"
+						:to="!(startResumeOrUnauthorized(index) === 2)
 							? {
 								name: 'enigma',
 								params: {
@@ -86,6 +86,12 @@ import { useQuasar } from 'quasar';
 import { api, baseURL } from 'src/boot/axios';
 import type { enigma, series } from 'src/types';
 
+enum enigmaStatus {
+	start = 1,
+	unauthorized,
+	resume
+}
+
 export default defineComponent({
 	name: 'SeriesDetailPage',
 	setup () {
@@ -95,7 +101,17 @@ export default defineComponent({
 		const enigmas = ref<enigma[] | null>(null);
 		const seriesRating = ref<number | null>(null);
 		const seriesRatingUpdate = ref<boolean>(false);
-		const isDesactivated = (enigma: any, enigmas: any, index: number) => !enigma.finish && index > 1 && !enigmas[index - 1].finish;
+
+		const startResumeOrUnauthorized = (index: number): enigmaStatus => {
+			if (index <= 0) {
+				return (!enigmas.value?.[index].finished)
+					? enigmaStatus.start
+					: enigmaStatus.resume;
+			}
+			if (enigmas.value?.[index - 1].finished && !enigmas.value?.[index].finished)
+				return enigmaStatus.start;
+			return enigmaStatus.unauthorized;
+		};
 
 		onMounted(() => {
 			api.post('/series/one/rating/user', {
@@ -127,8 +143,15 @@ export default defineComponent({
 			})
 				.then((d) => d.data)
 				.then((d) => {
+					console.log(d);
 					series.value = d.series;
-					enigmas.value = d.series.series_enigma_order.map((e: any) => e.enigma) as enigma[];
+					enigmas.value = d.series.series_enigma_order.map((e: any) => ({
+						id: e.enigma.id,
+						title: e.enigma.title,
+						description: e.enigma.description,
+						image: e.enigma.image,
+						finished: ((e.enigma.enigma_finished as any[]).length > 0)
+					})) as enigma[];
 				})
 				.catch((e) => {
 					console.error(e);
@@ -142,7 +165,7 @@ export default defineComponent({
 			enigmas,
 			seriesRating,
 			seriesRatingUpdate,
-			isDesactivated
+			startResumeOrUnauthorized
 		};
 	}
 });

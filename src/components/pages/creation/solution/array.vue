@@ -21,7 +21,7 @@
 				item-key="id"
 				direction="horizontal"
 				tag="transition-group"
-				class="row wrap justify-evenly"
+				class="row wrap justify-start"
 				handle=".move-icon"
 				:component-data="{
 					tag: 'div',

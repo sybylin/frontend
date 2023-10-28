@@ -1,6 +1,7 @@
 /* eslint-disable eqeqeq */
 import { boot } from 'quasar/wrappers';
 import { Dialog } from 'quasar';
+import Particles from 'vue3-particles';
 import ComponentsAchievementIsEarned from 'components/achievement/isEarned.vue';
 import type { serverAchievement } from './axios';
 
@@ -47,6 +48,8 @@ declare module '@vue/runtime-core' {
 }
 
 export default boot(({ app }) => {
+	app.use(Particles);
+
 	app.config.globalProperties.$capitalize = capitalize;
 	app.provide('$capitalize', capitalize);
 

@@ -25,11 +25,7 @@
 				<q-banner class="bg-primary text-white text-center q-mb-sm">
 					<span>{{ $capitalize($t('create.main.solution.sentenceBanner')) }}</span>
 				</q-banner>
-				<q-input
-					v-model="stringSolution"
-					filled
-					:label="$capitalize($t('create.main.solution.sentence'))"
-				/>
+				<components-pages-creation-solution-string v-model="stringSolution" />
 			</q-tab-panel>
 			<q-tab-panel name="ARRAY">
 				<q-banner class="bg-primary text-white text-center q-mb-sm">
@@ -41,7 +37,7 @@
 				<q-banner class="bg-primary text-white text-center q-mb-sm">
 					<span>{{ $capitalize($t('create.main.solution.sentenceKeyvalues')) }}</span>
 				</q-banner>
-				object
+				<components-pages-creation-solution-object v-if="objectSolution" v-model="objectSolution" />
 			</q-tab-panel>
 		</q-tab-panels>
 	</template>
@@ -50,16 +46,18 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
+import ComponentsPagesCreationSolutionString from 'src/components/pages/creation/solution/string.vue';
 import ComponentsPagesCreationSolutionArray from 'src/components/pages/creation/solution/array.vue';
+import ComponentsPagesCreationSolutionObject from 'src/components/pages/creation/solution/object.vue';
 import { api } from 'src/boot/axios';
-import type { prodArraySolution } from 'src/types';
-
-type SolutionType = 'STRING' | 'ARRAY' | 'OBJECT';
+import type { prodArraySolution, objectSolution, Solution } from 'src/types';
 
 export default defineComponent({
 	name: 'ComponentsPagesCreationEnigmaSolution',
 	components: {
-		ComponentsPagesCreationSolutionArray
+		ComponentsPagesCreationSolutionString,
+		ComponentsPagesCreationSolutionArray,
+		ComponentsPagesCreationSolutionObject
 	},
 	props: {
 		id: {
@@ -69,10 +67,10 @@ export default defineComponent({
 	},
 	setup (props) {
 		const $q = useQuasar();
-		const solutionType = ref<SolutionType | null>(null);
+		const solutionType = ref<Solution | null>(null);
 		const stringSolution = ref<string | null>(null);
 		const arraySolution = ref<prodArraySolution | null>(null);
-		const objectSolution = ref<Record<string, any> | null>(null);
+		const objectSolution = ref<objectSolution | null>(null);
 
 		const initDebounce = () => {
 			let timeout: any | null = null;
@@ -83,7 +81,7 @@ export default defineComponent({
 		};
 		const watchDebounce = initDebounce();
 
-		const save = async (type: SolutionType, data: unknown) => {
+		const save = async (type: Solution, data: unknown) => {
 			api.post('/enigma/solution/save', {
 				id: props.id,
 				type,
@@ -141,7 +139,7 @@ export default defineComponent({
 		});
 
 		onUnmounted(() => {
-			const getData = (type: SolutionType) => {
+			const getData = (type: Solution) => {
 				if (type === 'STRING')
 					return stringSolution.value;
 				if (type === 'ARRAY')
