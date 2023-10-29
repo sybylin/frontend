@@ -1,56 +1,46 @@
 <template>
-	<Particles
-		:id="tsParticlesContainerId"
-		:options="$props.options"
-		:particles-init="particleInit"
-	/>
-	<canvas ref="confettiIndex" class="confetti-index"></canvas>
+	<canvas ref="canvas" class="confetti-index"></canvas>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
-import { loadFull } from 'tsparticles';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import { confetti } from 'tsparticles-confetti';
-import { loadConfettiPreset } from 'tsparticles-preset-confetti';
-import type { Engine, ISourceOptions } from 'tsparticles-engine';
+import type { ConfettiFirstParam } from 'tsparticles-confetti';
+import type { IConfettiOptions } from 'tsparticles-confetti/types/IConfettiOptions';
+import type { Container, RecursivePartial } from 'tsparticles-engine';
+
+type ConfettiFunc = (idOrOptions: ConfettiFirstParam, confettiOptions?: RecursivePartial<IConfettiOptions>) => Promise<Container | undefined>;
+interface ConfettiCanvas extends HTMLCanvasElement {
+	confetti: ConfettiFunc
+}
 
 export default defineComponent({
 	name: 'Confetti',
 	props: {
-		popConfetti: {
+		modelValue: {
 			type: Boolean,
-			required: false,
-			default: false
-		},
-		options: {
-			type: Object as PropType<ISourceOptions>,
-			required: false,
-			default: () => {}
+			required: true
 		}
 	},
-	setup (props) {
-		const confettiIndex = ref<HTMLCanvasElement | null>(null);
-		const tsParticlesContainerId = Math.random().toString(32).substring(2, 16);
+	emits: ['update:model-value', 'finish'],
+	setup (props, { emit }) {
+		const canvasId = Math.random().toString(32).substring(2, 16);
+		const canvas = ref<ConfettiCanvas | null>(null);
+		const emitConfetti = ref<boolean>(props.modelValue);
 
-		const successConfetti = async () => {
-			if (confettiIndex.value && !(confettiIndex.value as any)?.confetti)
-				(confettiIndex.value as any).confetti = await confetti.create(confettiIndex.value, { resize: true } as any);
-
-			const currentDate = new Date();
-			const end = currentDate.getTime() + 3 * 1000;
-			const options = {};
-
-			if (currentDate.getDate() === 14 && currentDate.getMonth() === 1) {
+		const specialDay = (day: number, month: number) => {
+			if (day === 14 && month === 2) {
 				// valentine day
-				Object.assign(options, {
+				return {
 					scalar: 3,
 					shapes: ['heart'],
 					colors: ['FFC0CB', 'FF69B4', 'FF1493', 'C71585']
-				});
-			} else if (currentDate.getDate() === 31 && currentDate.getMonth() === 9) {
+				};
+			}
+			if (day === 31 && month === 10) {
 				// halloween
-				Object.assign(options, {
-					scalar: 1.5,
+				return {
+					scalar: 1.3,
 					shapes: ['text', 'circle'],
 					colors: ['8929bf', 'fd7708', 'fde500', '2e2e2e'],
 					shapeOptions: {
@@ -58,11 +48,12 @@ export default defineComponent({
 							value: ['🎃', '🦇', '👻']
 						}
 					}
-				});
-			} else if (currentDate.getDate() === 25 && currentDate.getMonth() === 11) {
+				};
+			}
+			if (day === 25 && month === 12) {
 				// christmas
-				Object.assign(options, {
-					scalar: 1.5,
+				return {
+					scalar: 1.3,
 					shapes: ['text', 'circle', 'square', 'star'],
 					colors: ['165b33', '146b3a', 'f8b229', 'ea4630', 'bb2528'],
 					shapeOptions: {
@@ -70,11 +61,12 @@ export default defineComponent({
 							value: ['🎅', '🎁', '🎄']
 						}
 					}
-				});
-			} else if (currentDate.getDate() === 31 && currentDate.getMonth() === 11) {
+				};
+			}
+			if (day === 31 && month === 12) {
 				// new year
-				Object.assign(options, {
-					scalar: 1.5,
+				return {
+					scalar: 1.3,
 					shapes: ['text', 'circle', 'square', 'star'],
 					colors: ['ffe400', 'ffbd00', 'e89400', 'ffca6c', 'fdffb8'],
 					shapeOptions: {
@@ -82,55 +74,62 @@ export default defineComponent({
 							value: ['🎉', '🥂', '✨']
 						}
 					}
-				});
+				};
 			}
+		};
+
+		const startAnimation = async () => {
+			const currentDate = new Date();
+			const end = currentDate.getTime() + 3 * 1000;
+			const options = specialDay(currentDate.getDate(), currentDate.getMonth() + 1);
+			const left = Object.assign({
+				particleCount: 2,
+				angle: 60,
+				spread: 55,
+				origin: { x: 0 }
+			}, options);
+			const right = Object.assign({
+				particleCount: 2,
+				angle: 120,
+				spread: 55,
+				origin: { x: 1 }
+			}, options);
+
 			(function frame () {
-				(confettiIndex.value as any)?.confetti(Object.assign({
-					particleCount: 2,
-					angle: 60,
-					spread: 55,
-					origin: { x: 0 }
-				}, options));
-				(confettiIndex.value as any)?.confetti(Object.assign({
-					particleCount: 2,
-					angle: 120,
-					spread: 55,
-					origin: { x: 1 }
-				}, options));
+				if (canvas.value) {
+					canvas.value.confetti(canvasId, left);
+					canvas.value.confetti(canvasId, right);
+				}
 				if (Date.now() < end)
 					requestAnimationFrame(frame);
+				else {
+					emitConfetti.value = false;
+					emit('finish');
+				}
 			})();
 		};
 
-		onMounted(() => {
-			if (props.popConfetti)
-				successConfetti();
-			watch(props, (newVal) => {
-				if (newVal.popConfetti)
-					successConfetti();
+		onMounted(async () => {
+			if (canvas.value)
+				canvas.value.confetti = canvas.value.confetti || await confetti.create(canvas.value, {});
+			if (props.modelValue)
+				startAnimation();
+
+			watch(props, (val) => {
+				emitConfetti.value = val.modelValue;
+				if (emitConfetti.value === true)
+					startAnimation();
+			}, { deep: true });
+
+			watch(emitConfetti, (newVal) => {
+				emit('update:model-value', newVal);
 			});
 		});
 
 		return {
-			confettiIndex,
-			tsParticlesContainerId
+			canvas,
+			emitConfetti
 		};
-	},
-	methods: {
-		async particleInit (engine: Engine) {
-			if (!this.$props.options)
-				return;
-			if (
-				this.$props.options.preset &&
-				(
-					(Array.isArray(this.$props.options.preset) && this.$props.options.preset.includes('confetti')) ||
-					(typeof this.$props.options.preset === 'string' && this.$props.options.preset.localeCompare('confetti') === 0)
-				)
-			)
-				await loadConfettiPreset(engine);
-			else
-				await loadFull(engine);
-		}
 	}
 });
 </script>

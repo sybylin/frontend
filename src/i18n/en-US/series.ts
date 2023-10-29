@@ -6,6 +6,7 @@ export default {
 		}
 	},
 	solution: {
+		redirect: 'you will be redirected automatically to enigma list',
 		check: {
 			title: 'check my solution',
 			load: 'your solution is being verified',

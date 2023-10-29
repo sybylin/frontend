@@ -1,75 +1,100 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<div v-if="!enigma" class="row justify-center items-center q-pt-xl q-pb-xl">
+	<div v-if="!enigma && !notAuthorized" class="row justify-center items-center q-pt-xl q-pb-xl">
 		<q-spinner-cube color="deep-purple-6" size="6em" />
 	</div>
 	<template v-else>
-		<q-img
-			loading="lazy"
-			fit="cover"
-			style="height: 30em;"
-			:src="(enigma.image) ? `${baseURL}${enigma.image}` : '/imgs/background.jpg' "
-		>
-			<div class="absolute-bottom">
-				<span class="text-h5">{{ enigma.title }}</span>
-			</div>
-		</q-img>
-		<div class="q-pa-sm" v-html="enigma.html"></div>
-		<q-separator class="q-ma-sm" />
-		<div class="q-ma-sm">
-			<div class="row full-width">
-				<span class="full-width text-center text-h4 text-weight-light q-pt-sm q-pb-sm">
-					{{ $capitalize($t('create.main.tab.solution')) }}
-				</span>
-				<components-string-solution
-					v-if="enigma.solutionType === 'STRING'"
-					:check="checkSolution"
-					@check="check"
-				/>
-				<components-array-solution
-					v-else-if="enigma.solutionType === 'ARRAY'"
-					:check="checkSolution"
-					@check="check"
-				/>
-				<components-object-solution
-					v-else-if="enigma.objectSolutionKeys"
-					:check="checkSolution"
-					:keys="enigma.objectSolutionKeys"
-					@check="check"
-				/>
-				<q-btn
-					class="q-ma-md full-width"
-					:color="genColor"
-					:loading="checkSolution"
-					@click="checkSolution = true"
-				>
-					{{ $t('series.solution.check.title') }}
-					<template v-slot:loading>
-						<q-spinner-hourglass class="on-left" />
-						{{ $t('series.solution.check.load') }}
-					</template>
-				</q-btn>
-			</div>
+		<div v-if="notAuthorized" class="row justify-center">
+			<h5>{{ $capitalize($t('unauthorized')) }}</h5>
 		</div>
+		<template v-else-if="enigma">
+			<q-img
+				loading="lazy"
+				fit="cover"
+				style="height: 30em;"
+				:src="(enigma.image) ? `${baseURL}${enigma.image}` : '/imgs/background.jpg' "
+			>
+				<div class="absolute-bottom">
+					<span class="text-h5">{{ enigma.title }}</span>
+				</div>
+			</q-img>
+			<div class="q-pa-sm" v-html="enigma.html"></div>
+			<q-separator class="q-ma-sm" />
+			<div class="q-ma-sm">
+				<div class="row full-width">
+					<span class="full-width text-center text-h4 text-weight-light q-pt-sm q-pb-sm">
+						{{ $capitalize($t('create.main.tab.solution')) }}
+					</span>
+					<div
+						v-if="statusSolution === 'invalid'"
+						class="row justify-center items-center full-width text-white bg-red-7 q-pa-sm q-mb-md"
+						style="position: relative;"
+					>
+						<q-btn
+							flat
+							round
+							icon="close"
+							size="xs"
+							style="position: absolute; right: 5px; top: 5px"
+							@click="() => statusSolution = null"
+						/>
+						<span class="text-h6 text-weight-light text-light">
+							{{ $capitalize($t('series.solution.check.error')) }}
+						</span>
+					</div>
+					<components-string-solution
+						v-if="enigma.solutionType === 'STRING'"
+						:check="checkSolution"
+						@check="check"
+					/>
+					<components-array-solution
+						v-else-if="enigma.solutionType === 'ARRAY'"
+						:check="checkSolution"
+						@check="check"
+					/>
+					<components-object-solution
+						v-else-if="enigma.objectSolutionKeys"
+						:check="checkSolution"
+						:keys="enigma.objectSolutionKeys"
+						@check="check"
+					/>
+					<q-btn
+						class="q-ma-md full-width"
+						:color="genColor"
+						:loading="checkSolution"
+						:disable="statusSolution === 'valid'"
+						@click="checkSolution = true"
+					>
+						{{ $t('series.solution.check.title') }}
+						<template v-slot:loading>
+							<q-spinner-hourglass class="on-left" />
+							{{ $t('series.solution.check.load') }}
+						</template>
+					</q-btn>
+				</div>
+			</div>
+		</template>
 	</template>
-	<components-tsparticles
-		v-if="statusSolution === 'valid'"
-		:pop-confetti="true"
+	<components-confetti
+		v-model="confetti"
+		@finish="finishAndRedirect"
 	/>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { brotliDecompress } from 'src/boot/brotli';
 import { api, baseURL } from 'src/boot/axios';
 import componentsStringSolution from 'src/components/pages/series/string.vue';
 import componentsArraySolution from 'src/components/pages/series/array.vue';
 import componentsObjectSolution from 'src/components/pages/series/object.vue';
-import componentsTsparticles from 'src/components/pages/confetti.vue';
+import componentsConfetti from 'src/components/pages/confetti.vue';
 import type { NamedColor } from 'quasar';
 import type { Solution } from 'src/types';
+import { capitalize } from 'src/boot/custom';
 
 interface enigma {
 	title: string;
@@ -86,20 +111,25 @@ export default defineComponent({
 		componentsStringSolution,
 		componentsArraySolution,
 		componentsObjectSolution,
-		componentsTsparticles
+		componentsConfetti
 	},
 	setup () {
 		const $q = useQuasar();
 		const route = useRoute();
+		const router = useRouter();
+		const { t } = useI18n();
 		const enigma = ref<enigma | null>(null);
 		const checkSolution = ref<boolean>(false);
+		const notAuthorized = ref<boolean>(false);
 		const statusSolution = ref<'valid' | 'invalid' | null>(null);
+		const confetti = ref<boolean>(false);
 		const genColor = computed((): NamedColor => (checkSolution.value)
 			? 'deep-purple-6'
 			: 'green-6'
 		);
 
 		const check = (d: string | string[] | Record<string, string>) => {
+			statusSolution.value = null;
 			api.post('/enigma/check', {
 				id: Number(route.params.enigmaId),
 				solution: {
@@ -111,9 +141,15 @@ export default defineComponent({
 				.then((d) => {
 					if (d.isCorrect === null)
 						statusSolution.value = null;
-					statusSolution.value = (d.isCorrect as boolean)
-						? 'valid'
-						: 'invalid';
+					if ((d.isCorrect as boolean)) {
+						confetti.value = true;
+						statusSolution.value = 'valid';
+						$q.notify({
+							type: 'info',
+							message: capitalize(t('series.solution.redirect'))
+						});
+					} else
+						statusSolution.value = 'invalid';
 				})
 				.catch((e) => $q.notify(e.response.info.message))
 				.finally(() => {
@@ -121,19 +157,35 @@ export default defineComponent({
 				});
 		};
 
+		const finishAndRedirect = () => {
+			setTimeout(() => {
+				router.push({
+					name: 'enigmaList',
+					params: {
+						id: Number(route.params.id)
+					}
+				});
+			}, 1500);
+		};
+
 		onMounted(() => {
 			api.post('/enigma/page/get/prod', {
-				enigma_id: Number(route.params.enigmaId)
+				enigma_id: Number(route.params.enigmaId),
+				series_id: Number(route.params.id)
 			})
 				.then(async (d) => {
-					enigma.value = {
-						title: d.data.info.title,
-						image: d.data.info.image,
-						description: d.data.info.description,
-						solutionType: d.data.solution,
-						objectSolutionKeys: d.data.objectSolutionKeys,
-						html: await brotliDecompress(d.data.enigma) ?? ''
-					};
+					if (d.data.enigma === false)
+						notAuthorized.value = true;
+					else {
+						enigma.value = {
+							title: d.data.info.title,
+							image: d.data.info.image,
+							description: d.data.info.description,
+							solutionType: d.data.solution,
+							objectSolutionKeys: d.data.objectSolutionKeys,
+							html: await brotliDecompress(d.data.enigma) ?? ''
+						};
+					}
 				})
 				.catch((e) => $q.notify(e.response.info.message));
 		});
@@ -142,16 +194,12 @@ export default defineComponent({
 			baseURL,
 			enigma,
 			checkSolution,
+			notAuthorized,
 			statusSolution,
 			genColor,
+			confetti,
 			check,
-			click: () => {
-				statusSolution.value = 'valid';
-				setTimeout(() => {
-					statusSolution.value = 'invalid';
-				}, 1500);
-			}
-			// options
+			finishAndRedirect
 		};
 	}
 });

@@ -1,14 +1,15 @@
 <template>
-	<div class="row wrap justify-center full-width">
+	<div class="row wrap justify-evenly full-width">
 		<template v-for="(_v, index) in solution" :key="index">
 			<div
 				:class="{
-					'full-width': true,
 					'row': true,
 					'justify-evenly': true,
 					'items-center': true,
 					'no-wrap': true,
 					'q-pa-xs': true,
+					'q-ml-lg': true,
+					'q-mr-lg': true,
 					'q-mb-xs': true
 				}"
 			>

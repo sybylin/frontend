@@ -108,8 +108,11 @@ export default defineComponent({
 					? enigmaStatus.start
 					: enigmaStatus.resume;
 			}
-			if (enigmas.value?.[index - 1].finished && !enigmas.value?.[index].finished)
-				return enigmaStatus.start;
+			if (enigmas.value?.[index - 1].finished) {
+				return (enigmas.value[index].finished)
+					? enigmaStatus.resume
+					: enigmaStatus.start;
+			}
 			return enigmaStatus.unauthorized;
 		};
 
@@ -143,7 +146,6 @@ export default defineComponent({
 			})
 				.then((d) => d.data)
 				.then((d) => {
-					console.log(d);
 					series.value = d.series;
 					enigmas.value = d.series.series_enigma_order.map((e: any) => ({
 						id: e.enigma.id,
