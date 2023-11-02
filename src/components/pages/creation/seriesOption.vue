@@ -37,19 +37,6 @@
 						:error-message="$capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))"
 						autogrow
 					/>
-					<q-slider
-						v-model.number="points"
-						class="q-pt-xl q-pb-md"
-						debounce="500"
-						bottom-slots
-						:min="0"
-						:max="1500"
-						:step="10"
-						label
-						:label-value="`${points} ${$t('create.main.series.points')}`"
-						label-always
-						color="light-blue-8"
-					/>
 					<div class="row no-wrap justify-end items-center">
 						<span class="text-body-1">
 							{{ $capitalize($t('create.main.series.publish')) }}
@@ -173,7 +160,6 @@ export default defineComponent({
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
-		const points = ref<number | null>(props.modelValue.points);
 		const published = ref<boolean>(props.modelValue.published);
 		const image = ref<string | null>(props.modelValue.image);
 
@@ -183,7 +169,7 @@ export default defineComponent({
 
 		const deleteName = ref<string | null>(null);
 
-		const sendEmit = (part: 'title' | 'description' | 'points' | 'image' | 'published', val: unknown) => {
+		const sendEmit = (part: 'title' | 'description' | 'image' | 'published', val: unknown) => {
 			const modelValue = props.modelValue;
 			modelValue[part] = val as never;
 			emit('update:modelValue', modelValue);
@@ -233,19 +219,6 @@ export default defineComponent({
 					.finally(() => setWait(false));
 			});
 
-			watch(points, (p) => {
-				if (pointsError.value || !p || typeof p !== 'number' || p < 0 || p > 5000)
-					return;
-				setWait(true);
-				api.post('/series/update/points', {
-					series_id: props.modelValue.id,
-					points: p
-				})
-					.then(() => sendEmit('points', p))
-					.catch((e) => $q.notify(e.response.info.message))
-					.finally(() => setWait(false));
-			});
-
 			watch(published, (p) => {
 				setWait(true);
 				api.post('/series/update/published', {
@@ -265,7 +238,6 @@ export default defineComponent({
 			apiWait,
 			title,
 			description,
-			points,
 			published,
 			image,
 

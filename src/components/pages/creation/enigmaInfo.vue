@@ -151,7 +151,6 @@ export default defineComponent({
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
-		const points = ref<number | null>(props.modelValue.points);
 		const image = ref<string | null>(props.modelValue.image);
 
 		const titleError = ref<boolean | 'isExist'>(false);
@@ -160,7 +159,7 @@ export default defineComponent({
 
 		const deleteName = ref<string | null>(null);
 
-		const sendEmit = (part: 'title' | 'description' | 'points' | 'image', val: unknown) => {
+		const sendEmit = (part: 'title' | 'description' | 'image', val: unknown) => {
 			const modelValue = props.modelValue;
 			modelValue[part] = val as never;
 			emit('update:modelValue', modelValue);

@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
 				component: () => import('pages/builder.vue')
 			},
 			{
+				path: 'unauthorized',
+				name: 'unauthorized',
+				component: () => import('pages/unauthorized.vue')
+			},
+			{
 				path: 'series',
 				name: 'seriesMain',
 				meta: { requiresAuth: true, level: 'user' },
@@ -103,11 +108,12 @@ const routes: RouteRecordRaw[] = [
 	},
 	{
 		path: '/:catchAll(.*)*',
+		name: 'error',
 		component: () => import('layouts/main.vue'),
 		children: [
 			{
 				path: '',
-				name: 'error',
+				name: 'error404',
 				component: () => import('pages/error.vue')
 			}
 		]

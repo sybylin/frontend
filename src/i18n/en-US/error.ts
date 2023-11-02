@@ -8,5 +8,9 @@ export default {
 		fail: 'An error occurred with the api, please try again in a few minutes. If the error persists, contact the administrator',
 		mail: 'Mail system no longer works, contact the administrator',
 		db: 'An error has occurred with the database, contact the administrator'
+	},
+	unauthorized: {
+		title: 'well, no, you\'re not allowed to go here',
+		subtitle: 'but I promise there\'s plenty of nice stuff elsewhere'
 	}
 };

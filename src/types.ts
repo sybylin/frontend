@@ -10,6 +10,7 @@ export interface series {
 	id: number;
 	title: string;
 	description: string;
+	published: boolean;
 	image: string | null;
 	modification_date: Date;
 	series_enigma_order: {

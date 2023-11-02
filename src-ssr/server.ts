@@ -1,5 +1,4 @@
 /* eslint-disable quotes */
-
 import { extname } from 'path/posix';
 import express from 'express';
 import compression from 'compression';
@@ -7,7 +6,6 @@ import { ssrClose, ssrCreate, ssrListen, ssrRenderPreloadTag, ssrServeStaticCont
 import helmet from 'helmet';
 import hpp from 'hpp';
 import { ExpressLog } from './middlewares/log';
-
 import type { Application } from 'express';
 
 export const create = ssrCreate(() => {

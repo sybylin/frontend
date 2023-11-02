@@ -3,54 +3,37 @@
 		<div class="col-md-5 col-12 column justify-center items-center q-pl-sm q-pr-md">
 			<div>
 				<h2 class="q-ma-none q-pb-md orkney-medium">
-					{{ $t('error.title') }}
+					{{ $capitalize($t('error.unauthorized.title')) }}
 				</h2>
-				<span class="text-body1 text-weight-regular">{{ $t('error.description') }}</span>
-				<div class="q-pt-md q-mb-md column">
-					<q-btn
-						flat size="md" align="left"
-						color="light-blue-8" class="width"
-						:label="$t('menu.home')" icon="home"
-						:to="$generatePath({ name: 'home' })"
-					/>
-					<q-btn
-						flat size="md" align="left"
-						color="light-blue-8" class="width"
-						:label="$t('menu.download')" icon="download"
-						:to="$generatePath({ name: 'course' })"
-					/>
-					<q-btn
-						flat size="md" align="left"
-						color="light-blue-8" class="width"
-						:label="$t('menu.documentation')" icon="description"
-						:to="$generatePath({ path: '/docs' })"
-					/>
-				</div>
+				<span class="text-body1 text-weight-regular">
+					{{ $capitalize($t('error.unauthorized.subtitle')) }}
+				</span>
 			</div>
 		</div>
 		<div class="gt-sm col-md-7 row justify-center items-center">
-			<div style="width: 20vw">
-				<error-svg :error-code="404" />
-			</div>
+			<q-img
+				ref="img"
+				src="/imgs/svg/door.svg"
+				alt="Screen with application"
+				fit="contain"
+				style="width: 20vw;"
+			/>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
-import errorSvg from 'components/error/errorSvg.vue';
-
+import type { QImg } from 'quasar';
 import meta from '../meta';
 
 export default defineComponent({
 	name: 'PageError',
-	components: {
-		errorSvg
-	},
 	setup () {
-		const { t, locale } = useI18n({ useScope: 'global' });
+		const { t } = useI18n({ useScope: 'global' });
+		const img = ref<QImg | null>(null);
 
 		useMeta(() => {
 			return meta({
@@ -72,8 +55,12 @@ export default defineComponent({
 			});
 		});
 
+		onMounted(() => {
+
+		});
+
 		return {
-			genPath: (path: string) => `/${locale.value}/docs${path}`
+			img
 		};
 	}
 });
