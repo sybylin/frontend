@@ -24,7 +24,6 @@ const routes: RouteRecordRaw[] = [
 			{
 				path: 'series',
 				name: 'seriesMain',
-				meta: { requiresAuth: true, level: 'user' },
 				children: [
 					{
 						path: '',
@@ -34,6 +33,7 @@ const routes: RouteRecordRaw[] = [
 					{
 						path: ':id(\\d+)/:enigmaId(\\d+)',
 						name: 'enigma',
+						meta: { requiresAuth: true, level: 'user' },
 						component: () => import('pages/series/enigma.vue')
 					},
 					{
