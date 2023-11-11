@@ -39,28 +39,31 @@
 					loading="lazy"
 					radio="1"
 					fit="contain"
-					width="5.5em"
-					height="5.5em"
-					class="q-ml-sm"
+					width="5em"
+					height="5em"
+					class="q-ma-sm"
 					:alt="`Image of ${el.achievement.name} achievement`"
 					:src="`/imgs/achievement/${el.achievement.name}.png`"
 				/>
 				<div
-					:style="$q.screen.lt.sm ? 'width: 100%' : 'width: calc(100% - 6em)'"
-					class="column justify-between text-center q-pa-sm"
+					:class="{
+						'card-text-full': $q.screen.lt.sm,
+						'card-text': !$q.screen.lt.sm,
+						'column': true,
+						'justify-between': true,
+						'text-center': true,
+						'q-pa-sm': true
+					}"
 				>
-					<div
-						class="column justify-evenly"
-						style="height: 83%;"
-					>
-						<span class="text-h4 text-weight-light">
+					<div class="column justify-evenly card-text-top">
+						<span class="text-h4 text-weight-light orkney-medium">
 							{{ $capitalize($t(`achievement.list.${el.achievement.name}.title`)) }}
 						</span>
 						<span class="text-body1">
 							{{ $capitalize($t(`achievement.list.${el.achievement.name}.description`)) }}
 						</span>
 					</div>
-					<div class="row justify-between items-center" :class="{ 'truncate-chip-labels': true }">
+					<div class="row justify-between items-center q-pl-sm q-pr-sm card-text-bottom">
 						<q-chip
 							dense
 							color="deep-orange" text-color="white"
@@ -167,6 +170,19 @@ export default defineComponent({
 	width: 17em;
 	height: 5.5em;
 }
+.card-text-full {
+	width: 100%;
+}
+.card-text {
+	width: calc(100% - 5.5em);
+}
+.card-text-top {
+	height: 75%;
+}
+.card-text-bottom {
+	height: 25%;
+}
+
 .background {
 	background-color: #f2f2f2;
 }

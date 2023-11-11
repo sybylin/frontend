@@ -5,6 +5,10 @@ export default {
 		firstConnection: {
 			title: 'first connection',
 			description: 'welcome to the newcomer !'
+		},
+		seriesFinished: {
+			title: 'series finished',
+			description: 'and we hope not the last'
 		}
 	}
 };

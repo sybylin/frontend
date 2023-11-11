@@ -8,13 +8,17 @@ export default {
 	main: {
 		search: 'Recherche par nom de série ou créateur',
 		sort: {
-			title: 'Trier par',
-			titleAsc: 'Titre croissant',
-			titleDesc: 'Titre décroissant',
-			creationDateAsc: 'Date de création croissante',
-			creationDateDesc: 'Date de création décroissante',
-			bestRated: 'Les mieux notés',
-			lowestRated: 'Les moins bien notés'
+			title: 'trier par',
+			filter: 'filtrer',
+			titleAsc: 'titre croissant',
+			titleDesc: 'titre décroissant',
+			creationDateAsc: 'date de création croissante',
+			creationDateDesc: 'date de création décroissante',
+			bestRated: 'les mieux notés',
+			lowestRated: 'les moins bien notés',
+			started: 'en cours',
+			finished: 'complète',
+			all: 'toutes'
 		}
 	},
 	solution: {

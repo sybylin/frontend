@@ -16,10 +16,12 @@ export default {
 	account: 'compte',
 	verify: 'ce compte est vérifié',
 	unverify: 'ce compte n\'est pas vérifié',
+	update: 'mettre à jour',
 	connection: {
 		username: 'pseudonyme',
 		lastName: 'nom de famille',
 		email: 'e-mail',
+		oldPassword: 'ancien mot de passe',
 		password: 'mot de passe',
 		passwords: 'mots de passe',
 		rememberMe: 'se souvenir de moi pendant 7 jours',

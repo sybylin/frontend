@@ -5,9 +5,8 @@
 	>
 		<q-spinner-cube v-if="!Object.keys($props.user).length" color="primary" size="6em" />
 		<template v-else>
-			<div class="profil-image">
+			<div v-if="$q.screen.gt.xs" class="profil-image">
 				<image-upload
-					v-if="$q.screen.gt.xs"
 					v-model="$props.user.avatar"
 					alt="Profil"
 					api-path="/user/image"
@@ -46,16 +45,7 @@ import { defineComponent, onMounted, PropType, ref } from 'vue';
 import { api } from 'src/boot/axios';
 import ComponentsPagesUserLevel from './level.vue';
 import ImageUpload from 'components/pages/imageUpload.vue';
-
-export interface user {
-	name: string;
-	creationDate: Date;
-	avatar: string | null;
-	verify?: boolean;
-	id?: number;
-	role?: 'USER' | 'MODERATOR' | 'ADMINISTRATOR';
-	points?: number;
-}
+import type { user } from 'src/types';
 
 export default defineComponent({
 	name: 'ComponentsPagesUserProfil',

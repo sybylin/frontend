@@ -16,10 +16,12 @@ export default {
 	account: 'account',
 	verify: 'this account is verified',
 	unverify: 'this account is unverified',
+	update: 'update',
 	connection: {
 		username: 'pseudonym',
 		lastName: 'last name',
 		email: 'email',
+		oldPassword: 'old password',
 		password: 'password',
 		passwords: 'passwords',
 		rememberMe: 'remember me for 7 days',
@@ -59,5 +61,13 @@ export default {
 				btn: 'redirect to account connection'
 			}
 		}
+	},
+	delete: {
+		title: 'delete my account',
+		description: 'you\'re about to delete your account, this action is irreversible.',
+		descriptionMore: 'deleting your account will result in the complete deletion of all related data, including puzzles, series, achievements, and more.',
+		explanation: 'to delete your account, enter your pseudonym and confirm the request.',
+		label: 'enter your pseudonym',
+		error: 'the pseudonym doesn\'t match'
 	}
 };

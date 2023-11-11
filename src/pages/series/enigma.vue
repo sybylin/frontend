@@ -4,9 +4,7 @@
 		<q-spinner-cube color="deep-purple-6" size="6em" />
 	</div>
 	<template v-else>
-		<div v-if="notAuthorized" class="row justify-center">
-			<h5>{{ $capitalize($t('unauthorized')) }}</h5>
-		</div>
+		<unauthorized v-if="notAuthorized" :code="401" />
 		<template v-else-if="enigma">
 			<q-img
 				loading="lazy"
@@ -88,13 +86,14 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { brotliDecompress } from 'src/boot/brotli';
 import { api, baseURL } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
 import componentsStringSolution from 'src/components/pages/series/string.vue';
 import componentsArraySolution from 'src/components/pages/series/array.vue';
 import componentsObjectSolution from 'src/components/pages/series/object.vue';
 import componentsConfetti from 'src/components/pages/confetti.vue';
+import Unauthorized from 'components/error/unauthorized.vue';
 import type { NamedColor } from 'quasar';
 import type { Solution } from 'src/types';
-import { capitalize } from 'src/boot/custom';
 
 interface enigma {
 	title: string;
@@ -111,7 +110,8 @@ export default defineComponent({
 		componentsStringSolution,
 		componentsArraySolution,
 		componentsObjectSolution,
-		componentsConfetti
+		componentsConfetti,
+		Unauthorized
 	},
 	setup () {
 		const $q = useQuasar();
@@ -130,7 +130,7 @@ export default defineComponent({
 
 		const check = (d: string | string[] | Record<string, string>) => {
 			statusSolution.value = null;
-			api.post('/enigma/check', {
+			api.post('/enigma/solution/check', {
 				id: Number(route.params.enigmaId),
 				solution: {
 					type: enigma.value?.solutionType ?? 'STRING',
@@ -169,12 +169,12 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			api.post('/enigma/page/get/prod', {
+			api.post('/enigma/page/prod', {
 				enigma_id: Number(route.params.enigmaId),
 				series_id: Number(route.params.id)
 			})
 				.then(async (d) => {
-					if (d.data.enigma === false)
+					if (!d.data.enigma || d.data.enigma === false)
 						notAuthorized.value = true;
 					else {
 						enigma.value = {

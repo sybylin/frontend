@@ -10,12 +10,16 @@ export default {
 		noSeries: 'no series',
 		sort: {
 			title: 'sort by',
+			filter: 'filter',
 			titleAsc: 'title ascending',
 			titleDesc: 'title descending',
 			creationDateAsc: 'creation date ascending',
 			creationDateDesc: 'creation date descending',
 			bestRated: 'best rated',
-			lowestRated: 'lowest rated'
+			lowestRated: 'lowest rated',
+			started: 'in progress',
+			finished: 'complete',
+			all: 'all'
 		}
 	},
 	solution: {

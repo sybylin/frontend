@@ -1,5 +1,12 @@
 <template>
-	<div class="full-width column justify-center items-center">
+	<div
+		:class="{
+			'full-width': $props.isInclude,
+			'column': true,
+			'justify-center': true,
+			'items-center': true
+		}"
+	>
 		<span class="text-h5">{{ $capitalize($t('user.connection.step.2.title')) }}</span>
 		<q-separator class="full-width q-mb-sm q-mt-sm" inset />
 		<p>{{ $capitalize($t('user.connection.step.2.text1')) }}</p>
@@ -24,6 +31,11 @@ export default defineComponent({
 		ComponentsPagesUserVerificationCode
 	},
 	props: {
+		isInclude: {
+			type: Boolean,
+			required: false,
+			default: true
+		},
 		name: {
 			type: String,
 			required: true

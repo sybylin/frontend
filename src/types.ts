@@ -1,5 +1,16 @@
+export interface user {
+	name: string;
+	creationDate: Date;
+	avatar: string | null;
+	verify?: boolean;
+	id?: number;
+	role?: 'USER' | 'MODERATOR' | 'ADMINISTRATOR';
+	points?: number;
+}
+
 export interface enigma {
 	id: number;
+	series_id: number;
 	title: string;
 	image: string | null;
 	description: string;
@@ -16,6 +27,17 @@ export interface series {
 	series_enigma_order: {
 		enigma: enigma
 	}[];
+}
+
+export interface seriesList {
+	id: number;
+	title: string;
+	image: string | null;
+	rating: number;
+	creator: { name: string; avatar: string | null } | null;
+	modification_date: Date | null;
+	series_finished: Date | null;
+	series_started: Date | null;
 }
 
 export interface devArraySolution {

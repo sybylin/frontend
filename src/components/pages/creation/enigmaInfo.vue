@@ -37,19 +37,6 @@
 						:error-message="$capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))"
 						autogrow
 					/>
-					<q-slider
-						v-model.number="points"
-						class="q-pt-xl q-pb-md"
-						debounce="500"
-						bottom-slots
-						:min="0"
-						:max="1500"
-						:step="10"
-						label
-						:label-value="`${points} ${$t('create.main.series.points')}`"
-						label-always
-						color="light-blue-8"
-					/>
 					<q-separator />
 					<div class="q-pt-md row reverse">
 						<q-btn color="red-7" :label="$t('create.main.delete')" @click="deleteEnigma = true" />
@@ -209,19 +196,6 @@ export default defineComponent({
 					.finally(() => setWait(false));
 			});
 
-			watch(points, (p) => {
-				if (pointsError.value || !p || typeof p !== 'number' || p < 0 || p > 5000)
-					return;
-				setWait(true);
-				api.post('/enigma/update/points', {
-					enigma_id: props.modelValue.id,
-					points: p
-				})
-					.then(() => sendEmit('points', p))
-					.catch((e) => $q.notify(e.response.info.message))
-					.finally(() => setWait(false));
-			});
-
 			watch(image, (i) => sendEmit('image', i));
 		});
 
@@ -230,7 +204,6 @@ export default defineComponent({
 			apiWait,
 			title,
 			description,
-			points,
 			image,
 
 			titleError,

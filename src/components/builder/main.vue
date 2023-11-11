@@ -88,7 +88,7 @@ export default defineComponent({
 			if (!data)
 				return;
 
-			api.post('/enigma/update/page/prod', {
+			api.put('/enigma/page/prod', {
 				enigma_id: props.id,
 				editor_data: data
 			})

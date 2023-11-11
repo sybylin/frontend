@@ -123,7 +123,7 @@ export default (container: HTMLElement, id: number) => {
 			try {
 				if (!savedAssets)
 					savedAssets = (await api.get('/enigma/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
-				const serverData = await api.post('/enigma/page/get/dev', { enigma_id: id });
+				const serverData = await api.post('/enigma/page/dev', { enigma_id: id });
 				if (serverData.data.enigma && (serverData.data.enigma as string).length)
 					loadData = JSON.parse(stringDecompress(serverData.data.enigma));
 				else
@@ -140,7 +140,7 @@ export default (container: HTMLElement, id: number) => {
 			savedAssets = saveData.assets.map((e: any) => e.src);
 			saveData.assets = [];
 
-			api.post('/enigma/update/page/dev', {
+			api.put('/enigma/page/dev', {
 				enigma_id: id,
 				editor_data: stringCompress(JSON.stringify(saveData))
 			})

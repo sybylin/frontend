@@ -37,66 +37,7 @@
 				</template>
 			</q-select>
 		</div>
-		<div class="q-pa-xl row items-center justify-center q-gutter-md">
-			<div v-if="!seriesSearch.length" class="row justify-center full-width">
-				<span>{{ $capitalize($t('series.main.noSeries')) }}</span>
-			</div>
-			<q-card
-				v-for="serie of seriesSearch" :key="serie.id"
-				class="card"
-				flat bordered square
-			>
-				<q-img
-					loading="lazy"
-					style="max-height: 20em;"
-					:src="(serie.image) ? `${baseURL}${serie.image}` : '/imgs/background.jpg' "
-				>
-					<div class="absolute-top transparent row reverse">
-						<q-avatar
-							v-if="!serie.creator"
-							color="secondary"
-							icon="person"
-						/>
-						<q-avatar v-else>
-							<q-img
-								loading="lazy"
-								class="border"
-								:src="(serie.creator.avatar) ? `${baseURL}${serie.creator.avatar}` : '/imgs/background.jpg' "
-							>
-								<q-tooltip
-									anchor="center left"
-									self="center right"
-									class="bg-secondary text-body2"
-								>
-									<span>{{ $capitalize(serie.creator.name) }}</span>
-								</q-tooltip>
-							</q-img>
-						</q-avatar>
-					</div>
-					<div class="absolute-bottom">
-						<span class="text-h6">{{ serie.title }}</span>
-					</div>
-				</q-img>
-				<q-card-actions class="row justify-between">
-					<q-rating
-						v-model="serie.rating"
-						readonly
-						color="yellow-8"
-						icon="star_border"
-						icon-selected="star"
-						size="2em"
-						:max="5"
-					/>
-					<q-btn
-						unelevated square
-						:icon-right="(serie.series_started) ? 'play_circle' : 'play_arrow'"
-						:color="(serie.series_started) ? 'orange-7' : 'green-7'"
-						:label="(serie.series_started) ? $t('main.resume') : $t('main.start')"
-						:to="{ name: 'enigmaList', params: { id: serie.id } }"
-					/>
-				</q-card-actions>
-			</q-card>
-		</div>
+		<series-card :series="seriesSearch" />
 	</template>
 </template>
 
@@ -107,32 +48,24 @@ import { useQuasar, useMeta } from 'quasar';
 import { api, baseURL } from 'src/boot/axios';
 import fuzzy from 'src/fuzzy';
 import meta from 'src/meta';
-import Unauthorized from 'components/error/unauthorized.vue';
 import { capitalize } from 'src/boot/custom';
-
-interface seriesList {
-	id: number;
-	title: string;
-	image: string | null;
-	rating: number;
-	creator: { name: string; avatar: string | null } | null;
-	modification_date: Date | null;
-	series_finished: Date | null;
-	series_started: Date | null;
-}
+import Unauthorized from 'components/error/unauthorized.vue';
+import SeriesCard from 'components/pages/series/list.vue';
+import type { seriesList } from 'src/types';
 
 type SortType = 'titleAsc' | 'titleDesc' | 'creationDateAsc' | 'creationDateDesc' | 'bestRated' | 'lowestRated';
 
 export default defineComponent({
 	name: 'SeriesPages',
 	components: {
-		Unauthorized
+		Unauthorized,
+		SeriesCard
 	},
 	setup () {
 		const $q = useQuasar();
 		const { t } = useI18n();
 		const search = ref<string | null>(null);
-		const series = ref<seriesList[] | 'error'>([]);
+		const series = ref<seriesList[] | 'error' | null>(null);
 		const seriesSearch = ref<seriesList[]>([]);
 		const seriesSearchLoading = ref<boolean>(false);
 		const sort = ref<{ label: string, value: SortType }>({ label: capitalize(t('series.main.sort.titleAsc')), value: 'titleAsc' });
@@ -199,7 +132,7 @@ export default defineComponent({
 				})
 				.catch((e) => {
 					series.value = 'error';
-					$q.notify({ type: 'error', message: e.response.info.message });
+					$q.notify({ type: 'error', message: e.response.data.info.message });
 				});
 
 			watch(search, (searchValue) => {
@@ -237,14 +170,3 @@ export default defineComponent({
 	}
 });
 </script>
-
-<style scoped lang="scss">
-.card {
-	width: 100%;
-	max-width: 25em;
-}
-.border {
-	border: 2px solid $grey-8;
-	border-radius: 50%;
-}
-</style>
