@@ -16,6 +16,7 @@ export default {
 		home: 'Home',
 		series: 'Series',
 		create: 'Create',
+		dashboard: 'Dashboard',
 		license: 'License',
 		documentation: 'Documentation',
 		discord: 'Discord',

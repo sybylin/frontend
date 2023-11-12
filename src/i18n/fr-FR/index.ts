@@ -16,6 +16,7 @@ export default {
 		home: 'Accueil',
 		series: 'Séries',
 		create: 'Créer',
+		dashboard: 'Tableau de bord',
 		license: 'Licence',
 		documentation: 'Documentation',
 		discord: 'Discord',

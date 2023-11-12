@@ -101,7 +101,6 @@ export default defineComponent({
 			api.get('/user')
 				.then((d) => {
 					user.value = d.data.user;
-					console.log(d.data.user);
 				});
 		});
 

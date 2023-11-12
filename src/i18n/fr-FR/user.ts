@@ -61,5 +61,14 @@ export default {
 				btn: 'redirection vers la connexion au compte'
 			}
 		}
+	},
+	delete: {
+		title: 'supprimer mon compte',
+		description: 'vous êtes sur le point de supprimer votre compte, cette action est irréversible.',
+		descriptionMore: 'la suppression de votre compte entraînera la suppression complète de toutes les données qui y sont liées, y compris les puzzles, les séries, les succès, etc.',
+		explanation: 'pour supprimer votre compte, saisissez votre pseudonyme et confirmez la demande.',
+		label: 'entrez votre pseudonyme',
+		error: 'le pseudonyme ne correspond pas',
+		ok: 'votre compte est supprimé'
 	}
 };

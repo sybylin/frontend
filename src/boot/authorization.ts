@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers';
 import { api, xsrfName } from 'src/boot/axios';
 import { globalStore } from 'src/stores/global';
+import type { RouteLocationNormalized } from 'vue-router';
 
 export type authorizationLevel = 'user' | 'moderator' | 'administrator';
 
@@ -38,25 +39,26 @@ const checkUserRightsAndVerify = async (role: authorizationLevel): Promise<{ has
 				resolve({ hasRight: true, isVerify: d.data.userIsVerify });
 			})
 			.catch((e) => {
-				switch (e.response.data.info.code) {
-				case 'JW_002':
+				if (e.response.data.info.code === 'JW_002') {
 					globalStore().setIsConnected(true);
-					break;
-				case 'JW_001':
-				default:
-					globalStore().setIsConnected(false);
+					return resolve({ hasRight: false, isVerify: true });
 				}
-				resolve({ hasRight: false, isVerify: false });
+				globalStore().setIsConnected(false);
+				return resolve({ hasRight: false, isVerify: false });
 			});
 	});
 };
 
-const genName = (isConnected: boolean, isAuthorization: { hasRight: boolean; isVerify: boolean }) => {
+const genName = (
+	isConnected: boolean,
+	isAuthorization: { hasRight: boolean; isVerify: boolean },
+	from: RouteLocationNormalized
+) => {
 	if (!isConnected)
 		return 'login';
 	if (!isAuthorization.isVerify)
 		return 'verify';
-	return 'user';
+	return from.name ?? 'user';
 };
 
 const checkUserRightsBoot = {
@@ -88,15 +90,14 @@ export default boot(({ app, router, ssrContext }) => {
 	 * storage, and may make a hydration error at any time
 	 */
 	if (!ssrContext) {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		router.beforeResolve(async (to, _from) => {
+		router.beforeResolve(async (to, from) => {
 			if (to.meta.requiresAuth) {
 				const isAuthorization = await checkUserRightsAndVerify(to.meta.level ?? 'user');
 				const isConnected = globalStore().isConnected;
 
 				if (!isAuthorization.hasRight) {
 					return {
-						name: genName(isConnected, isAuthorization),
+						name: genName(isConnected, isAuthorization, from),
 						params: {
 							lang: to.params.lang ?? globalStore().lang ?? 'en-US'
 						},

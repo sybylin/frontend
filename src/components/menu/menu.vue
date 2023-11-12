@@ -1,21 +1,36 @@
 <template>
-	<div :class="(!$props.inDrawer) ? 'flex row' : 'flex column'">
+	<div
+		:class="{
+			flex: true,
+			column: $props.inDrawer,
+			row: !$props.inDrawer
+		}"
+	>
 		<q-no-ssr>
 			<template v-for="route in routes" :key="route.name">
 				<div
-					v-show="!route.wall || (route.wall && storeInstance.isConnected)"
-					:class="($props.inDrawer) ? 'drawer-btn' : 'btn'"
+					v-show="isShow(route)"
+					:class="{
+						'drawer-btn': $props.inDrawer,
+						'btn': !$props.inDrawer
+					}"
 				>
 					<q-btn
 						square flat color="white"
 						:label="$t(route.label)"
 						:icon="route.icon"
-						:class="($props.inDrawer) ? 'drawer-btn-content' : 'btn-content'"
+						:class="{
+							'drawer-btn-content': $props.inDrawer,
+							'btn-content': !$props.inDrawer
+						}"
 						:to="$generatePath({ name: route.name })"
 					/>
 					<div
 						v-if="$isInCurrentPath(route.name, $route.path, route.isRoot)"
-						:class="($props.inDrawer) ? 'right-line-if-selected' : 'bottom-line-if-selected'"
+						:class="{
+							'right-line-if-selected': $props.inDrawer,
+							'bottom-line-if-selected': !$props.inDrawer
+						}"
 					>
 					</div>
 				</div>
@@ -25,16 +40,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, watch } from 'vue';
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import { globalStore } from 'src/stores/global';
 import { storeToRefs } from 'pinia';
+import { checkUserRights } from 'src/boot/authorization';
 
 interface routeList {
   name: string;
   icon: string;
   label: string;
-  isRoot?: boolean;
-  wall?: boolean;
+	isRoot?: boolean;
+	isConnected?: boolean;
+	isModerator?: boolean;
 }
 
 export default defineComponent({
@@ -49,7 +66,7 @@ export default defineComponent({
 	setup () {
 		const storeInstance = globalStore();
 		const store = storeToRefs(storeInstance);
-
+		const isModerator = ref<boolean>(false);
 		const routes = reactive<routeList[]>([
 			{
 				name: 'home',
@@ -66,7 +83,14 @@ export default defineComponent({
 				name: 'selectSeries',
 				icon: 'design_services',
 				label: 'menu.create',
-				wall: true
+				isConnected: true
+			},
+			{
+				name: 'dashboard',
+				icon: 'dashboard',
+				label: 'menu.dashboard',
+				isConnected: true,
+				isModerator: true
 			},
 			{
 				name: 'user',
@@ -74,18 +98,38 @@ export default defineComponent({
 				label: 'user.account'
 			}
 		]);
+		const userIndex = routes.findIndex((e) => e.name === 'user');
+
+		const isShow = (route: routeList) => {
+			if (route.isConnected) {
+				if (!route.isModerator)
+					return storeInstance.isConnected;
+				return storeInstance.isConnected && isModerator.value;
+			}
+			return true;
+		};
+
+		const updateUserRoute = (isConnected: boolean) => {
+			checkUserRights('moderator')
+				.then((d) => {
+					isModerator.value = d;
+				});
+			routes[userIndex].name = (isConnected)
+				? 'user'
+				: 'login';
+		};
 
 		onMounted(() => {
-			watch(store.isConnected, (v) => {
-				routes[3].name = (v)
-					? 'user'
-					: 'login';
-			});
+			updateUserRoute(storeInstance.isConnected);
+			watch(store.isConnected, (v) => updateUserRoute(v));
 		});
 
 		return {
 			storeInstance,
-			routes
+			routes,
+			isModerator,
+			isShow,
+			updateUserRoute
 		};
 	}
 });

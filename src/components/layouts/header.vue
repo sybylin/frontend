@@ -58,7 +58,7 @@ export default defineComponent({
 	},
 	setup () {
 		const openDrawer = ref(false);
-		const mobileScreen = 880;
+		const mobileScreen = 920;
 
 		const toggleDrawer = () => { openDrawer.value = !openDrawer.value; };
 

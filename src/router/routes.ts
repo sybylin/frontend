@@ -11,15 +11,21 @@ const routes: RouteRecordRaw[] = [
 				component: () => import('pages/main.vue')
 			},
 			{
-				path: 'builder',
-				name: 'builder',
-				meta: { noSSR: true },
-				component: () => import('pages/builder.vue')
-			},
-			{
 				path: 'unauthorized',
 				name: 'unauthorized',
 				component: () => import('pages/unauthorized.vue')
+			},
+			{
+				path: 'dashboard',
+				name: 'dashboardMain',
+				meta: { noSSR: true, requiresAuth: true, level: 'moderator' },
+				children: [
+					{
+						path: '',
+						name: 'dashboard',
+						component: () => import('pages/dashboard/main.vue')
+					}
+				]
 			},
 			{
 				path: 'series',

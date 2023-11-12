@@ -68,6 +68,7 @@ export default {
 		descriptionMore: 'deleting your account will result in the complete deletion of all related data, including puzzles, series, achievements, and more.',
 		explanation: 'to delete your account, enter your pseudonym and confirm the request.',
 		label: 'enter your pseudonym',
-		error: 'the pseudonym doesn\'t match'
+		error: 'the pseudonym doesn\'t match',
+		ok: 'you\'re account is deleted'
 	}
 };

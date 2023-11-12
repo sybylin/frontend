@@ -1,6 +1,6 @@
 <template>
 	<div class="input">
-		<template v-for="(v, i) in codes" :key="i">
+		<template v-for="(_v, i) in codes" :key="i">
 			<q-input
 				:ref="setItemRef"
 				v-model="codes[i]"

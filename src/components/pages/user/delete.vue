@@ -64,7 +64,12 @@
 
 <script lang="ts">
 import { defineComponent, ref, PropType } from 'vue';
-import { user } from 'src/types';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { api } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
+import type { user } from 'src/types';
 
 export default defineComponent({
 	name: 'ComponentsPagesUserDelete',
@@ -75,13 +80,21 @@ export default defineComponent({
 		}
 	},
 	setup (props) {
+		const $q = useQuasar();
+		const router = useRouter();
+		const { t } = useI18n();
 		const expanded = ref<boolean>(false);
 		const deleteName = ref<string | null>(null);
 
 		const onSubmitDelete = () => {
 			if (!deleteName.value || deleteName.value.localeCompare(props.user.name) !== 0)
 				return;
-			console.log('submit');
+			api.delete('/user')
+				.then(() => {
+					$q.notify({ type: 'info', message: capitalize(t('user.delete.ok')) });
+					router.push({ name: 'home' });
+				})
+				.catch((e) => $q.notify({ type: 'error', message: e.response.data.info.message }));
 		};
 
 		const onResetDelete = () => {
