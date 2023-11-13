@@ -20,7 +20,15 @@ export default {
 			incorrect: '{key} is incorrect',
 			mandatory: '{key} is mandatory',
 			publish: 'publish series',
-			publishTooltip: 'makes the series visible to the public and searchable'
+			publishSubtitle: 'makes the series visible to the public and searchable',
+			pendingExplanation: 'for safety reasons, your series must be checked by a moderator to ensure that it complies with the rules.',
+			btn: {
+				publishSeries: 'publish my series',
+				unpublishSeries: 'unpublish my series',
+				unpublished: 'unpublished',
+				pending: 'pending',
+				published: 'published'
+			}
 		},
 		delete: 'delete',
 		deleteDialog: {

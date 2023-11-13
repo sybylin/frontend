@@ -37,26 +37,49 @@
 						:error-message="$capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))"
 						autogrow
 					/>
-					<div class="row no-wrap justify-end items-center">
-						<span class="text-body-1">
-							{{ $capitalize($t('create.main.series.publish')) }}
-							<q-icon name="help" size="sm" color="light-blue-8">
-								<q-tooltip
-									anchor="bottom middle" self="bottom middle" class="bg-light-blue-8 text-body2 text-center"
-									:offset="[0,40]"
-								>
-									{{ $capitalize($t('create.main.series.publishTooltip')) }}
-								</q-tooltip>
-							</q-icon>
-						</span>
-						<q-toggle
-							v-model="published"
-							:disable="apiWait"
-							size="xl"
-							color="green"
-							keep-color
-							checked-icon="public"
-							unchecked-icon="lock"
+					<q-separator />
+					<span class="text-center text-h6 orkney-medium q-pa-sm">
+						{{ $capitalize($t('create.main.series.publish')) }}
+						<q-icon :name="iconName" :color="iconColor" size="sm">
+							<q-tooltip
+								anchor="bottom middle"
+								self="bottom middle"
+								class="bg-light-blue-8 text-body2 text-center"
+								:offset="[0,40]"
+							>
+								{{ $capitalize($t(`create.main.series.btn.${iconText}`)) }}
+							</q-tooltip>
+						</q-icon>
+					</span>
+					<span class="text-center text-body2">
+						{{ $capitalize($t('create.main.series.publishSubtitle')) }}
+					</span>
+
+					<div class="column q-pb-sm">
+						<q-card
+							v-if="published === 'PENDING'"
+							class="q-ma-sm border"
+							flat
+							bordered
+						>
+							<q-card-section class="text-center">
+								<span class="text-body2">
+									{{ $capitalize($t('create.main.series.pendingExplanation')) }}
+								</span>
+							</q-card-section>
+						</q-card>
+						<q-btn
+							v-if="published !== 'PUBLISHED'"
+							color="green-7"
+							:disable="published === 'PENDING'"
+							:label="$capitalize($t('create.main.series.btn.publishSeries'))"
+							@click="pendingSeries"
+						/>
+						<q-btn
+							v-else
+							color="red-7"
+							:label="$capitalize($t('create.main.series.btn.unpublishSeries'))"
+							@click="unpublishSeries"
 						/>
 					</div>
 					<q-separator />
@@ -132,7 +155,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, onMounted, ref, watch } from 'vue';
+import { PropType, computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
@@ -160,7 +183,7 @@ export default defineComponent({
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
-		const published = ref<boolean>(props.modelValue.published);
+		const published = ref<'UNPUBLISHED' | 'PENDING' | 'PUBLISHED'>(props.modelValue.published);
 		const image = ref<string | null>(props.modelValue.image);
 
 		const titleError = ref<boolean | 'isExist'>(false);
@@ -168,6 +191,28 @@ export default defineComponent({
 		const pointsError = ref<boolean>(false);
 
 		const deleteName = ref<string | null>(null);
+
+		const iconColor = computed(() => {
+			if (published.value === 'UNPUBLISHED')
+				return 'red-7';
+			if (published.value === 'PENDING')
+				return 'deep-purple-6';
+			return 'green';
+		});
+		const iconText = computed(() => {
+			if (published.value === 'UNPUBLISHED')
+				return 'unpublished';
+			if (published.value === 'PENDING')
+				return 'pending';
+			return 'published';
+		});
+		const iconName = computed(() => {
+			if (published.value === 'UNPUBLISHED')
+				return 'lock';
+			if (published.value === 'PENDING')
+				return 'pending_actions';
+			return 'public';
+		});
 
 		const sendEmit = (part: 'title' | 'description' | 'image' | 'published', val: unknown) => {
 			const modelValue = props.modelValue;
@@ -185,11 +230,30 @@ export default defineComponent({
 				return;
 			api.delete(`/series/${props.modelValue.id}`)
 				.then(() => router.push({ name: 'selectSeries' }))
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		};
 
 		const onResetDelete = () => {
 			deleteName.value = null;
+		};
+
+		const pendingSeries = () => {
+			setWait(true);
+			api.post('/series/publish/pending', {
+				series_id: props.modelValue.id
+			})
+				.then(() => sendEmit('published', 'PENDING'))
+				.catch((e) => $q.notify(e.response.data.info.message))
+				.finally(() => setWait(false));
+		};
+
+		const unpublishSeries = () => {
+			api.post('/series/publish/unpublish', {
+				series_id: props.modelValue.id
+			})
+				.then(() => sendEmit('published', 'UNPUBLISHED'))
+				.catch((e) => $q.notify(e.response.data.info.message))
+				.finally(() => setWait(false));
 		};
 
 		onMounted(() => {
@@ -219,17 +283,6 @@ export default defineComponent({
 					.finally(() => setWait(false));
 			});
 
-			watch(published, (p) => {
-				setWait(true);
-				api.post('/series/update/published', {
-					series_id: props.modelValue.id,
-					published: p
-				})
-					.then(() => sendEmit('published', p))
-					.catch((e) => $q.notify(e.response.info.message))
-					.finally(() => setWait(false));
-			});
-
 			watch(image, (i) => sendEmit('image', i));
 		});
 
@@ -247,16 +300,25 @@ export default defineComponent({
 
 			deleteName,
 
+			iconColor,
+			iconText,
+			iconName,
+
 			onSubmitDelete,
-			onResetDelete
+			onResetDelete,
+			pendingSeries,
+			unpublishSeries
 		};
 	}
 });
 </script>
 
-<style>
+<style lang="scss">
 .closeBtn {
 	right: 1.1em;
 	top: 1.1em;
+}
+.border {
+	border-color: $deep-purple-6;
 }
 </style>
