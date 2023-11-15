@@ -20,7 +20,16 @@ export default {
 			incorrect: '{key} est incorrecte',
 			mandatory: '{key} est obligatoire',
 			publish: 'publier la série',
-			publishTooltip: 'rend la série visible au public et consultable'
+			publishSubtitle: 'rendre la série visible au public et consultable',
+			pendingExplanation: 'pour des raisons de sécurité, votre série doit être vérifiée par un modérateur afin de s\'assurer qu\'elle est conforme aux règlements',
+			rejection: 'votre énigme a été refusée par un modérateur, la raison en est la suivante :',
+			btn: {
+				publishSeries: 'publier ma série',
+				unpublishSeries: 'dépublier ma série',
+				unpublished: 'non publié',
+				pending: 'en attente',
+				published: 'publié'
+			}
 		},
 		delete: 'supprimer',
 		deleteDialog: {
@@ -39,8 +48,15 @@ export default {
 		},
 		solution: {
 			sentence: 'phrase',
+			sentenceBanner: 'cette phrase doit être écrite par l\'utilisateur pour que l\'énigme soit complète',
 			keywords: 'mots-clés',
-			keyvalues: 'clés valeurs'
+			sentenceKeywords: 'la liste des mots-clés doit être complète et peut être ordonnée ou non',
+			toggleHelpKeywords: 'les utilisateurs doivent saisir les mots-clés exactement dans cet ordre pour que la solution soit valide',
+			toggleKeywords: 'maintenir l\'ordre des mots-clés',
+			key: 'clé',
+			value: 'valeur',
+			keyvalues: 'clés valeurs',
+			sentenceKeyvalues: 'un objet qui peut contenir autant de couples clé/valeur que nécessaire, l\'ordre à l\'intérieur d\'un objet n\'est pas obligatoire'
 		}
 	},
 	mobile: 'Vous êtes sur mobile, l\'éditeur d\'énigme est plus compliqué sur celui-ci. Veuillez passer sur un ordinateur de bureau',

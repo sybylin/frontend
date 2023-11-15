@@ -12,8 +12,10 @@ export const checkUserRights = async (role: authorizationLevel): Promise<boolean
 	return new Promise((resolve) => {
 		api.get(`/rights/${role}`)
 			.then((d) => {
-				if (d.data.info.code === 'JW_101')
+				if (d.data.info.code === 'JW_101') {
 					globalStore().setIsConnected(true);
+					globalStore().setRole(d.data.role);
+				}
 				resolve(true);
 			})
 			.catch((e) => {
@@ -25,6 +27,7 @@ export const checkUserRights = async (role: authorizationLevel): Promise<boolean
 				default:
 					globalStore().setIsConnected(false);
 				}
+				globalStore().setRole(e.response.data.role);
 				resolve(false);
 			});
 	});
@@ -34,9 +37,11 @@ const checkUserRightsAndVerify = async (role: authorizationLevel): Promise<{ has
 	return new Promise((resolve) => {
 		api.get(`/rights/${role}`)
 			.then((d) => {
-				if (d.data.info.code === 'JW_101')
+				if (d.data.info.code === 'JW_101') {
 					globalStore().setIsConnected(true);
-				resolve({ hasRight: true, isVerify: d.data.userIsVerify });
+					globalStore().setRole(d.data.role);
+				}
+				resolve({ hasRight: true, isVerify: d.data.verify });
 			})
 			.catch((e) => {
 				if (e.response.data.info.code === 'JW_002') {
@@ -44,6 +49,7 @@ const checkUserRightsAndVerify = async (role: authorizationLevel): Promise<{ has
 					return resolve({ hasRight: false, isVerify: true });
 				}
 				globalStore().setIsConnected(false);
+				globalStore().setRole(e.response.data.role);
 				return resolve({ hasRight: false, isVerify: false });
 			});
 	});

@@ -87,7 +87,7 @@ export default defineComponent({
 				type,
 				solution: JSON.stringify(data)
 			})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		};
 
 		onMounted(() => {
@@ -114,7 +114,7 @@ export default defineComponent({
 						? data
 						: {};
 				})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 
 			watch(stringSolution, (newVal) => watchDebounce(() => {
 				if (solutionType.value !== 'STRING' || !newVal || !newVal.length)

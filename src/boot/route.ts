@@ -37,7 +37,7 @@ export const isInCurrentPath = (name: string, path: string, isRoot?: boolean): b
 	if (!userPath.length)
 		userPath = '/';
 	if (isRoot)
-		return (userPath === '/');
+		return (userPath.localeCompare('/') === 0 || userPath.localeCompare(checkPath) === 0);
 	return userPath.startsWith(checkPath);
 };
 

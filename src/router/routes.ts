@@ -18,12 +18,34 @@ const routes: RouteRecordRaw[] = [
 			{
 				path: 'dashboard',
 				name: 'dashboardMain',
-				meta: { noSSR: true, requiresAuth: true, level: 'moderator' },
+				meta: { requiresAuth: true, level: 'moderator' },
+				component: () => import('pages/dashboard/index.vue'),
 				children: [
 					{
 						path: '',
 						name: 'dashboard',
 						component: () => import('pages/dashboard/main.vue')
+					},
+					{
+						path: 'users',
+						name: 'dashboardUsers',
+						meta: { requiresAuth: true, level: 'administrator' },
+						component: () => import('pages/dashboard/users.vue')
+					},
+					{
+						path: 'series',
+						name: 'dashboardSeries',
+						component: () => import('pages/dashboard/series.vue')
+					},
+					{
+						path: 'series/:id(\\d+)/:enigmaId(\\d+)',
+						name: 'dashboardSeriesEnigma',
+						component: () => import('pages/dashboard/seriesEnigma.vue')
+					},
+					{
+						path: 'series/:id(\\d+)',
+						name: 'dashboardSeriesList',
+						component: () => import('pages/dashboard/seriesList.vue')
 					}
 				]
 			},

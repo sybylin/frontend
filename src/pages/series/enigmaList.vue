@@ -9,7 +9,7 @@
 		<template v-else-if="series">
 			<div class="row no-wrap justify-between q-pa-sm">
 				<q-btn
-					label="Return"
+					:label="$t('create.main.series.return')"
 					color="secondary"
 					align="between"
 					unelevated
@@ -147,7 +147,7 @@ export default defineComponent({
 					});
 				})
 				.catch((e) => {
-					$q.notify(e.response.info.message);
+					$q.notify(e.response.data.info.message);
 				});
 
 			api.post('/series/one', {
@@ -169,7 +169,7 @@ export default defineComponent({
 					}
 				})
 				.catch((e) => {
-					$q.notify(e.response.info.message);
+					$q.notify(e.response.data.info.message);
 				});
 		});
 

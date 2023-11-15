@@ -92,10 +92,10 @@ export default defineComponent({
 							.then((d) => {
 								enigma.value = d.data.enigma;
 							})
-							.catch((e) => $q.notify(e.response.info.message));
+							.catch((e) => $q.notify(e.response.data.info.message));
 					}
 				})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		});
 
 		return {

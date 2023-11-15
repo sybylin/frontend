@@ -73,7 +73,7 @@ export default defineComponent({
 				})
 				.catch((e) => {
 					series.value = 'error';
-					$q.notify({ type: 'error', message: e.response.info.message });
+					$q.notify({ type: 'error', message: e.response.data.info.message });
 				});
 
 			watch(type, (newType) => sortFunction(newType), { deep: true });

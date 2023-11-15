@@ -162,7 +162,7 @@ export default defineComponent({
 				return;
 			api.delete(`/enigma/${props.modelValue.id}`)
 				.then(() => router.push({ name: 'editSeries', params: { seriesId: props.modelValue.series_id } }))
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		};
 
 		const onResetDelete = () => {
@@ -179,7 +179,7 @@ export default defineComponent({
 					title: t
 				})
 					.then(() => sendEmit('title', t))
-					.catch((e) => $q.notify(e.response.info.message))
+					.catch((e) => $q.notify(e.response.data.info.message))
 					.finally(() => setWait(false));
 			});
 
@@ -192,7 +192,7 @@ export default defineComponent({
 					description: d
 				})
 					.then(() => sendEmit('description', d))
-					.catch((e) => $q.notify(e.response.info.message))
+					.catch((e) => $q.notify(e.response.data.info.message))
 					.finally(() => setWait(false));
 			});
 

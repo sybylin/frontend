@@ -94,7 +94,7 @@ export default defineComponent({
 			})
 				.catch((e) => {
 					console.error(e.response.data);
-					$q.notify({ type: 'failed', message: e.response.info.message });
+					$q.notify({ type: 'failed', message: e.response.data.info.message });
 				});
 		};
 

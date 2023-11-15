@@ -5,6 +5,7 @@ import series from './series';
 import achievement from './achievement';
 import create from './create';
 import builder from './builder';
+import dashboard from './dashboard';
 
 export default {
 	title: 'Sibyllin',
@@ -29,5 +30,6 @@ export default {
 	series,
 	achievement,
 	create,
-	builder
+	builder,
+	dashboard
 };

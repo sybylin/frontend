@@ -131,7 +131,7 @@ export default (container: HTMLElement, id: number) => {
 				loadData.assets = savedAssets;
 			} catch (e: any) {
 				console.log(e);
-				Notify.create({ type: 'failed', message: e.response.info.message });
+				Notify.create({ type: 'failed', message: e.response.data.info.message });
 			}
 			return loadData;
 		},
@@ -144,7 +144,7 @@ export default (container: HTMLElement, id: number) => {
 				enigma_id: id,
 				editor_data: stringCompress(JSON.stringify(saveData))
 			})
-				.catch((e) => Notify.create({ type: 'failed', message: e.response.info.message }));
+				.catch((e) => Notify.create({ type: 'failed', message: e.response.data.info.message }));
 		}
 	});
 

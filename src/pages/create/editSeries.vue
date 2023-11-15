@@ -91,7 +91,7 @@ export default defineComponent({
 				.then((d) => {
 					series.value = d.series;
 				})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		};
 
 		const updateEnigmas = (enigmasList: enigma[]) => {
@@ -115,7 +115,7 @@ export default defineComponent({
 				series_id: Number(route.params.seriesId),
 				order: enigmasList.map((v) => ({ series_id: v.series_id, enigma_id: v.id }))
 			})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		};
 
 		onBeforeMount(() => {
@@ -129,7 +129,7 @@ export default defineComponent({
 						? true
 						: 'unauthorized';
 				})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		});
 
 		return {

@@ -151,7 +151,7 @@ export default defineComponent({
 					} else
 						statusSolution.value = 'invalid';
 				})
-				.catch((e) => $q.notify(e.response.info.message))
+				.catch((e) => $q.notify(e.response.data.info.message))
 				.finally(() => {
 					checkSolution.value = false;
 				});
@@ -187,7 +187,7 @@ export default defineComponent({
 						};
 					}
 				})
-				.catch((e) => $q.notify(e.response.info.message));
+				.catch((e) => $q.notify(e.response.data.info.message));
 		});
 
 		return {

@@ -21,7 +21,8 @@ export default {
 			mandatory: '{key} is mandatory',
 			publish: 'publish series',
 			publishSubtitle: 'makes the series visible to the public and searchable',
-			pendingExplanation: 'for safety reasons, your series must be checked by a moderator to ensure that it complies with the rules.',
+			pendingExplanation: 'for safety reasons, your series must be checked by a moderator to ensure that it complies with the rules',
+			rejection: 'your enigma has been refused by a moderator, the reason is :',
 			btn: {
 				publishSeries: 'publish my series',
 				unpublishSeries: 'unpublish my series',
@@ -55,7 +56,7 @@ export default {
 			key: 'key',
 			value: 'value',
 			keyvalues: 'key values',
-			sentenceKeyvalues: 'an object that can contain as many sub-objects as required; order within an object is not mandatory'
+			sentenceKeyvalues: 'an object that can contain as many key/values pairs as required, the order within an object is not mandatory'
 		}
 	},
 	mobile: 'You\'re on mobile, enigma editor is more complicated on it. Please switch to desktop',

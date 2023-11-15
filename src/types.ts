@@ -24,9 +24,19 @@ export interface series {
 	published: 'UNPUBLISHED' | 'PENDING' | 'PUBLISHED';
 	image: string | null;
 	modification_date: Date;
+	series_creator: {
+		name: string;
+		avatar: string;
+	};
 	series_enigma_order: {
-		enigma: enigma
+		series_id?: number ;
+		enigma_id?: number;
+		enigma: enigma;
+		order?: number;
 	}[];
+	series_verified_by: {
+		rejectionReason: string | null;
+	}
 }
 
 export interface seriesList {

@@ -40,10 +40,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from 'vue';
+import { defineComponent, onMounted, reactive, watch } from 'vue';
 import { globalStore } from 'src/stores/global';
 import { storeToRefs } from 'pinia';
-import { checkUserRights } from 'src/boot/authorization';
 
 interface routeList {
   name: string;
@@ -66,7 +65,6 @@ export default defineComponent({
 	setup () {
 		const storeInstance = globalStore();
 		const store = storeToRefs(storeInstance);
-		const isModerator = ref<boolean>(false);
 		const routes = reactive<routeList[]>([
 			{
 				name: 'home',
@@ -102,18 +100,14 @@ export default defineComponent({
 
 		const isShow = (route: routeList) => {
 			if (route.isConnected) {
-				if (!route.isModerator)
+				if (storeInstance.role !== 'moderator')
 					return storeInstance.isConnected;
-				return storeInstance.isConnected && isModerator.value;
+				return storeInstance.isConnected && storeInstance.role === 'moderator';
 			}
 			return true;
 		};
 
 		const updateUserRoute = (isConnected: boolean) => {
-			checkUserRights('moderator')
-				.then((d) => {
-					isModerator.value = d;
-				});
 			routes[userIndex].name = (isConnected)
 				? 'user'
 				: 'login';
@@ -127,7 +121,6 @@ export default defineComponent({
 		return {
 			storeInstance,
 			routes,
-			isModerator,
 			isShow,
 			updateUserRoute
 		};

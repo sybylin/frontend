@@ -42,10 +42,10 @@
 						{{ $capitalize($t('create.main.series.publish')) }}
 						<q-icon :name="iconName" :color="iconColor" size="sm">
 							<q-tooltip
-								anchor="bottom middle"
-								self="bottom middle"
-								class="bg-light-blue-8 text-body2 text-center"
-								:offset="[0,40]"
+								anchor="center end"
+								self="center left"
+								:class="`text-body2 text-center bg-${iconColor}`"
+								:offset="[10,0]"
 							>
 								{{ $capitalize($t(`create.main.series.btn.${iconText}`)) }}
 							</q-tooltip>
@@ -54,8 +54,24 @@
 					<span class="text-center text-body2">
 						{{ $capitalize($t('create.main.series.publishSubtitle')) }}
 					</span>
-
 					<div class="column q-pb-sm">
+						<q-card
+							v-if="rejectionError"
+							class="q-ma-sm border-error"
+							flat
+							bordered
+						>
+							<q-card-section class="row">
+								<span class="text-body1 orkney-medium full-width text-center">
+									{{ $capitalize($t('create.main.series.rejection')) }}
+								</span>
+								<q-separator class="full-width q-ma-sm" />
+								<span class="text-body2 full-width text-center">
+									{{ $capitalize(rejectionError) }}
+								</span>
+							</q-card-section>
+						</q-card>
+
 						<q-card
 							v-if="published === 'PENDING'"
 							class="q-ma-sm border"
@@ -183,6 +199,7 @@ export default defineComponent({
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
+		const rejectionError = ref<string | null>(props.modelValue.series_verified_by.rejectionReason);
 		const published = ref<'UNPUBLISHED' | 'PENDING' | 'PUBLISHED'>(props.modelValue.published);
 		const image = ref<string | null>(props.modelValue.image);
 
@@ -242,7 +259,11 @@ export default defineComponent({
 			api.post('/series/publish/pending', {
 				series_id: props.modelValue.id
 			})
-				.then(() => sendEmit('published', 'PENDING'))
+				.then(() => {
+					sendEmit('published', 'PENDING');
+					published.value = 'PENDING';
+					rejectionError.value = null;
+				})
 				.catch((e) => $q.notify(e.response.data.info.message))
 				.finally(() => setWait(false));
 		};
@@ -251,7 +272,11 @@ export default defineComponent({
 			api.post('/series/publish/unpublish', {
 				series_id: props.modelValue.id
 			})
-				.then(() => sendEmit('published', 'UNPUBLISHED'))
+				.then(() => {
+					sendEmit('published', 'UNPUBLISHED');
+					published.value = 'UNPUBLISHED';
+					rejectionError.value = null;
+				})
 				.catch((e) => $q.notify(e.response.data.info.message))
 				.finally(() => setWait(false));
 		};
@@ -266,7 +291,7 @@ export default defineComponent({
 					title: t
 				})
 					.then(() => sendEmit('title', t))
-					.catch((e) => $q.notify(e.response.info.message))
+					.catch((e) => $q.notify(e.response.data.info.message))
 					.finally(() => setWait(false));
 			});
 
@@ -279,7 +304,7 @@ export default defineComponent({
 					description: d
 				})
 					.then(() => sendEmit('description', d))
-					.catch((e) => $q.notify(e.response.info.message))
+					.catch((e) => $q.notify(e.response.data.info.message))
 					.finally(() => setWait(false));
 			});
 
@@ -291,6 +316,7 @@ export default defineComponent({
 			apiWait,
 			title,
 			description,
+			rejectionError,
 			published,
 			image,
 
@@ -313,12 +339,15 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .closeBtn {
 	right: 1.1em;
 	top: 1.1em;
 }
 .border {
 	border-color: $deep-purple-6;
+}
+.border-error {
+	border-color: $red-7;
 }
 </style>
