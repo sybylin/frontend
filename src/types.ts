@@ -1,11 +1,16 @@
+export type Role = 'USER' | 'MODERATOR' | 'ADMINISTRATOR';
+export type Published = 'UNPUBLISHED' | 'PENDING' | 'PUBLISHED';
+export type Solution = 'STRING' | 'ARRAY' | 'OBJECT';
+
 export interface user {
-	name: string;
-	creationDate: Date;
+	id: number;
+  name: string;
+	email: string;
 	avatar: string | null;
-	verify?: boolean;
-	id?: number;
-	role?: 'USER' | 'MODERATOR' | 'ADMINISTRATOR';
-	points?: number;
+	role: Role;
+	verify: boolean;
+	blocked: boolean;
+	creation_date: Date;
 }
 
 export interface enigma {
@@ -21,7 +26,7 @@ export interface series {
 	id: number;
 	title: string;
 	description: string;
-	published: 'UNPUBLISHED' | 'PENDING' | 'PUBLISHED';
+	published: Published;
 	image: string | null;
 	modification_date: Date;
 	series_creator: {
@@ -64,5 +69,3 @@ export interface prodArraySolution {
 }
 
 export type objectSolution = Record<string, string>;
-
-export type Solution = 'STRING' | 'ARRAY' | 'OBJECT';

@@ -35,17 +35,17 @@ const routes: RouteRecordRaw[] = [
 					{
 						path: 'series',
 						name: 'dashboardSeries',
-						component: () => import('pages/dashboard/series.vue')
+						component: () => import('pages/dashboard/series/series.vue')
 					},
 					{
 						path: 'series/:id(\\d+)/:enigmaId(\\d+)',
 						name: 'dashboardSeriesEnigma',
-						component: () => import('pages/dashboard/seriesEnigma.vue')
+						component: () => import('pages/dashboard/series/seriesEnigma.vue')
 					},
 					{
 						path: 'series/:id(\\d+)',
 						name: 'dashboardSeriesList',
-						component: () => import('pages/dashboard/seriesList.vue')
+						component: () => import('pages/dashboard/series/seriesList.vue')
 					}
 				]
 			},
