@@ -150,7 +150,7 @@ export default defineComponent({
 	emits: ['update:modelValue'],
 	setup (props, { emit }) {
 		const $q = useQuasar();
-		const size = 1;
+		const size = 100;
 
 		const apiGetUsers = ref<boolean>(props.modelValue);
 		const usersList = ref<user[] | null>(null);
