@@ -1,10 +1,19 @@
 export default {
 	title: 'dashboard',
 	main: {
-		title: 'main'
+		title: 'main',
+		desc: 'main page of dashboard'
 	},
 	users: {
 		title: 'users',
+		desc: 'manage users',
+		noUsers: 'no users',
+		sort: {
+			nameAsc: 'name ascending',
+			nameDesc: 'name descending',
+			creationDateAsc: 'creation date ascending',
+			creationDateDesc: 'creation date descending'
+		},
 		table: {
 			avatar: 'avatar',
 			name: 'name',
@@ -30,6 +39,7 @@ export default {
 	},
 	series: {
 		title: 'series',
+		desc: 'verify series of enigmas',
 		verifyBtn: 'check series',
 		verifyBtnEnigma: 'check enigma',
 		seriesTitle: 'series title',

@@ -2,7 +2,8 @@
 	<div class="row no-wrap min-height">
 		<div
 			:class="{
-				'col-2': true,
+				'col-2': $q.screen.gt.sm,
+				'col-1': !$q.screen.gt.sm,
 				'text-white': true,
 				'bg-grey-2': true
 			}"
@@ -20,7 +21,7 @@
 					</div>
 					<q-btn
 						square flat color="white"
-						:label="$t(`dashboard.${tab.name}.title`)"
+						:label="($q.screen.gt.sm) ? $t(`dashboard.${tab.name}.title`) : undefined"
 						:icon="tab.icon"
 						class="btn-content"
 						:to="$generatePath({ name: tab.to })"
@@ -28,7 +29,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-10 q-pa-xs">
+		<div
+			:class="{
+				'q-pa-xs': true,
+				'col-10': $q.screen.gt.sm,
+				'col-11': !$q.screen.gt.sm
+			}"
+		>
 			<router-view />
 		</div>
 	</div>

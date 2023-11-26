@@ -9,7 +9,7 @@
 import { defineComponent, ref } from 'vue';
 import { useMeta } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import meta from '../meta';
+import meta from 'src/meta';
 
 import mainHeader from '../components/pages/main/header.vue';
 

@@ -54,15 +54,40 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { useQuasar } from 'quasar';
+import { useQuasar, useMeta } from 'quasar';
+import { useI18n } from 'vue-i18n';
 import { api, baseURL } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
+import meta from 'src/meta';
 import type { seriesList } from 'src/types';
 
 export default defineComponent({
 	name: 'PagesDashboardSeries',
 	setup () {
 		const $q = useQuasar();
+		const { t } = useI18n();
 		const series = ref<seriesList[] | null>(null);
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: capitalize(t('dashboard.series.title')),
+					description: capitalize(t('dashboard.series.desc'))
+				},
+				og: {
+					url: 'https://sibyllin.app/dashboard/users',
+					title: capitalize(t('dashboard.series.title')),
+					description: capitalize(t('dashboard.series.desc')),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/dashboard/users',
+					title: capitalize(t('dashboard.series.title')),
+					description: capitalize(t('dashboard.series.desc')),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		onMounted(() => {
 			api.get('/series/publish/pending')

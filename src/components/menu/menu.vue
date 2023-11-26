@@ -100,9 +100,9 @@ export default defineComponent({
 
 		const isShow = (route: routeList) => {
 			if (route.isConnected) {
-				if (storeInstance.role !== 'moderator')
-					return storeInstance.isConnected;
-				return storeInstance.isConnected && storeInstance.role === 'moderator';
+				if (route.isModerator)
+					return storeInstance.role !== 'user';
+				return storeInstance.isConnected;
 			}
 			return true;
 		};
