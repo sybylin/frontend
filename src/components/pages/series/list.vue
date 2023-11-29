@@ -15,7 +15,7 @@
 			>
 				<div class="absolute-top transparent row reverse">
 					<q-avatar
-						v-if="!serie.creator"
+						v-if="!serie.name"
 						color="secondary"
 						icon="person"
 					/>
@@ -23,14 +23,14 @@
 						<q-img
 							loading="lazy"
 							class="border"
-							:src="(serie.creator.avatar) ? `${baseURL}${serie.creator.avatar}` : '/imgs/background.jpg' "
+							:src="(serie.avatar) ? `${baseURL}${serie.avatar}` : '/imgs/background.jpg' "
 						>
 							<q-tooltip
 								anchor="center left"
 								self="center right"
 								class="bg-secondary text-body2"
 							>
-								<span>{{ $capitalize(serie.creator.name) }}</span>
+								<span>{{ $capitalize(serie.name) }}</span>
 							</q-tooltip>
 						</q-img>
 					</q-avatar>
@@ -39,8 +39,15 @@
 					<span class="text-h6">{{ serie.title }}</span>
 				</div>
 			</q-img>
-			<q-card-actions class="row justify-between">
+			<q-card-actions
+				:class="{
+					row: true,
+					'justify-between': serie.rating !== null,
+					'justify-end': serie.rating === null
+				}"
+			>
 				<q-rating
+					v-if="serie.rating !== null"
 					v-model="serie.rating"
 					readonly
 					color="yellow-8"
@@ -51,9 +58,9 @@
 				/>
 				<q-btn
 					unelevated square
-					:icon-right="(serie.series_started) ? 'play_circle' : 'play_arrow'"
-					:color="(serie.series_started) ? 'orange-7' : 'green-7'"
-					:label="(serie.series_started) ? $t('main.resume') : $t('main.start')"
+					:icon-right="(serie.started_date) ? 'play_circle' : 'play_arrow'"
+					:color="(serie.started_date) ? 'orange-7' : 'green-7'"
+					:label="(serie.started_date) ? $t('main.resume') : $t('main.start')"
 					:to="{ name: 'enigmaList', params: { id: serie.id } }"
 				/>
 			</q-card-actions>
@@ -90,5 +97,7 @@ export default defineComponent({
 .border {
 	border: 2px solid $grey-8;
 	border-radius: 50%;
+	width: 2em;
+	height: 2em;
 }
 </style>

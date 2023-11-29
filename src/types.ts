@@ -46,13 +46,14 @@ export interface series {
 
 export interface seriesList {
 	id: number;
-	title: string;
 	image: string | null;
+	title: string;
+	creation_date: Date | null;
+	name: string;
+	avatar: string | null
 	rating: number;
-	creator: { name: string; avatar: string | null } | null;
-	modification_date: Date | null;
-	series_finished: Date | null;
-	series_started: Date | null;
+	started_date: Date | null;
+	completion_date: Date | null;
 }
 
 export interface devArraySolution {
