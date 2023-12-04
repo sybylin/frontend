@@ -1,5 +1,5 @@
 <template>
-	<div class="q-pa-xl row items-center justify-center q-gutter-md">
+	<div class="q-pa-xl column items-center justify-center q-gutter-md">
 		<div v-if="!$props.series.length" class="row justify-center full-width">
 			<span class="text-h4 text-weight-light">{{ $capitalize($t('series.main.noSeries')) }}</span>
 		</div>
@@ -8,6 +8,7 @@
 			class="card"
 			flat bordered square
 		>
+			{{ serie.rating }}
 			<q-img
 				loading="lazy"
 				style="max-height: 20em;"
@@ -52,6 +53,7 @@
 					readonly
 					color="yellow-8"
 					icon="star_border"
+					icon-half="star_half"
 					icon-selected="star"
 					size="2em"
 					:max="5"

@@ -56,6 +56,11 @@
 		@load="onLoad"
 	>
 		<series-card :series="seriesList" />
+		<template v-slot:loading>
+			<div class="row justify-center q-pa-sm">
+				<q-spinner-dots size="6em" color="deep-purple-6" />
+			</div>
+		</template>
 	</q-infinite-scroll>
 </template>
 
@@ -160,15 +165,8 @@ export default defineComponent({
 
 		onMounted(() => {
 			getSeries(sortBy.value, search.value);
-
-			watch(search, (n) => {
-				console.log('search');
-				getSeries(sortBy.value, n);
-			});
-			watch(sortBy, (n) => {
-				console.log('sortBy');
-				getSeries(n, search.value);
-			});
+			watch(search, (n) => getSeries(sortBy.value, n));
+			watch(sortBy, (n) => getSeries(n, search.value));
 		});
 
 		return {
