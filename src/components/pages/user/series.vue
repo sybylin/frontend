@@ -58,18 +58,30 @@ export default defineComponent({
 			else {
 				seriesSearch.value = series.value.filter((e) => {
 					return (
-						(newSort.value === 'started' && e.series_started && !e.series_finished) ||
-						(newSort.value === 'finished' && e.series_finished)
+						(newSort.value === 'started' && e.started_date && !e.completion_date) ||
+						(newSort.value === 'finished' && e.started_date)
 					);
 				});
 			}
 		};
 
+		const setElement = (e: any) => ({
+			id: e.id,
+			image: e.image,
+			title: e.title,
+			creation_date: e.creation_date,
+			name: e.name,
+			avatar: e.avatar,
+			rating: Number(e.rating),
+			started_date: e.started_date,
+			completion_date: e.completion_date
+		});
+
 		onMounted(() => {
 			api.get('series/user')
 				.then((d) => {
-					series.value = d.data.series;
-					seriesSearch.value = d.data.series;
+					series.value = d.data.series.map(setElement);
+					seriesSearch.value = d.data.series.map(setElement);
 				})
 				.catch((e) => {
 					series.value = 'error';

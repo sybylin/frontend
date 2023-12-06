@@ -199,7 +199,7 @@ export default defineComponent({
 		const apiWait = ref<boolean>(false);
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
-		const rejectionError = ref<string | null>(props.modelValue.series_verified_by.rejection_reason);
+		const rejectionError = ref<string | null>(props.modelValue.series_verified_by?.rejection_reason ?? null);
 		const published = ref<'UNPUBLISHED' | 'PENDING' | 'PUBLISHED'>(props.modelValue.published);
 		const image = ref<string | null>(props.modelValue.image);
 
