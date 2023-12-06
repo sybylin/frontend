@@ -15,7 +15,7 @@
 			>
 				<div class="absolute-top transparent row reverse">
 					<q-avatar
-						v-if="!serie.creator"
+						v-if="!serie.avatar"
 						color="secondary"
 						icon="person"
 					/>
@@ -23,14 +23,14 @@
 						<q-img
 							loading="lazy"
 							class="border"
-							:src="(serie.creator.avatar) ? `${baseURL}${serie.creator.avatar}` : '/imgs/background.jpg' "
+							:src="(serie.avatar) ? `${baseURL}${serie.avatar}` : '/imgs/background.jpg' "
 						>
 							<q-tooltip
 								anchor="center left"
 								self="center right"
 								class="bg-secondary text-body2"
 							>
-								<span>{{ $capitalize(serie.creator.name) }}</span>
+								<span>{{ $capitalize(serie.name) }}</span>
 							</q-tooltip>
 						</q-img>
 					</q-avatar>

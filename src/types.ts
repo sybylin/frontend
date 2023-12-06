@@ -40,7 +40,7 @@ export interface series {
 		order?: number;
 	}[];
 	series_verified_by: {
-		rejectionReason: string | null;
+		rejection_reason: string | null;
 	}
 }
 

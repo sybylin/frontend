@@ -33,29 +33,18 @@
 			</template>
 		</q-select>
 	</div>
-	<div
-		v-if="!seriesList"
-		class="full-width row justify-center items-center q-pt-xl q-pb-xl"
-	>
-		<q-spinner-cube color="deep-purple-6" size="6em" />
-	</div>
-	<unauthorized v-else-if="seriesList === 'error'" :code="401" />
-	<div
-		v-else-if="!seriesList.length"
-		class="full-width row justify-center"
-	>
-		<span class="text-h4 text-weight-light q-pt-xl">
-			{{ $capitalize($t('dashboard.users.noUsers')) }}
-		</span>
-	</div>
+	<unauthorized v-if="seriesList === 'error'" :code="401" />
 	<q-infinite-scroll
-		v-else
+		ref="infiniteScroll"
 		class="full-width"
 		:offset="400"
 		:debounce="100"
 		@load="onLoad"
 	>
-		<series-card :series="seriesList" />
+		<series-card
+			v-if="seriesList !== 'error'"
+			:series="seriesList"
+		/>
 		<template v-slot:loading>
 			<div class="row justify-center q-pa-sm">
 				<q-spinner-dots size="6em" color="deep-purple-6" />
@@ -73,6 +62,7 @@ import meta from 'src/meta';
 import { capitalize } from 'src/boot/custom';
 import Unauthorized from 'components/error/unauthorized.vue';
 import SeriesCard from 'components/pages/series/list.vue';
+import type { QInfiniteScroll } from 'quasar';
 import type { seriesList } from 'src/types';
 
 export default defineComponent({
@@ -84,13 +74,18 @@ export default defineComponent({
 	setup () {
 		const $q = useQuasar();
 		const { t } = useI18n();
+		const infiniteScroll = ref<QInfiniteScroll | null>(null);
 		const apiGetSeries = ref<boolean>(false);
 		const seriesList = ref<seriesList[] | 'error' | null>(null);
 		const sortBy = ref<{ label: string, value: number }>({ label: capitalize(t('series.main.sort.titleAsc')), value: 1 });
 		const search = ref<string | null>(null);
 		const size = 100;
 
-		const onLoad = (_id: number, done: (stop: boolean) => void) => getSeries(sortBy.value, search.value, done);
+		const triggerLoader = () => {
+			seriesList.value = null;
+			infiniteScroll.value?.resume();
+			infiniteScroll.value?.trigger();
+		};
 
 		const getLastElement = () => {
 			if (!seriesList.value || !seriesList.value.length || seriesList.value === 'error')
@@ -114,26 +109,19 @@ export default defineComponent({
 			completion_date: e.completion_date
 		});
 
-		const getSeries = (
-			sortBy: { label: string, value: number },
-			search: string | null,
-			done?: (stop: boolean) => void
-		) => {
+		const onLoad = (_id: number, done: (stop?: boolean) => void) => {
 			apiGetSeries.value = true;
-			if (!done)
-				seriesList.value = null;
 			api.post('/series/published', {
-				sort: sortBy.value,
+				sort: sortBy.value.value,
 				last_element: getLastElement(),
-				search: search ?? undefined
+				search: search.value ?? undefined
 			})
 				.then((d) => {
-					if (!done)
+					if (!seriesList.value)
 						seriesList.value = d.data.series.map(setElement);
 					else
 						(seriesList.value as seriesList[])?.push(...d.data.series.map(setElement));
-					if (done)
-						done(d.data.series.length < size);
+					done(d.data.series.length < size);
 				})
 				.catch((e) => $q.notify(e.response.data.info.message))
 				.finally(() => {
@@ -164,13 +152,14 @@ export default defineComponent({
 		});
 
 		onMounted(() => {
-			getSeries(sortBy.value, search.value);
-			watch(search, (n) => getSeries(sortBy.value, n));
-			watch(sortBy, (n) => getSeries(n, search.value));
+			triggerLoader();
+			watch(search, () => triggerLoader(), { immediate: false, flush: 'post' });
+			watch(sortBy, () => triggerLoader(), { immediate: false, flush: 'post' });
 		});
 
 		return {
 			baseURL,
+			infiniteScroll,
 			apiGetSeries,
 			seriesList,
 			size,
