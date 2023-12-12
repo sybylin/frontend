@@ -130,7 +130,7 @@ export default defineComponent({
 
 		const check = (d: string | string[] | Record<string, string>) => {
 			statusSolution.value = null;
-			api.post('/enigma/solution/check', {
+			api.post('/enigmas/solution/check', {
 				id: Number(route.params.enigmaId),
 				solution: {
 					type: enigma.value?.solutionType ?? 'STRING',
@@ -169,7 +169,7 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			api.post('/enigma/page/prod', {
+			api.post('/enigmas/page/prod', {
 				enigma_id: Number(route.params.enigmaId),
 				series_id: Number(route.params.id)
 			})

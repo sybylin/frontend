@@ -82,7 +82,7 @@ export default defineComponent({
 		const watchDebounce = initDebounce();
 
 		const save = async (type: Solution, data: unknown) => {
-			api.post('/enigma/solution/save', {
+			api.post('/enigmas/solution/save', {
 				id: props.id,
 				type,
 				solution: JSON.stringify(data)
@@ -91,7 +91,7 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			api.post('/enigma/solution/get', {
+			api.post('/enigmas/solution/get', {
 				id: props.id
 			})
 				.then((d) => {

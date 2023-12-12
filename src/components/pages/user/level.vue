@@ -8,12 +8,24 @@
 			class="q-mt-sm"
 		>
 			<div class="absolute-full flex flex-center">
-				<q-badge color="white" text-color="black" :label="`${Math.round(progress * 100)}%`" />
+				<q-badge color="white" text-color="black" :label="`${Math.round(progress * 100)} %`" />
 			</div>
 		</q-linear-progress>
 		<div class="row justify-between full-width q-pl-md q-pr-md q-pt-xs">
-			<span class="text-weight-bold text-body1">{{ minLevel }}</span>
-			<span class="text-weight-bold text-body1">{{ maxLevel }}</span>
+			<q-spinner
+				v-if="!isCalc"
+				color="secondary" size="1.5em" :thickness="3"
+			/>
+			<span v-else class="text-weight-bold text-body1">
+				{{ minLevel }}
+			</span>
+			<q-spinner
+				v-if="!isCalc"
+				color="secondary" size="1.5em" :thickness="3"
+			/>
+			<span v-else class="text-weight-bold text-body1">
+				{{ maxLevel }}
+			</span>
 		</div>
 	</div>
 </template>
@@ -31,6 +43,7 @@ export default defineComponent({
 		}
 	},
 	setup (props) {
+		const isCalc = ref<boolean>(false);
 		const progress = ref<number>(0);
 		const level = ref<number>(0);
 
@@ -51,6 +64,7 @@ export default defineComponent({
 			progress.value = (points > 0)
 				? (points - min) / (max - min)
 				: 0;
+			isCalc.value = true;
 		};
 
 		const minLevel = computed(() => (level.value - 1 < 0)
@@ -68,6 +82,7 @@ export default defineComponent({
 		});
 
 		return {
+			isCalc,
 			progress,
 			level,
 			minLevel,

@@ -8,7 +8,7 @@ import { stringCompress, stringDecompress } from 'src/boot/brotli';
 
 const uploadCheckMimetype = (mimetype: string) => ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype.trim().toLowerCase());
 
-let savedAssets: string[] | null = null;
+// let savedAssets: string[] | null = null;
 export default (container: HTMLElement, id: number) => {
 	const editor = GrapesJs.init({
 		container,
@@ -42,7 +42,7 @@ export default (container: HTMLElement, id: number) => {
 					formData.append('image', filesRet[0]);
 				else
 					filesRet.forEach((f, i) => formData.append(`image-${i + 1}`, f));
-				api.post('/enigma/content/image', formData, {
+				api.post('/content/image', formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data'
 					}
@@ -121,28 +121,29 @@ export default (container: HTMLElement, id: number) => {
 		async load () {
 			let loadData: ProjectData = {};
 			try {
-				if (!savedAssets)
-					savedAssets = (await api.get('/enigma/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
-				const serverData = await api.post('/enigma/page/dev', { enigma_id: id });
-				if (serverData.data.enigma && (serverData.data.enigma as string).length)
-					loadData = JSON.parse(stringDecompress(serverData.data.enigma));
-				else
+				const serverData = await api.post('/enigmas/page/dev', { enigma_id: id });
+				const serveAssets: string[] | null = (await api.get('/enigmas/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
+
+				if (serverData.data.enigma && (serverData.data.enigma as string).length) {
+					const parse = JSON.parse(stringDecompress(serverData.data.enigma));
+					loadData = {
+						assets: [],
+						pages: parse.pages,
+						styles: parse.styles
+					};
+				} else
 					loadData = editor.getProjectData();
-				loadData.assets = savedAssets;
+				if (serveAssets !== null)
+					loadData.assets = serveAssets;
 			} catch (e: any) {
-				console.log(e);
 				Notify.create({ type: 'failed', message: e.response.data.info.message });
 			}
 			return loadData;
 		},
 		async store (data) {
-			const saveData = data;
-			savedAssets = saveData.assets.map((e: any) => e.src);
-			saveData.assets = [];
-
-			api.put('/enigma/page/dev', {
+			api.put('/enigmas/page/dev', {
 				enigma_id: id,
-				editor_data: stringCompress(JSON.stringify(saveData))
+				editor_data: stringCompress(JSON.stringify({ pages: data.pages, styles: data.styles }))
 			})
 				.catch((e) => Notify.create({ type: 'failed', message: e.response.data.info.message }));
 		}

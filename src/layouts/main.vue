@@ -5,11 +5,13 @@
 			<q-page>
 				<router-view v-slot="{ Component }">
 					<div class="page">
-						<q-no-ssr
-							v-if="isRequiresAuth || $route.meta.noSSR === true"
-							placeholder="This part is rendered on client"
-						>
+						<q-no-ssr v-if="isRequiresAuth || $route.meta.noSSR === true">
 							<component :is="Component" />
+							<template v-slot:placeholder>
+								<div class="full-width row justify-center q-pt-xl">
+									<q-spinner-cube size="6em" color="deep-purple-7" />
+								</div>
+							</template>
 						</q-no-ssr>
 						<component :is="Component" v-else />
 					</div>

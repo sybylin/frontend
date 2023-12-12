@@ -13,8 +13,8 @@
 				active-color="secondary"
 				indicator-color="secondary"
 			>
-				<q-tab name="series" label="Series" />
 				<q-tab name="achievement" label="Achievement" />
+				<q-tab name="series" label="Series" />
 				<q-tab name="edition" label="Edition" />
 			</q-tabs>
 		</template>
@@ -27,11 +27,11 @@
 				transition-prev="fade"
 				transition-next="fade"
 			>
-				<q-tab-panel name="series">
-					<components-pages-series :user="user" />
-				</q-tab-panel>
 				<q-tab-panel name="achievement" style="font-size: 2rem;">
 					<components-achievement-list :user="true" />
+				</q-tab-panel>
+				<q-tab-panel name="series">
+					<components-pages-series :user="user" />
 				</q-tab-panel>
 				<q-tab-panel name="edition">
 					<components-user-edit :user="user" @change="userChange" />
@@ -68,7 +68,7 @@ export default defineComponent({
 		const { t } = useI18n();
 		const splitter = ref<number>(20);
 		const user = ref<user>({} as user);
-		const tab = ref<'series' | 'achievement' | 'edition'>('series');
+		const tab = ref<'series' | 'achievement' | 'edition'>('achievement');
 
 		useMeta(() => {
 			return meta({
@@ -94,7 +94,8 @@ export default defineComponent({
 
 		const userChange = (v: { name: string, email: string, verify: boolean | null }) => {
 			user.value.name = v.name;
-			user.value.verify = v.verify ?? undefined;
+			if (v.verify)
+				user.value.verify = v.verify ?? undefined;
 		};
 
 		onMounted(() => {

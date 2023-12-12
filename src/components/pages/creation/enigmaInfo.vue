@@ -5,7 +5,7 @@
 				<div class="row full-height justify-center items-center">
 					<image-upload
 						v-model="image"
-						api-path="/enigma/update/image"
+						api-path="/enigmas/update/image"
 						:api-data="{ enigma_id: $props.modelValue.id }"
 					/>
 				</div>
@@ -160,7 +160,7 @@ export default defineComponent({
 		const onSubmitDelete = () => {
 			if (!deleteName.value || deleteName.value.localeCompare(props.modelValue.title) !== 0)
 				return;
-			api.delete(`/enigma/${props.modelValue.id}`)
+			api.delete(`/enigmas/${props.modelValue.id}`)
 				.then(() => router.push({ name: 'editSeries', params: { seriesId: props.modelValue.series_id } }))
 				.catch((e) => $q.notify(e.response.data.info.message));
 		};
@@ -174,7 +174,7 @@ export default defineComponent({
 				if (titleError.value || !t || isEmpty(t))
 					return;
 				setWait(true);
-				api.post('/enigma/update/title', {
+				api.post('/enigmas/update/title', {
 					enigma_id: props.modelValue.id,
 					title: t
 				})
@@ -187,7 +187,7 @@ export default defineComponent({
 				if (descriptionError.value || !d || isEmpty(d))
 					return;
 				setWait(true);
-				api.post('/enigma/update/description', {
+				api.post('/enigmas/update/description', {
 					enigma_id: props.modelValue.id,
 					description: d
 				})

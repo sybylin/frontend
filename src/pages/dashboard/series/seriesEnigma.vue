@@ -138,7 +138,7 @@ export default defineComponent({
 		});
 
 		onMounted(() => {
-			api.post('/enigma/page/prod', {
+			api.post('/enigmas/page/prod', {
 				enigma_id: Number(route.params.enigmaId),
 				series_id: Number(route.params.id)
 			})

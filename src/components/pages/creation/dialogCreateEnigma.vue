@@ -94,7 +94,7 @@ export default defineComponent({
 
 		const onSubmit = () => {
 			if (title.value && description.value && !isEmpty(title.value) && !isEmpty(description.value)) {
-				api.post('/enigma/create', {
+				api.post('/enigmas/create', {
 					series_id: props.seriesId,
 					title: title.value,
 					description: description.value,
