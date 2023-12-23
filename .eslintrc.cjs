@@ -56,6 +56,7 @@ module.exports = {
 		'prefer-promise-reject-errors': 'off',
 		'no-unused-vars': 'off',
 
+		camelcase: 'off',
 		indent: ['error', 'tab'],
 		'linebreak-style': ['error', 'unix'],
 		quotes: ['error', 'single'],

@@ -16,6 +16,7 @@ export default {
 			options: 'options',
 			title: 'title',
 			description: 'description',
+			createdBy: 'created by',
 			points: 'points',
 			incorrect: '{key} is incorrect',
 			mandatory: '{key} is mandatory',
@@ -58,6 +59,10 @@ export default {
 			keyvalues: 'key values',
 			sentenceKeyvalues: 'an object that can contain as many key/values pairs as required, the order within an object is not mandatory'
 		}
+	},
+	forbidden: {
+		pending: 'the series is being verified, you cannot modify it',
+		published: 'the series is published, please set it to unpublished to modify it'
 	},
 	mobile: 'You\'re on mobile, enigma editor is more complicated on it. Please switch to desktop',
 	dialogCreateSerie: {

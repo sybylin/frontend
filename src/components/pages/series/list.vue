@@ -64,7 +64,7 @@
 					:icon-right="(serie.started_date) ? 'play_circle' : 'play_arrow'"
 					:color="(serie.started_date) ? 'orange-7' : 'green-7'"
 					:label="(serie.started_date) ? $t('main.resume') : $t('main.start')"
-					:to="{ name: 'enigmaList', params: { id: serie.id } }"
+					:to="{ name: 'enigmaList', params: { lang: $route.params.lang, id: serie.id } }"
 				/>
 			</q-card-actions>
 		</q-card>

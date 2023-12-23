@@ -6,7 +6,8 @@ export default {
 		}
 	},
 	main: {
-		search: 'Recherche par nom de série ou créateur',
+		search: 'recherche par nom de série ou créateur',
+		noSeries: 'aucune série',
 		sort: {
 			title: 'trier par',
 			filter: 'filtrer',

@@ -8,8 +8,7 @@ import { stringCompress, stringDecompress } from 'src/boot/brotli';
 
 const uploadCheckMimetype = (mimetype: string) => ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype.trim().toLowerCase());
 
-// let savedAssets: string[] | null = null;
-export default (container: HTMLElement, id: number) => {
+export default (container: HTMLElement, id: number, series_id: number) => {
 	const editor = GrapesJs.init({
 		container,
 		fromElement: true,
@@ -121,7 +120,7 @@ export default (container: HTMLElement, id: number) => {
 		async load () {
 			let loadData: ProjectData = {};
 			try {
-				const serverData = await api.post('/enigmas/page/dev', { enigma_id: id });
+				const serverData = await api.post('/enigmas/page/dev', { enigma_id: id, series_id });
 				const serveAssets: string[] | null = (await api.get('/enigmas/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
 
 				if (serverData.data.enigma && (serverData.data.enigma as string).length) {

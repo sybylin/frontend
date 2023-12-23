@@ -10,6 +10,8 @@ export default {
 		db: 'An error has occurred with the database, contact the administrator'
 	},
 	unauthorized: {
+		redirect: 'login to your account to access content',
+		jwt: 'you need to connect to access content',
 		title: 'well, no, you\'re not allowed to go here',
 		subtitle: 'but I promise there\'s plenty of nice stuff elsewhere'
 	}

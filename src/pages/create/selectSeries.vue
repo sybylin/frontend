@@ -28,7 +28,7 @@
 					color="deep-purple-6"
 					:label="$t('create.main.list.edit')"
 					icon-right="edit"
-					:to="{ name: 'editSeries', params: { seriesId: series.id } }"
+					:to="{ name: 'editSeries', params: { lang: $route.params.lang, seriesId: series.id } }"
 				/>
 			</q-card-actions>
 		</q-card>

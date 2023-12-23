@@ -25,5 +25,10 @@ declare module 'vue-router' {
 		 * This route must not be rendered in ssr
 		 */
 		noSSR?: boolean;
+
+		/**
+		 * Don't force lang redirection
+		 */
+		noForceLang?: boolean;
 	}
 }

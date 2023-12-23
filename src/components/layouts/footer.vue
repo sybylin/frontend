@@ -3,7 +3,7 @@
 		<div class="q-pa-xl">
 			<div class="row justify-between">
 				<div class="col-md-6 col-sm-4 col-12 q-pa-sm">
-					<span class="text-h3 orkney-medium">{{ $t('catch') }}</span>
+					<span class="text-h3 orkney-medium">{{ $t('title') }}</span>
 					<lang is-dark />
 					<div class="row no-wrap items-center">
 						<span>{{ $t('menu.dark') }}</span>
@@ -16,15 +16,26 @@
 						<router-link :to="$generatePath({ name: 'home' })">
 							<span>{{ $t('menu.home') }}</span>
 						</router-link>
+						<q-no-ssr class="column q-mb-md footer-list no-ssr">
+							<router-link
+								v-if="storeInstance.isConnected"
+								:to="$generatePath({ name: 'selectSeries' })"
+							>
+								<span>{{ $t('menu.create') }}</span>
+							</router-link>
+							<router-link
+								v-if="storeInstance.isConnected && storeInstance.role !== 'user'"
+								:to="$generatePath({ name: 'dashboard' })"
+							>
+								<span>{{ $t('menu.dashboard') }}</span>
+							</router-link>
+						</q-no-ssr>
 						<router-link :to="$generatePath({ name: 'series' })">
 							<span>{{ $t('menu.series') }}</span>
 						</router-link>
-						<a href="https://discord.gg/PMEFsW3ac9" target="_blank">
-							{{ $t('menu.discord') }}
-						</a>
-						<a href="https://github.com/mapcraft-app" target="_blank">
-							{{ $t('menu.github') }}
-						</a>
+						<router-link :to="$generatePath({ name: 'user' })">
+							<span>{{ $capitalize($t('user.account')) }}</span>
+						</router-link>
 					</div>
 				</div>
 			</div>
@@ -42,7 +53,7 @@
 				</router-link>
 				<div class="q-pa-xs">
 					<q-btn
-						label="tutu"
+						:label="$capitalize($t('menu.series'))"
 						:to="$generatePath({ name: 'series' })"
 						color="light-blue-9"
 						unelevated
@@ -57,7 +68,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { globalStore } from 'src/stores/global';
 import lang from '../menu/lang.vue';
 import darkMode from '../menu/darkMode.vue';
 
@@ -66,6 +77,13 @@ export default defineComponent({
 	components: {
 		lang,
 		darkMode
+	},
+	setup () {
+		const storeInstance = globalStore();
+
+		return {
+			storeInstance
+		};
 	}
 });
 </script>
@@ -78,7 +96,10 @@ export default defineComponent({
 	text-decoration: none;
 	color: inherit;
 }
-
+.no-ssr {
+	margin-top: 0;
+  margin-bottom: 0;
+}
 .light {
 	font-weight: inherit;
 	min-width: 10em;

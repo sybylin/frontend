@@ -16,14 +16,14 @@
 					<q-btn
 						flat size="md" align="left"
 						color="light-blue-8" class="width"
-						:label="$t('menu.download')" icon="download"
-						:to="$generatePath({ name: 'course' })"
+						:label="$t('menu.series')" icon="apps"
+						:to="$generatePath({ name: 'series' })"
 					/>
 					<q-btn
 						flat size="md" align="left"
 						color="light-blue-8" class="width"
-						:label="$t('menu.documentation')" icon="description"
-						:to="$generatePath({ path: '/docs' })"
+						:label="$t('user.account')" icon="account_circle"
+						:to="$generatePath({ name: store.isConnected ? 'user' : 'login' })"
 					/>
 				</div>
 			</div>
@@ -40,6 +40,7 @@
 import { defineComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
+import { globalStore } from 'src/stores/global';
 import errorSvg from 'components/error/errorSvg.vue';
 
 import meta from '../meta';
@@ -50,6 +51,7 @@ export default defineComponent({
 		errorSvg
 	},
 	setup () {
+		const store = globalStore();
 		const { t, locale } = useI18n({ useScope: 'global' });
 
 		useMeta(() => {
@@ -73,6 +75,7 @@ export default defineComponent({
 		});
 
 		return {
+			store,
 			genPath: (path: string) => `/${locale.value}/docs${path}`
 		};
 	}

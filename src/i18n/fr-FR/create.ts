@@ -16,6 +16,7 @@ export default {
 			options: 'options',
 			title: 'titre',
 			description: 'description',
+			createdBy: 'créé par',
 			points: 'points',
 			incorrect: '{key} est incorrecte',
 			mandatory: '{key} est obligatoire',
@@ -58,6 +59,10 @@ export default {
 			keyvalues: 'clés valeurs',
 			sentenceKeyvalues: 'un objet qui peut contenir autant de couples clé/valeur que nécessaire, l\'ordre à l\'intérieur d\'un objet n\'est pas obligatoire'
 		}
+	},
+	forbidden: {
+		pending: 'la série est en cours de vérification, vous ne pouvez pas la modifier',
+		published: 'la série est publiée, veuillez la remettre à l\'état non publié pour la modifier'
 	},
 	mobile: 'Vous êtes sur mobile, l\'éditeur d\'énigme est plus compliqué sur celui-ci. Veuillez passer sur un ordinateur de bureau',
 	dialogCreateSerie: {

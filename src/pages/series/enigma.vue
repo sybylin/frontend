@@ -1,10 +1,11 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<div v-if="!enigma && !notAuthorized" class="row justify-center items-center q-pt-xl q-pb-xl">
+	<div v-if="!enigma && !error" class="row justify-center items-center q-pt-xl q-pb-xl">
 		<q-spinner-cube color="deep-purple-6" size="6em" />
 	</div>
 	<template v-else>
-		<unauthorized v-if="notAuthorized" :code="401" />
+		<unauthorized v-if="error === 'notAuthorized'" :code="401" />
+		<error v-else-if="error === 'notExist'" />
 		<template v-else-if="enigma">
 			<q-img
 				loading="lazy"
@@ -91,6 +92,7 @@ import componentsStringSolution from 'src/components/pages/series/string.vue';
 import componentsArraySolution from 'src/components/pages/series/array.vue';
 import componentsObjectSolution from 'src/components/pages/series/object.vue';
 import componentsConfetti from 'src/components/pages/confetti.vue';
+import Error from 'pages/error.vue';
 import Unauthorized from 'components/error/unauthorized.vue';
 import type { NamedColor } from 'quasar';
 import type { Solution } from 'src/types';
@@ -111,6 +113,7 @@ export default defineComponent({
 		componentsArraySolution,
 		componentsObjectSolution,
 		componentsConfetti,
+		Error,
 		Unauthorized
 	},
 	setup () {
@@ -118,9 +121,11 @@ export default defineComponent({
 		const route = useRoute();
 		const router = useRouter();
 		const { t } = useI18n();
+
+		const error = ref<'notExist' | 'notAuthorized' | 'empty' | false>(false);
 		const enigma = ref<enigma | null>(null);
 		const checkSolution = ref<boolean>(false);
-		const notAuthorized = ref<boolean>(false);
+
 		const statusSolution = ref<'valid' | 'invalid' | null>(null);
 		const confetti = ref<boolean>(false);
 		const genColor = computed((): NamedColor => (checkSolution.value)
@@ -174,8 +179,12 @@ export default defineComponent({
 				series_id: Number(route.params.id)
 			})
 				.then(async (d) => {
-					if (!d.data.enigma || d.data.enigma === false)
-						notAuthorized.value = true;
+					if (d.data.enigma === false)
+						error.value = 'notAuthorized';
+					else if (Object.prototype.hasOwnProperty.call(d.data.enigma, 'notExist'))
+						error.value = 'notExist';
+					else if (Object.prototype.hasOwnProperty.call(d.data.enigma, 'empty'))
+						error.value = 'empty';
 					else {
 						enigma.value = {
 							title: d.data.info.title,
@@ -194,7 +203,7 @@ export default defineComponent({
 			baseURL,
 			enigma,
 			checkSolution,
-			notAuthorized,
+			error,
 			statusSolution,
 			genColor,
 			confetti,

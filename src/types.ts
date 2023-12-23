@@ -1,5 +1,6 @@
 export type Role = 'USER' | 'MODERATOR' | 'ADMINISTRATOR';
 export type Published = 'UNPUBLISHED' | 'PENDING' | 'PUBLISHED';
+export type Finished = 'START' | 'RESUME' | 'UNAUTHORIZED';
 export type Solution = 'STRING' | 'ARRAY' | 'OBJECT';
 
 export interface user {
@@ -15,33 +16,33 @@ export interface user {
 
 export interface enigma {
 	id: number;
-	series_id: number;
-	title: string;
 	image: string | null;
+	title: string;
 	description: string;
-	finished: boolean | null;
+	finished: Finished;
+	enigma_finished: {
+		completion_date: Date | null;
+	}[];
 }
 
 export interface series {
 	id: number;
 	title: string;
 	description: string;
-	published: Published;
 	image: string | null;
-	modification_date: Date;
+	rating: number;
+	creation_date: Date | null;
+	published: Published;
+	series_enigma_order: enigma[];
 	series_creator: {
-		name: string;
-		avatar: string;
-	};
-	series_enigma_order: {
-		series_id?: number ;
-		enigma_id?: number;
-		enigma: enigma;
-		order?: number;
-	}[];
-	series_verified_by: {
-		rejection_reason: string | null;
-	}
+		id: number;
+		name: string
+		avatar: string | null;
+  }[];
+	series_verified_by?: {
+		verified: boolean;
+    rejection_reason: string | null;
+  }[];
 }
 
 export interface seriesList {

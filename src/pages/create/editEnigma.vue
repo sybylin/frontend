@@ -16,7 +16,7 @@
 					color="secondary"
 					:label="$t('create.main.series.return')"
 					icon="arrow_back"
-					:to="{ name: 'editSeries', params: { seriesId: $route.params.seriseId } }"
+					:to="{ name: 'editSeries', params: { lang: $route.params.lang, seriesId: $route.params.seriseId } }"
 				/>
 				<span class="text-h5">{{ enigma?.title }}</span>
 				<span></span>
@@ -46,7 +46,7 @@
 					<enigma-info v-if="enigma" v-model="enigma" />
 				</q-tab-panel>
 				<q-tab-panel name="editor">
-					<components-builder-main v-if="enigma" :id="enigma.id" />
+					<components-builder-main v-if="enigma" :id="enigma.id" :series-id="enigma.series_id" />
 				</q-tab-panel>
 				<q-tab-panel name="solution">
 					<enigma-solution v-if="enigma" :id="enigma.id" />

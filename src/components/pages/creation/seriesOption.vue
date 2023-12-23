@@ -7,6 +7,8 @@
 						v-model="image"
 						api-path="/series/update/image"
 						:api-data="{ series_id: $props.modelValue.id }"
+						:disable="isPublished"
+						@forbidden="notifyError()"
 					/>
 				</div>
 			</div>
@@ -17,7 +19,7 @@
 						debounce="500"
 						bottom-slots
 						:loading="apiWait"
-						:disable="apiWait"
+						:disable="isPublished || apiWait"
 						:label="$capitalize($t('create.main.series.title'))"
 						:error="titleError === true || titleError === 'isExist'"
 						:error-message="titleError === 'isExist'
@@ -31,7 +33,7 @@
 						debounce="500"
 						bottom-slots
 						:loading="apiWait"
-						:disable="apiWait"
+						:disable="isPublished || apiWait"
 						:label="$capitalize($t('create.main.series.description'))"
 						:error="descriptionError === true"
 						:error-message="$capitalize($t('create.main.series.incorrect', { key: $t('create.main.series.title') }))"
@@ -100,7 +102,12 @@
 					</div>
 					<q-separator />
 					<div class="q-pt-md row reverse">
-						<q-btn color="red-7" :label="$t('create.main.delete')" @click="deleteDialog = true" />
+						<q-btn
+							color="red-7"
+							:disable="isPublished"
+							:label="$t('create.main.delete')"
+							@click="deleteDialog = true"
+						/>
 					</div>
 				</div>
 			</div>
@@ -172,10 +179,12 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import isEmpty from 'validator/lib/isEmpty';
 import { api } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
 import ImageUpload from '../imageUpload.vue';
 import type { series } from 'src/types';
 
@@ -193,13 +202,19 @@ export default defineComponent({
 	emits: ['update:modelValue', 'wait'],
 	setup (props, { emit }) {
 		const $q = useQuasar();
+		const { t } = useI18n();
 		const router = useRouter();
 
 		const deleteDialog = ref<boolean>(false);
 		const apiWait = ref<boolean>(false);
+		const isPublished = computed<boolean>(() => (props.modelValue.published !== 'UNPUBLISHED'));
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
-		const rejectionError = ref<string | null>(props.modelValue.series_verified_by?.rejection_reason ?? null);
+		const rejectionError = ref<string | null>(
+			props.modelValue.series_verified_by
+				? props.modelValue.series_verified_by[0].rejection_reason
+				: null
+		);
 		const published = ref<'UNPUBLISHED' | 'PENDING' | 'PUBLISHED'>(props.modelValue.published);
 		const image = ref<string | null>(props.modelValue.image);
 
@@ -281,6 +296,14 @@ export default defineComponent({
 				.finally(() => setWait(false));
 		};
 
+		const notifyError = () => $q.notify({
+			type: 'negative',
+			message: capitalize(t(`create.forbidden.${(props.modelValue.published === 'PENDING')
+				? 'pending'
+				: 'published'}`
+			))
+		});
+
 		onMounted(() => {
 			watch(title, (t) => {
 				if (titleError.value || !t || isEmpty(t))
@@ -314,6 +337,7 @@ export default defineComponent({
 		return {
 			deleteDialog,
 			apiWait,
+			isPublished,
 			title,
 			description,
 			rejectionError,
@@ -333,7 +357,8 @@ export default defineComponent({
 			onSubmitDelete,
 			onResetDelete,
 			pendingSeries,
-			unpublishSeries
+			unpublishSeries,
+			notifyError
 		};
 	}
 });

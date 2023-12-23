@@ -9,7 +9,6 @@ import dashboard from './dashboard';
 
 export default {
 	title: 'Sibyllin',
-	catch: 'Enigma',
 	searchError: 'An error has occurred during the search',
 	unauthorized: 'You do not have the necessary rights to access this content',
 	menu: {

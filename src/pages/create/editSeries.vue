@@ -20,7 +20,7 @@
 						color="secondary"
 						:label="$t('create.main.series.return')"
 						icon="arrow_back"
-						:to="{ name: 'selectSeries' }"
+						:to="{ name: 'selectSeries', params: { lang: $route.params.lang, } }"
 					/>
 					<span class="text-h5">{{ series.title }}</span>
 					<span></span>
@@ -98,6 +98,11 @@ export default defineComponent({
 			if (!series.value)
 				return;
 			enigmasList.forEach((v, i) => {
+				if (series.value?.series_enigma_order[i])
+					series.value.series_enigma_order[i] = v;
+				else
+					series.value?.series_enigma_order.push(v);
+				/*
 				if ((series.value as series).series_enigma_order[i]) {
 					(series.value as series).series_enigma_order[i].enigma = v;
 					(series.value as series).series_enigma_order[i].enigma_id = v.id;
@@ -109,11 +114,12 @@ export default defineComponent({
 						order: i + 1
 					});
 				}
+				*/
 			});
 
 			api.post('/series/update/order', {
 				series_id: Number(route.params.seriesId),
-				order: enigmasList.map((v) => ({ series_id: v.series_id, enigma_id: v.id }))
+				order: enigmasList.map((v) => (v.id))
 			})
 				.catch((e) => $q.notify(e.response.data.info.message));
 		};

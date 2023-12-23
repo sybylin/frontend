@@ -15,7 +15,8 @@
 				row: true,
 				'justify-center': true,
 				'items-center': true,
-				rounded: $props.rounded
+				rounded: $props.rounded,
+				disable: $props.disable
 			}"
 			@click="click"
 		>
@@ -69,16 +70,24 @@ export default defineComponent({
 			type: Boolean,
 			required: false,
 			default: false
+		},
+		disable: {
+			type: Boolean,
+			required: false,
+			default: false
 		}
 	},
-	emits: ['update:modelValue'],
+	emits: ['forbidden', 'update:modelValue'],
 	setup (props, { emit }) {
 		const $q = useQuasar();
+
 		const image = ref<QImg | null>(null);
 		const file = ref<HTMLInputElement | null>(null);
 		const inputUrl = ref<string | null>(props.modelValue ?? null);
 
 		const click = () => {
+			if (props.disable)
+				return emit('forbidden');
 			if (!file.value)
 				return;
 			file.value.click();
@@ -146,5 +155,9 @@ export default defineComponent({
 	background-color: rgba(0, 0, 0, .2);
 	border: .5em dashed rgb(220, 220, 220);
 	color: rgb(220, 220, 220);
+}
+
+.disable {
+	cursor: not-allowed !important;
 }
 </style>

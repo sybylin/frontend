@@ -2,6 +2,17 @@
 	<div class="column justify-center align-center full-width q-pt-xl q-pb-xl height">
 		<div class="row full-width justify-center">
 			<q-card
+				v-if="$route.query.redirect"
+				class="q-pa-md q-mb-md text-center bg-red-7 text-white"
+				flat
+				bordered
+				:style="($q.screen.width > mobileScreen) ? 'width: 75%' : 'width: 90%'"
+			>
+				<span class="text-h6 orkney-regular">
+					{{ $capitalize($t('error.unauthorized.redirect')) }}
+				</span>
+			</q-card>
+			<q-card
 				class="q-pa-md"
 				flat
 				bordered

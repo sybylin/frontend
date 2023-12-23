@@ -45,7 +45,7 @@
 					icon-right="shield"
 					color="green-7"
 					:label="$t('dashboard.series.verifyBtn')"
-					:to="{ name: 'dashboardSeriesList', params: { id: serie.id } }"
+					:to="{ name: 'dashboardSeriesList', params: { lang: $route.params.lang, id: serie.id } }"
 				/>
 			</q-card-actions>
 		</q-card>

@@ -7,6 +7,7 @@
 		tag="transition-group"
 		class="fit row wrap justify-center q-pt-xl q-pb-xl"
 		handle=".move-icon"
+		:disabled="disable"
 		:component-data="{
 			tag: 'div',
 			type: 'transition-group',
@@ -31,7 +32,12 @@
 						/>
 						<div class="row justify-between img-top">
 							<q-icon
-								class="bg-primary text-white move-icon"
+								:class="{
+									'bg-primary': true,
+									'text-white': true,
+									'move-icon': true,
+									disable: disable
+								}"
 								name="open_with"
 								size="1.8em"
 							/>
@@ -45,8 +51,9 @@
 						<q-btn
 							color="deep-purple-6"
 							:label="$t('create.main.list.edit')"
+							:disable="disable"
 							icon-right="edit"
-							:to="{ name: 'editEnigma', params: { seriesId: $props.modelValue.id, enigmaId: element.id } }"
+							:to="{ name: 'editEnigma', params: { lang: $route.params.lang, seriesId: $props.modelValue.id, enigmaId: element.id } }"
 						/>
 					</q-card-actions>
 				</q-card>
@@ -57,9 +64,14 @@
 				<q-card
 					flat
 					square
-					:class="{ 'dark': $q.dark.isActive }"
-					class="card add q-ma-sm"
-					@click="openCreationDialog = true"
+					:class="{
+						card: true,
+						add: true,
+						disable: disable,
+						'q-ma-sm': true,
+						'dark': $q.dark.isActive
+					}"
+					@click="($props.modelValue.published === 'UNPUBLISHED') ? openCreationDialog = true : notifyError()"
 				>
 					<q-card-section class="full-width full-height row justify-center items-center">
 						<q-icon name="add" size="6em" />
@@ -78,11 +90,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
+import { computed, defineComponent, ref, onMounted, watch, PropType } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useQuasar } from 'quasar';
 import { baseURL } from 'src/boot/axios';
 import draggable from 'zhyswan-vuedraggable';
 import ComponentsPagesCreationDialogCreateEnigma from 'src/components/pages/creation/dialogCreateEnigma.vue';
 import type { enigma, series } from 'src/types';
+import { capitalize } from 'src/boot/custom';
 
 export default defineComponent({
 	name: 'ComponentsPagesCreationSeriesEnigmasList',
@@ -98,9 +113,13 @@ export default defineComponent({
 	},
 	emits: ['update'],
 	setup (props, { emit }) {
+		const $q = useQuasar();
+		const { t } = useI18n();
+
+		const disable = computed<boolean>(() => (props.modelValue.published !== 'UNPUBLISHED'));
 		const openCreationDialog = ref<boolean>(false);
 		const drag = ref<boolean>(false);
-		const enigmas = ref(props.modelValue.series_enigma_order.map((e: any) => e.enigma) as enigma[] ?? []);
+		const enigmas = ref(props.modelValue.series_enigma_order);
 
 		const initDebounce = () => {
 			let timeout: any | null = null;
@@ -116,6 +135,14 @@ export default defineComponent({
 			openCreationDialog.value = false;
 		};
 
+		const notifyError = () => $q.notify({
+			type: 'negative',
+			message: capitalize(t(`create.forbidden.${(props.modelValue.published === 'PENDING')
+				? 'pending'
+				: 'published'}`
+			))
+		});
+
 		onMounted(() => {
 			watch(enigmas, (newEnigmas) => {
 				watchDebounce(() => emit('update', newEnigmas));
@@ -124,10 +151,12 @@ export default defineComponent({
 
 		return {
 			baseURL,
+			disable,
 			openCreationDialog,
 			drag,
 			enigmas,
-			addEnigmaToList
+			addEnigmaToList,
+			notifyError
 		};
 	}
 });
@@ -155,6 +184,7 @@ export default defineComponent({
 	margin: .3em;
 	cursor: move;
 }
+
 .index {
 	display: flex;
   align-items: center;
@@ -175,6 +205,9 @@ export default defineComponent({
 .add:hover {
 	border-color: rgba(0, 0, 0, 0.75);
 	color: rgba(0, 0, 0, 0.75);
+}
+.disable {
+	cursor: not-allowed !important;
 }
 .add.dark {
 	border: .35em dashed #989898;

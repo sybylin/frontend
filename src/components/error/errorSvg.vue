@@ -1,6 +1,6 @@
 <template>
 	<svg
-		style="width: 100%; height: auto;"
+		class="size"
 		width="141.87" height="226.83" version="1.1"
 		viewBox="0 0 37.536 60.015" xmlns="http://www.w3.org/2000/svg"
 	>
@@ -35,7 +35,7 @@
 				fill="#e6e6e6"
 			/>
 		</g>
-		<g transform="translate(-8.2728 -9.0975)">
+		<g transform="matrix(1.5585 0 0 1.5585 -23.05 -17.003)">
 			<rect
 				x="24.916" y="19.539" width="3.0844"
 				height="1.9062" ry=".15373" fill="#e6e6e6"
@@ -85,3 +85,10 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style scoped>
+.size {
+	width: 100%;
+	height: auto;
+}
+</style>

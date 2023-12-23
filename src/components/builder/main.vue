@@ -39,6 +39,10 @@ import type { Editor } from 'grapesjs';
 export default defineComponent({
 	name: 'ComponentsBuilderMain',
 	props: {
+		seriesId: {
+			type: Number,
+			required: true
+		},
 		id: {
 			type: Number,
 			required: true
@@ -99,7 +103,7 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			grapesjsInstance.value = initGrapeJs(editor.value as HTMLElement, props.id);
+			grapesjsInstance.value = initGrapeJs(editor.value as HTMLElement, props.id, props.seriesId);
 			grapesjsInstance.value.I18n.setLocale(locale.value);
 
 			grapesjsInstance.value.once('storage:end:load', () => {
