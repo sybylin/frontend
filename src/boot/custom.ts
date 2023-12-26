@@ -23,6 +23,9 @@ export const os = (): osType => {
 	return undefined;
 };
 
+/**
+ * Print achievement
+ */
 export const hasAchievement = (achievement: serverAchievement) => {
 	Dialog.create({
 		component: ComponentsAchievementIsEarned,

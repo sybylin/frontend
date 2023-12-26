@@ -82,12 +82,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { useQuasar, useMeta } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { brotliDecompress } from 'src/boot/brotli';
 import { api, baseURL } from 'src/boot/axios';
 import { capitalize } from 'src/boot/custom';
+import meta from 'src/meta';
 import componentsStringSolution from 'src/components/pages/series/string.vue';
 import componentsArraySolution from 'src/components/pages/series/array.vue';
 import componentsObjectSolution from 'src/components/pages/series/object.vue';
@@ -132,6 +133,12 @@ export default defineComponent({
 			? 'deep-purple-6'
 			: 'green-6'
 		);
+		const computedTitle = computed(() => (enigma.value)
+			? `${enigma.value.title} | ${t('series.meta.enigma.title')}`
+			: t('series.meta.enigma.title'));
+		const computedDesc = computed(() => (enigma.value)
+			? capitalize(enigma.value.description)
+			: t('series.meta.enigma.description'));
 
 		const check = (d: string | string[] | Record<string, string>) => {
 			statusSolution.value = null;
@@ -172,6 +179,28 @@ export default defineComponent({
 				});
 			}, 1500);
 		};
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: computedTitle.value,
+					description: computedDesc.value,
+					keywords: ['enigma']
+				},
+				og: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: computedDesc.value,
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: computedDesc.value,
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		onMounted(() => {
 			api.post('/enigmas/page/prod', {

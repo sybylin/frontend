@@ -32,7 +32,7 @@ export default defineComponent({
 				meta: {
 					title: t('menu.home'),
 					description: t('main.header.desc'),
-					keywords: ['minecraft', 'sibyllin', 'generator', 'advancement', 'recipe', 'cutscene', 'trigger', 'music', 'sound', 'datapack']
+					keywords: ['enigmas', 'series', 'mystery', 'riddle', 'problem']
 				},
 				og: {
 					url: 'https://sibyllin.app',

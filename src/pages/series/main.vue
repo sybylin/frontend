@@ -134,7 +134,7 @@ export default defineComponent({
 				meta: {
 					title: t('series.meta.main.title'),
 					description: t('series.meta.main.description'),
-					keywords: ['Sibyllin', 'series', 'enigmas', 'selection']
+					keywords: ['series', 'list', 'search']
 				},
 				og: {
 					url: 'https://sibyllin.app/series',

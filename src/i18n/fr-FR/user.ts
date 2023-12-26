@@ -11,6 +11,10 @@ export default {
 		creation: {
 			title: 'Création d\'un compte',
 			description: 'Créer un nouveau compte'
+		},
+		reset: {
+			title: 'Réinitialiser le mot de passe',
+			description: 'Réinitialisation le mot de passe de votre compte'
 		}
 	},
 	account: 'compte',

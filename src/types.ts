@@ -16,6 +16,7 @@ export interface user {
 
 export interface enigma {
 	id: number;
+	series_id?: number;
 	image: string | null;
 	title: string;
 	description: string;
@@ -34,6 +35,7 @@ export interface series {
 	creation_date: Date | null;
 	published: Published;
 	series_enigma_order: enigma[];
+	series_finished?: Date[];
 	series_creator: {
 		id: number;
 		name: string

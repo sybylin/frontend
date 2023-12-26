@@ -3,6 +3,13 @@ export default {
 		main: {
 			title: 'Series',
 			description: 'Select the series of enigmas you wish to complete'
+		},
+		series: {
+			description: 'Start or continue the enigmas in the series'
+		},
+		enigma: {
+			title: 'Enigma',
+			description: 'Resolve enigma'
 		}
 	},
 	main: {

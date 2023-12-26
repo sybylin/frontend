@@ -3,6 +3,13 @@ export default {
 		main: {
 			title: 'Séries',
 			description: 'Sélectionnez la série d\'énigmes que vous souhaitez compléter'
+		},
+		series: {
+			description: 'Commencer ou continuer les énigmes de la série'
+		},
+		enigma: {
+			title: 'Énigme',
+			description: 'Résoudre l\'énigme'
 		}
 	},
 	main: {

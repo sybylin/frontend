@@ -2,7 +2,14 @@ export default {
 	main: {
 		list: {
 			title: 'mes séries',
+			description: 'sélectionnez votre série',
 			edit: 'éditer'
+		},
+		enigmaList: {
+			description: 'modifier les énigmes ou l\'ordre'
+		},
+		enigma: {
+			description: 'éditer l\'énigme de la série'
 		},
 		tab: {
 			info: 'info',
@@ -17,6 +24,7 @@ export default {
 			title: 'titre',
 			description: 'description',
 			createdBy: 'créé par',
+			finishedOn: 'terminée le',
 			points: 'points',
 			incorrect: '{key} est incorrecte',
 			mandatory: '{key} est obligatoire',

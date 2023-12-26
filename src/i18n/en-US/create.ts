@@ -2,7 +2,14 @@ export default {
 	main: {
 		list: {
 			title: 'my series',
+			description: 'select your series',
 			edit: 'edit'
+		},
+		enigmaList: {
+			description: 'edit enigma or change order'
+		},
+		enigma: {
+			description: 'edit enigma of series'
 		},
 		tab: {
 			info: 'info',
@@ -17,6 +24,7 @@ export default {
 			title: 'title',
 			description: 'description',
 			createdBy: 'created by',
+			finishedOn: 'finished on',
 			points: 'points',
 			incorrect: '{key} is incorrect',
 			mandatory: '{key} is mandatory',

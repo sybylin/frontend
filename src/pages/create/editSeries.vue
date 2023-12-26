@@ -61,10 +61,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { useQuasar } from 'quasar';
+import { useI18n } from 'vue-i18n';
+import { useQuasar, useMeta } from 'quasar';
 import { api } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
+import meta from 'src/meta';
 import ComponentsPagesCreationSeriesOption from 'components/pages/creation/seriesOption.vue';
 import ComponentsPagesCreationSeriesEnigmasList from 'components/pages/creation/seriesEnigmasList.vue';
 
@@ -77,11 +80,16 @@ export default defineComponent({
 		ComponentsPagesCreationSeriesEnigmasList
 	},
 	setup () {
+		const { t } = useI18n();
 		const $q = useQuasar();
+		const route = useRoute();
+
 		const isCheck = ref<boolean | 'unauthorized'>(false);
 		const series = ref<series | null>(null);
 		const tab = ref<'enigmas' | 'options'>('enigmas');
-		const route = useRoute();
+		const computedTitle = computed<string>(() => (series.value)
+			? `${series.value.title} | ${capitalize(t('create.main.list.title'))}`
+			: t('series.meta.main.title'));
 
 		const getSerie = () => {
 			api.post('/series/one', {
@@ -123,6 +131,28 @@ export default defineComponent({
 			})
 				.catch((e) => $q.notify(e.response.data.info.message));
 		};
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: computedTitle.value,
+					description: capitalize(t('create.main.enigmaList.description')),
+					keywords: ['select', 'series']
+				},
+				og: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: capitalize(t('create.main.enigmaList.description')),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: capitalize(t('create.main.enigmaList.description')),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		onBeforeMount(() => {
 			api.post('/series/isCreatedByUser', {

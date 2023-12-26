@@ -59,7 +59,7 @@ export default defineComponent({
 				meta: {
 					title: t('error.meta.title'),
 					description: t('error.description'),
-					keywords: ['minecraft', 'sibyllin', 'error', '400']
+					keywords: ['error', '400']
 				},
 				og: {
 					url: 'https://sibyllin.app/error',

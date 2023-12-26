@@ -20,6 +20,8 @@ export interface meta {
 	}
 }
 
+export const titleTemplate = (t: string) => `${t} - Sibyllin`;
+
 export default (meta: meta) => {
 	const metaData: {
 		title: string,
@@ -27,7 +29,7 @@ export default (meta: meta) => {
 		meta: Record<string, any>
 	} = {
 		title: meta.meta.title,
-		titleTemplate: (t: string) => `${t} - Sibyllin`,
+		titleTemplate,
 		meta: {
 			title: {
 				name: 'title',
@@ -39,7 +41,7 @@ export default (meta: meta) => {
 			},
 			keywords: {
 				name: 'keywords',
-				content: meta.meta.keywords?.join(' ') ?? ''
+				content: [...meta.meta.keywords ?? [], 'sibyllin'].join(' ')
 			},
 			equiv: {
 				'http-equiv': 'Content-Type',

@@ -46,7 +46,7 @@
 					<enigma-info v-if="enigma" v-model="enigma" />
 				</q-tab-panel>
 				<q-tab-panel name="editor">
-					<components-builder-main v-if="enigma" :id="enigma.id" :series-id="enigma.series_id" />
+					<components-builder-main v-if="enigma" :id="enigma.id" :series-id="enigma.series_id ?? -1" />
 				</q-tab-panel>
 				<q-tab-panel name="solution">
 					<enigma-solution v-if="enigma" :id="enigma.id" />
@@ -57,14 +57,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { computed, defineComponent, onBeforeMount, ref } from 'vue';
+import { useQuasar, useMeta } from 'quasar';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { api } from 'src/boot/axios';
+import meta from 'src/meta';
 import ComponentsBuilderMain from 'components/builder/main.vue';
 import EnigmaInfo from 'components/pages/creation/enigmaInfo.vue';
 import EnigmaSolution from 'components/pages/creation/enigmaSolution.vue';
 import type { enigma } from 'src/types';
+import { capitalize } from 'src/boot/custom';
 
 export default defineComponent({
 	name: 'PagesCreateEditEnigma',
@@ -75,12 +78,39 @@ export default defineComponent({
 	},
 	setup () {
 		const $q = useQuasar();
+		const { t } = useI18n();
 		const route = useRoute();
+
 		const isCheck = ref<boolean>(false);
 		const isNotCreatedByUser = ref<boolean>(false);
 		const enigma = ref<enigma | null>(null);
 		const splitter = ref<number>(15);
 		const tabs = ref<'info' | 'editor' | 'solution'>('info');
+		const computedTitle = computed<string>(() => (enigma.value)
+			? `${enigma.value.title} | ${capitalize(t('series.meta.enigma.title'))}`
+			: t('series.meta.main.title'));
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: computedTitle.value,
+					description: capitalize(t('create.main.enigma.description')),
+					keywords: ['select', 'series']
+				},
+				og: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: capitalize(t('create.main.enigma.description')),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: capitalize(t('create.main.enigma.description')),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		onBeforeMount(() => {
 			api.post('/enigmas/createByUser', { id: route.params.enigmaId })

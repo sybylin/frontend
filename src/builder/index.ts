@@ -142,6 +142,7 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 		async store (data) {
 			api.put('/enigmas/page/dev', {
 				enigma_id: id,
+				series_id,
 				editor_data: stringCompress(JSON.stringify({ pages: data.pages, styles: data.styles }))
 			})
 				.catch((e) => Notify.create({ type: 'failed', message: e.response.data.info.message }));

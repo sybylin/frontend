@@ -11,6 +11,10 @@ export default {
 		creation: {
 			title: 'Account creation',
 			description: 'Create a new account'
+		},
+		reset: {
+			title: 'Reset password',
+			description: 'Reset your password account'
 		}
 	},
 	account: 'account',

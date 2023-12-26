@@ -40,7 +40,7 @@ export default defineComponent({
 				meta: {
 					title: 'Error 500',
 					description: 'Well, someone must have unplugged the server again...',
-					keywords: ['minecraft', 'sibyllin', 'error', '500']
+					keywords: ['error', '500']
 				}
 			});
 		});

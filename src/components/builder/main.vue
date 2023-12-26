@@ -94,6 +94,7 @@ export default defineComponent({
 
 			api.put('/enigmas/page/prod', {
 				enigma_id: props.id,
+				series_id: props.seriesId,
 				editor_data: data
 			})
 				.catch((e) => {

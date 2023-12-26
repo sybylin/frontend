@@ -258,20 +258,20 @@ export default defineComponent({
 		useMeta(() => {
 			return meta({
 				meta: {
-					title: t('menu.home'),
-					description: t('main.header.desc'),
-					keywords: ['minecraft', 'sibyllin', 'generator', 'advancement', 'recipe', 'cutscene', 'trigger', 'music', 'sound', 'datapack']
+					title: t('user.meta.reset.title'),
+					description: t('user.meta.reset.description'),
+					keywords: ['account', 'password', 'reset']
 				},
 				og: {
 					url: 'https://sibyllin.app/reset',
-					title: t('menu.home'),
-					description: t('main.header.desc'),
+					title: t('user.meta.reset.title'),
+					description: t('user.meta.reset.description'),
 					image: 'https://sibyllin.app/img/background.png'
 				},
 				twitter: {
 					url: 'https://sibyllin.app/reset',
-					title: t('menu.home'),
-					description: t('main.header.desc'),
+					title: t('user.meta.reset.title'),
+					description: t('user.meta.reset.description'),
 					image: 'https://sibyllin.app/img/background.png'
 				}
 			});

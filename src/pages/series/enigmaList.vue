@@ -41,7 +41,6 @@
 					:max="5"
 				/>
 			</div>
-
 			<q-slide-transition>
 				<div v-show="openTransition">
 					<div class="q-pa-md row justify-evenly">
@@ -58,6 +57,14 @@
 							<span class="text-body1 q-ml-sm">
 								{{ series.description }}
 							</span>
+							<template v-if="series.series_finished && series.series_finished.length > 0">
+								<span class="text-h5 orkney-regular">
+									{{ $capitalize($t('create.main.series.finishedOn')) }}
+								</span>
+								<span class="text-body1 q-ml-sm">
+									{{ date(series.series_finished[0]) }}
+								</span>
+							</template>
 						</div>
 						<div class="column items-center">
 							<span class="text-h5 orkney-regular">
@@ -139,14 +146,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useQuasar } from 'quasar';
+import { useI18n } from 'vue-i18n';
+import { useQuasar, useMeta } from 'quasar';
 import { api, baseURL } from 'src/boot/axios';
 import { globalStore } from 'src/stores/global';
+import meta from 'src/meta';
 import Error from 'pages/error.vue';
 import Unauthorized from 'components/error/unauthorized.vue';
 import type { series } from 'src/types';
+import { capitalize } from 'src/boot/custom';
 
 export default defineComponent({
 	name: 'SeriesDetailPage',
@@ -156,8 +166,8 @@ export default defineComponent({
 	},
 	setup () {
 		const $q = useQuasar();
+		const { t } = useI18n();
 		const route = useRoute();
-		// const router = useRouter();
 		const store = globalStore();
 
 		const openTransition = ref<boolean>(false);
@@ -165,6 +175,12 @@ export default defineComponent({
 		const series = ref<series | null>(null);
 		const seriesRating = ref<number | null>(null);
 		const seriesRatingUpdate = ref<boolean>(false);
+		const computedTitle = computed<string>(() => (series.value)
+			? `${series.value.title} | ${t('series.meta.main.title')}`
+			: t('series.meta.main.title'));
+		const computedDesc = computed<string>(() => (series.value)
+			? capitalize(series.value.description)
+			: capitalize(t('series.meta.series.description')));
 
 		const getNote = () => {
 			api.post('/series/one/rating/user', {
@@ -191,6 +207,33 @@ export default defineComponent({
 					$q.notify(e.response.data.info.message);
 				});
 		};
+
+		const date = (date: Date) => {
+			const _date = new Date(date);
+			return `${_date.getUTCDate()}/${_date.getUTCMonth() + 1}/${_date.getUTCFullYear()} - ${_date.getUTCHours()}:${_date.getUTCMinutes()}`;
+		};
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: computedTitle.value,
+					description: computedDesc.value,
+					keywords: ['series']
+				},
+				og: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: computedDesc.value,
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/series',
+					title: computedTitle.value,
+					description: computedDesc.value,
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		onMounted(() => {
 			api.post('/series/one', {
@@ -220,7 +263,8 @@ export default defineComponent({
 			error,
 			series,
 			seriesRating,
-			seriesRatingUpdate
+			seriesRatingUpdate,
+			date
 		};
 	}
 });

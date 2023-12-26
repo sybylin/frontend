@@ -54,7 +54,11 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useMeta } from 'quasar';
 import { baseURL, api } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
+import meta from 'src/meta';
 import ComponentsPagesCreationDialogCreateSeries from 'components/pages/creation/dialogCreateSeries.vue';
 import type { series } from 'src/types';
 
@@ -64,6 +68,7 @@ export default defineComponent({
 		ComponentsPagesCreationDialogCreateSeries
 	},
 	setup () {
+		const { t } = useI18n();
 		const seriesList = ref<series[] | null>(null);
 		const selectedSerie = ref<series | null>(null);
 		const openCreationDialog = ref<boolean>(false);
@@ -91,6 +96,28 @@ export default defineComponent({
 				}
 			}
 		};
+
+		useMeta(() => {
+			return meta({
+				meta: {
+					title: capitalize(t('create.main.list.title')),
+					description: capitalize(t('create.main.list.description')),
+					keywords: ['select', 'series']
+				},
+				og: {
+					url: 'https://sibyllin.app/series',
+					title: capitalize(t('create.main.list.title')),
+					description: capitalize(t('create.main.list.description')),
+					image: 'https://sibyllin.app/img/background.png'
+				},
+				twitter: {
+					url: 'https://sibyllin.app/series',
+					title: capitalize(t('create.main.list.title')),
+					description: capitalize(t('create.main.list.description')),
+					image: 'https://sibyllin.app/img/background.png'
+				}
+			});
+		});
 
 		onBeforeMount(() => {
 			api.get('/series/createByUser')
