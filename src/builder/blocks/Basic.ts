@@ -22,42 +22,13 @@ export default (editor: Editor, _opts: PluginOptions) => {
 			attributes: {
 				'aria-label': 'image',
 				alt: 'Enigma image',
-				class: 'responsive-img',
+				style: 'width: 100%; height: auto; vertical-align: middle;',
 				src: `${frontBaseUrl}/public/imgs/builder/default.png`,
 				loading: 'lazy',
 				fetchpriority: 'auto',
 				'aria-hidden': 'true',
 				draggable: 'false'
 			}
-			/*
-			components: [
-				{
-					tagName: 'div',
-					attributes: { style: 'padding-bottom: 100%' }
-				},
-				{
-					tagName: 'div',
-					attributes: { class: 'q-img__container absolute-full' },
-					components: {
-						tagName: 'img',
-						type: 'image',
-						attributes: {
-							src: `${frontBaseUrl}/public/imgs/builder/default.png`,
-							loading: 'lazy',
-							fetchpriority: 'auto',
-							'aria-hidden': 'true',
-							draggable: 'false',
-							class: 'q-img__image q-img__image--with-transition q-img__image--loaded',
-							style: 'object-fit: cover; object-position: 50% 50%;'
-						}
-					}
-				},
-				{
-					tagName: 'div',
-					attributes: { class: 'q-img__content absolute-full q-anchor--skip' }
-				}
-			]
-			*/
 		}
 	});
 
@@ -66,18 +37,14 @@ export default (editor: Editor, _opts: PluginOptions) => {
 		media: mediaIcon('music_note'),
 		category,
 		content: {
-			tagName: 'div',
+			tagName: 'audio',
+			type: 'audio',
 			droppable: false,
-			attributes: { class: 'full-width' },
-			components: {
-				tagName: 'audio',
-				type: 'audio',
-				attributes: {
-					class: 'full-width',
-					controls: true,
-					preload: 'metadata',
-					src: `${frontBaseUrl}/public/audio/toony.mp3`
-				}
+			attributes: {
+				class: 'full-width',
+				controls: true,
+				preload: 'metadata',
+				src: `${frontBaseUrl}/public/audio/toony.mp3`
 			}
 		}
 	});

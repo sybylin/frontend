@@ -1,4 +1,7 @@
 export default {
+	autosave: 'The enigma has been saved automatically',
+	save: 'The enigma has been saved',
+	jsonError: 'An error in the saved data corrupted it, so it has been reset to zero',
 	components: {
 		audio: 'Audio',
 		basic: {

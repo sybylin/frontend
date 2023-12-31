@@ -176,7 +176,10 @@ export default defineComponent({
 						};
 					}
 				})
-				.catch((e) => $q.notify(e.response.data.info.message));
+				.catch((e) => {
+					console.log(e);
+					$q.notify(e.response.data.info.message);
+				});
 		});
 
 		return {

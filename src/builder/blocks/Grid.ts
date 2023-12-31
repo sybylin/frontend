@@ -36,10 +36,10 @@ export default (editor: Editor, _opts: PluginOptions) => {
 				},
 				components: new Array(nms[reg]).fill({
 					tagName: 'div',
-					type: 'default',
+					type: 'grid',
 					attributes: {
-						class: `col-sm-${size} col-xs-12 ${nms[reg] === 1
-							? 'full-width'
+						class: `col-sm-${size} col-xs-12${nms[reg] === 1
+							? ' full-width'
 							: ''}`,
 						style: 'min-height: 3em'
 					}

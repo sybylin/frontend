@@ -1,4 +1,7 @@
 export default {
+	autosave: 'L\'énigme a été sauvegardée automatiquement',
+	save: 'L\'énigme a été sauvegardée',
+	jsonError: 'Une erreur dans les données sauvegardées les a corrompues, elles ont donc été remises à zéro',
 	components: {
 		audio: 'Audio',
 		basic: {

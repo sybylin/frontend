@@ -2,12 +2,22 @@
 	<div class="row no-wrap q-pa-xl">
 		<div class="col-md-5 col-12 column justify-center items-start q-pl-sm q-pr-md">
 			<div>
-				<h2 class="q-ma-none q-pb-md orkney-medium">
-					{{ $capitalize($t('error.unauthorized.title')) }}
-				</h2>
-				<span class="text-body1 text-weight-regular">
-					{{ $capitalize($t('error.unauthorized.subtitle')) }}
-				</span>
+				<template v-if="$props.message === undefined">
+					<h2 class="q-ma-none q-pb-md orkney-medium">
+						{{ $capitalize($t('error.unauthorized.title')) }}
+					</h2>
+					<span class="text-body1 text-weight-regular">
+						{{ $capitalize($t('error.unauthorized.subtitle')) }}
+					</span>
+				</template>
+				<template v-else>
+					<h2 class="q-ma-none q-pb-md orkney-medium">
+						{{ $capitalize($props.message) }}
+					</h2>
+					<span class="text-body1 text-weight-regular">
+						{{ $capitalize($t('error.brotli.description')) }}
+					</span>
+				</template>
 			</div>
 			<div class="q-pt-xl">
 				<q-btn
@@ -20,7 +30,7 @@
 		</div>
 		<div class="gt-sm col-md-7 row justify-center items-center">
 			<div style="width: 20vw">
-				<error-svg :error-code="401" />
+				<error-svg :error-code="$props.code" />
 			</div>
 		</div>
 	</div>
@@ -34,6 +44,18 @@ export default defineComponent({
 	name: 'PageError',
 	components: {
 		errorSvg
+	},
+	props: {
+		code: {
+			type: Number,
+			required: false,
+			default: 401
+		},
+		message: {
+			type: String,
+			required: false,
+			default: null
+		}
 	}
 });
 </script>

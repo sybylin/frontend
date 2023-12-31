@@ -14,5 +14,9 @@ export default {
 		jwt: 'you need to connect to access content',
 		title: 'well, no, you\'re not allowed to go here',
 		subtitle: 'but I promise there\'s plenty of nice stuff elsewhere'
+	},
+	brotli: {
+		title: 'An error has occurred while decompressing data sent by the server',
+		description: 'It would be a good idea to try and contact the enigma\'s creator to let him know.'
 	}
 };

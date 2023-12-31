@@ -1,14 +1,17 @@
 import GrapesJs, { Editor, ProjectData } from 'grapesjs';
+import { useI18n } from 'vue-i18n';
 import enUS from 'grapesjs/locale/en';
 import frFR from 'grapesjs/locale/fr';
 import plugin from './plugin';
 import { api, baseURL } from 'src/boot/axios';
 import { Notify } from 'quasar';
-import { stringCompress, stringDecompress } from 'src/boot/brotli';
+import { brotliDecompress } from 'src/boot/brotli';
 
 const uploadCheckMimetype = (mimetype: string) => ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype.trim().toLowerCase());
 
 export default (container: HTMLElement, id: number, series_id: number) => {
+	const { t } = useI18n();
+
 	const editor = GrapesJs.init({
 		container,
 		fromElement: true,
@@ -119,12 +122,14 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 	editor.Storage.add('remote', {
 		async load () {
 			let loadData: ProjectData = {};
+			let serveAssets: string[] | null = null;
+
 			try {
 				const serverData = await api.post('/enigmas/page/dev', { enigma_id: id, series_id });
-				const serveAssets: string[] | null = (await api.get('/enigmas/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
+				serveAssets = (await api.get('/enigmas/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
 
 				if (serverData.data.enigma && (serverData.data.enigma as string).length) {
-					const parse = JSON.parse(stringDecompress(serverData.data.enigma));
+					const parse = JSON.parse(await brotliDecompress(serverData.data.enigma) ?? '');
 					loadData = {
 						assets: [],
 						pages: parse.pages,
@@ -135,7 +140,13 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 				if (serveAssets !== null)
 					loadData.assets = serveAssets;
 			} catch (e: any) {
-				Notify.create({ type: 'failed', message: e.response.data.info.message });
+				if (e instanceof SyntaxError) {
+					loadData = editor.getProjectData();
+					if (serveAssets !== null)
+						loadData.assets = serveAssets;
+					Notify.create({ type: 'warning', textColor: 'white', message: t('builder.jsonError') });
+				} else
+					Notify.create({ type: 'failed', message: e.response.data.info.message });
 			}
 			return loadData;
 		},
@@ -143,7 +154,7 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 			api.put('/enigmas/page/dev', {
 				enigma_id: id,
 				series_id,
-				editor_data: stringCompress(JSON.stringify({ pages: data.pages, styles: data.styles }))
+				editor_data: JSON.stringify({ pages: data.pages, styles: data.styles })
 			})
 				.catch((e) => Notify.create({ type: 'failed', message: e.response.data.info.message }));
 		}

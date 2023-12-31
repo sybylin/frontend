@@ -4,7 +4,8 @@
 		<q-spinner-cube color="deep-purple-6" size="6em" />
 	</div>
 	<template v-else>
-		<unauthorized v-if="error === 'notAuthorized'" :code="401" />
+		<unauthorized v-if="error === 'brotliError'" :code="422" :message="$t('error.brotli.title')" />
+		<unauthorized v-else-if="error === 'notAuthorized'" :code="401" />
 		<error v-else-if="error === 'notExist'" />
 		<template v-else-if="enigma">
 			<q-img
@@ -123,7 +124,7 @@ export default defineComponent({
 		const router = useRouter();
 		const { t } = useI18n();
 
-		const error = ref<'notExist' | 'notAuthorized' | 'empty' | false>(false);
+		const error = ref<'notExist' | 'notAuthorized' | 'brotliError' |'empty' | false>(false);
 		const enigma = ref<enigma | null>(null);
 		const checkSolution = ref<boolean>(false);
 
@@ -225,7 +226,13 @@ export default defineComponent({
 						};
 					}
 				})
-				.catch((e) => $q.notify(e.response.data.info.message));
+				.catch((e) => {
+					if ((e as string).includes('Brotli')) {
+						$q.notify({ type: 'negative', message: t('error.brotli') });
+						error.value = 'brotliError';
+					} else
+						$q.notify({ type: 'negative', message: e.response.data.info.message });
+				});
 		});
 
 		return {

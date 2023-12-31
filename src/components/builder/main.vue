@@ -31,7 +31,6 @@ import { useI18n } from 'vue-i18n';
 import { inlineContent } from 'juice';
 import { useQuasar } from 'quasar';
 import { api } from 'src/boot/axios';
-import { brotliCompress } from 'src/boot/brotli';
 import initGrapeJs from 'src/builder';
 import 'grapesjs/dist/css/grapes.min.css';
 import type { Editor } from 'grapesjs';
@@ -49,20 +48,24 @@ export default defineComponent({
 		}
 	},
 	setup (props) {
-		const { locale } = useI18n({ useScope: 'global' });
+		const { t, locale } = useI18n({ useScope: 'global' });
 		const $q = useQuasar();
+		const autoSave = ref<NodeJS.Timeout | undefined>(undefined); // eslint-disable-line no-undef
 		const grapesjsInstance = ref<Editor | null>(null);
 		const editor = ref<HTMLElement | null>(null);
 		const isLoad = ref<boolean>(false);
 
-		const generateAndSaveHTML = async () => {
+		const generateAndSaveHTML = async (autosave = false) => {
+			if (!grapesjsInstance.value)
+				return;
+
 			const generateData: { html: string, css: string[] } = {
 				html: '',
 				css: []
 			};
 
 			const cssTag = document.createElement('style');
-			cssTag.textContent = grapesjsInstance.value?.getCss() ?? null;
+			cssTag.textContent = grapesjsInstance.value.getCss() ?? null;
 			if (cssTag.textContent) {
 				const fakeDocCss = document.implementation.createHTMLDocument();
 				fakeDocCss.body.appendChild(cssTag);
@@ -74,7 +77,7 @@ export default defineComponent({
 				}
 			}
 
-			const genHtml = grapesjsInstance.value?.getHtml({ cleanId: true });
+			const genHtml = grapesjsInstance.value.getHtml({ cleanId: true });
 			if (genHtml) {
 				const domParser = new DOMParser().parseFromString(genHtml, 'text/html');
 				const htmlTag = document.createElement('div');
@@ -86,9 +89,7 @@ export default defineComponent({
 				generateData.html = htmlTag.outerHTML;
 			}
 
-			const data = await brotliCompress(
-				inlineContent(generateData.html, generateData.css.join(' '))
-			);
+			const data = inlineContent(generateData.html, generateData.css.join(' '));
 			if (!data)
 				return;
 
@@ -97,8 +98,13 @@ export default defineComponent({
 				series_id: props.seriesId,
 				editor_data: data
 			})
+				.then(() => $q.notify({
+					type: 'info',
+					message: t(`builder.${autosave === true
+						? 'autosave'
+						: 'save'}`)
+				}))
 				.catch((e) => {
-					console.error(e.response.data);
 					$q.notify({ type: 'failed', message: e.response.data.info.message });
 				});
 		};
@@ -108,6 +114,8 @@ export default defineComponent({
 			grapesjsInstance.value.I18n.setLocale(locale.value);
 
 			grapesjsInstance.value.once('storage:end:load', () => {
+				// 5 minutes
+				autoSave.value = setInterval(() => generateAndSaveHTML(true), 1000 * 60 * 5);
 				isLoad.value = true;
 			});
 
@@ -118,6 +126,8 @@ export default defineComponent({
 
 		onBeforeUnmount(() => {
 			grapesjsInstance.value?.store();
+			if (autoSave.value)
+				clearInterval(autoSave.value);
 			generateAndSaveHTML();
 		});
 

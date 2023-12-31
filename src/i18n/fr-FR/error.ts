@@ -14,5 +14,9 @@ export default {
 		jwt: 'vous devez vous connecter pour accéder au contenu',
 		title: 'Et bien non, vous n\'avez pas le droit d\'être ici',
 		subtitle: 'mais je vous promets qu\'il y a plein de belles choses ailleurs'
+	},
+	brotli: {
+		title: 'Une erreur s\'est produite lors de la décompression des données envoyées par le serveur',
+		description: 'Il serait bon d\'essayer de contacter le créateur de l\'énigme pour le mettre au courant'
 	}
 };
