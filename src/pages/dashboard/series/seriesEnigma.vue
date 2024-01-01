@@ -4,7 +4,8 @@
 		<q-spinner-cube color="deep-purple-6" size="6em" />
 	</div>
 	<template v-else>
-		<unauthorized v-if="error === 'notAuthorized'" :code="401" />
+		<unauthorized v-if="error === 'brotliError'" :code="422" :message="$t('error.brotli.title')" />
+		<unauthorized v-else-if="error === 'notAuthorized'" :code="401" />
 		<error v-else-if="error === 'notExist'" />
 		<template v-else>
 			<div class="row no-wrap justify-between q-pa-sm">
@@ -34,7 +35,7 @@
 				<q-img
 					loading="lazy"
 					fit="cover"
-					style="height: 30em;"
+					class="img"
 					:src="(enigma.image) ? `${baseURL}${enigma.image}` : '/imgs/background.jpg' "
 				>
 					<div class="absolute-bottom">
@@ -63,28 +64,38 @@
 							flat
 							bordered
 						>
-							<template v-if="enigma.solution.type === 'STRING'">
-								<span class="text-body1">{{ enigma.solution.solution }}</span>
-							</template>
-							<template v-else-if="enigma.solution.type === 'ARRAY'">
-								<div
-									v-for="(value, i) in enigma.solution.solution.list"
-									:key="i"
-									:class="{
-										'row': true,
-										'items-center': true,
-										'q-pa-xs': true,
-										'q-ma-xs': true,
-										'bg-grey-8': !$q.dark.isActive,
-										'bg-grey-1': $q.dark.isActive
-									}"
-									style="border-radius: 3px; width: fit-content;"
-								>
-									<span class="text-body1">{{ value }}</span>
-								</div>
-							</template>
+							<div
+								v-if="enigma.solution === null"
+								class="full-width row justify-center"
+							>
+								<q-icon name="warning" size="2em" color="red" />
+								<span class="q-ml-sm q-mr-sm orkney-regular text-h6">
+									{{ $capitalize($t('dashboard.series.emptySolution')) }}
+								</span>
+								<q-icon name="warning" size="2em" color="red" />
+							</div>
 							<template v-else>
-								<div class="row text-h6">
+								<span v-if="enigma.solution.type === 'STRING'" class="text-body1">
+									{{ enigma.solution.solution }}
+								</span>
+								<template v-else-if="enigma.solution.type === 'ARRAY'">
+									<div
+										v-for="(value, i) in enigma.solution.solution.list"
+										:key="i"
+										:class="{
+											'row': true,
+											'items-center': true,
+											'q-pa-xs': true,
+											'q-ma-xs': true,
+											'keyword': true,
+											'bg-grey-8': !$q.dark.isActive,
+											'bg-grey-1': $q.dark.isActive
+										}"
+									>
+										<span class="text-body1">{{ value }}</span>
+									</div>
+								</template>
+								<div v-else class="row text-h6">
 									<div
 										v-for="(value, key) in enigma.solution.solution"
 										:key="key"
@@ -121,9 +132,11 @@ interface enigma {
 	title: string;
 	image: string | null;
 	description: string;
-	solution: { type: 'STRING'; solution: string; } |
+	solution:
+	{ type: 'STRING'; solution: string; } |
 	{ type: 'ARRAY'; solution: { keepOrder: boolean; list: string[]; }; } |
-	{ type: 'OBJECT'; solution: Record<string, string>; };
+	{ type: 'OBJECT'; solution: Record<string, string>; } |
+	null;
 	html: string;
 }
 
@@ -138,8 +151,10 @@ export default defineComponent({
 		const route = useRoute();
 
 		const enigma = ref<enigma | null>(null);
-		const error = ref<'notExist' | 'notAuthorized' | 'empty' | false>(false);
+		const error = ref<'notExist' | 'notAuthorized' | 'brotliError' | 'empty' | false>(false);
 		const solutionType = computed(() => {
+			if (!enigma.value?.solution)
+				return 'null';
 			switch (enigma.value?.solution.type) {
 			case 'ARRAY':
 				return 'keywords';
@@ -168,17 +183,22 @@ export default defineComponent({
 							title: d.data.info.title,
 							image: d.data.info.image,
 							description: d.data.info.description,
-							solution: {
-								type: d.data.solution.type,
-								solution: JSON.parse(d.data.solution.solution)
-							},
+							solution: (d.data.solution)
+								? {
+									type: d.data.solution.type ?? null,
+									solution: JSON.parse(d.data.solution.solution ?? {})
+								}
+								: null,
 							html: await brotliDecompress(d.data.enigma) ?? ''
 						};
 					}
 				})
 				.catch((e) => {
 					console.log(e);
-					$q.notify(e.response.data.info.message);
+					if (typeof e === 'string' && (e as string).includes('Brotli'))
+						error.value = 'brotliError';
+					else
+						$q.notify({ type: 'negative', message: e.response.data.info.message });
 				});
 		});
 
@@ -191,3 +211,13 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style scoped>
+.img {
+	height: 30em;
+}
+.keyword {
+	border-radius: 3px;
+	width: fit-content;
+}
+</style>

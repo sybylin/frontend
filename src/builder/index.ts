@@ -140,7 +140,7 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 				if (serveAssets !== null)
 					loadData.assets = serveAssets;
 			} catch (e: any) {
-				if (e instanceof SyntaxError) {
+				if (e instanceof SyntaxError || (typeof e === 'string' && (e as string).includes('Brotli'))) {
 					loadData = editor.getProjectData();
 					if (serveAssets !== null)
 						loadData.assets = serveAssets;

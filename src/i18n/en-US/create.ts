@@ -56,6 +56,7 @@ export default {
 			error: 'the name doesn\'t match'
 		},
 		solution: {
+			null: 'no solution',
 			sentence: 'sentence',
 			sentenceBanner: 'this sentence is needed from user for complete enigma',
 			keywords: 'keywords',

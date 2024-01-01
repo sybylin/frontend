@@ -62,7 +62,7 @@
 						class="q-ma-md full-width"
 						:color="genColor"
 						:loading="checkSolution"
-						:disable="statusSolution === 'valid'"
+						:disable="computedIsEmpty || statusSolution === 'valid'"
 						@click="checkSolution = true"
 					>
 						{{ $t('series.solution.check.title') }}
@@ -70,6 +70,17 @@
 							<q-spinner-hourglass class="on-left" />
 							{{ $t('series.solution.check.load') }}
 						</template>
+						<q-tooltip
+							v-if="computedIsEmpty"
+							:class="`bg-${genColor} text-body2`"
+							:offset="[10, 10]"
+						>
+							<q-icon name="warning" size="2em" color="red" />
+							<span class="q-ml-sm q-mr-sm orkney-regular text-h6">
+								{{ $capitalize($t('dashboard.series.emptySolution')) }}
+							</span>
+							<q-icon name="warning" size="2em" color="red" />
+						</q-tooltip>
 					</q-btn>
 				</div>
 			</div>
@@ -140,8 +151,11 @@ export default defineComponent({
 		const computedDesc = computed(() => (enigma.value)
 			? capitalize(enigma.value.description)
 			: t('series.meta.enigma.description'));
+		const computedIsEmpty = computed(() => !!(enigma.value && !enigma.value.solutionType && !enigma.value.objectSolutionKeys));
 
 		const check = (d: string | string[] | Record<string, string>) => {
+			if (computedIsEmpty.value)
+				return;
 			statusSolution.value = null;
 			api.post('/enigmas/solution/check', {
 				id: Number(route.params.enigmaId),
@@ -216,6 +230,7 @@ export default defineComponent({
 					else if (Object.prototype.hasOwnProperty.call(d.data.enigma, 'empty'))
 						error.value = 'empty';
 					else {
+						console.log(d.data);
 						enigma.value = {
 							title: d.data.info.title,
 							image: d.data.info.image,
@@ -227,10 +242,9 @@ export default defineComponent({
 					}
 				})
 				.catch((e) => {
-					if ((e as string).includes('Brotli')) {
-						$q.notify({ type: 'negative', message: t('error.brotli') });
+					if ((e as string).includes('Brotli'))
 						error.value = 'brotliError';
-					} else
+					else
 						$q.notify({ type: 'negative', message: e.response.data.info.message });
 				});
 		});
@@ -243,6 +257,7 @@ export default defineComponent({
 			statusSolution,
 			genColor,
 			confetti,
+			computedIsEmpty,
 			check,
 			finishAndRedirect
 		};

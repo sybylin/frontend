@@ -113,5 +113,7 @@ export default defineComponent({
 .border {
 	border: 2px solid $grey-8;
 	border-radius: 50%;
+	width: 2em;
+	height: 2em;
 }
 </style>

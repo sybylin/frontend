@@ -29,6 +29,7 @@ import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
 import HeaderLayout from '../components/layouts/header.vue';
 import FooterLayout from '../components/layouts/footer.vue';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 export default defineComponent({
 	name: 'MainLayouts',
@@ -47,18 +48,22 @@ export default defineComponent({
 			return (route.meta.noSSR === true || route.meta.requiresAuth === true);
 		});
 
+		const printNotification = (route: RouteLocationNormalizedLoaded) => {
+			if (Object.keys(route.query).length && Object.prototype.hasOwnProperty.call(route.query, 'unauthorized')) {
+				$q.notify({
+					type: 'negative',
+					icon: 'gpp_maybe',
+					timeout: 5000,
+					position: 'bottom-right',
+					message: t('unauthorized')
+				});
+			}
+		};
+
 		onMounted(() => {
-			watch(route, (v) => {
-				if (Object.keys(v.query).length && Object.prototype.hasOwnProperty.call(v.query, 'unauthorized')) {
-					$q.notify({
-						type: 'negative',
-						icon: 'gpp_maybe',
-						timeout: 5000,
-						position: 'bottom-right',
-						message: t('unauthorized')
-					});
-				}
-			});
+			printNotification(route);
+
+			watch(route, (v) => printNotification(v));
 		});
 
 		return {

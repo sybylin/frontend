@@ -211,7 +211,7 @@ export default defineComponent({
 		const title = ref<string | null>(props.modelValue.title);
 		const description = ref<string | null>(props.modelValue.description);
 		const rejectionError = ref<string | null>(
-			props.modelValue.series_verified_by
+			(props.modelValue.series_verified_by && props.modelValue.series_verified_by.length > 0)
 				? props.modelValue.series_verified_by[0].rejection_reason
 				: null
 		);

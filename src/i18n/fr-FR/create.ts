@@ -56,6 +56,7 @@ export default {
 			error: 'le nom ne correspond pas'
 		},
 		solution: {
+			null: 'pas de solution',
 			sentence: 'phrase',
 			sentenceBanner: 'cette phrase doit être écrite par l\'utilisateur pour que l\'énigme soit complète',
 			keywords: 'mots-clés',

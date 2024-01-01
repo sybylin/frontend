@@ -43,6 +43,7 @@ export default {
 		verifyBtn: 'check series',
 		verifyBtnEnigma: 'check enigma',
 		emptyEnigma: 'this enigma has no content',
+		emptySolution: 'this enigma has no solution',
 		seriesTitle: 'series title',
 		seriesDescription: 'series description',
 		seriesCreator: 'series creator',

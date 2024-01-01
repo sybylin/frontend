@@ -2,20 +2,20 @@
 	<div class="row no-wrap q-pa-xl">
 		<div class="col-md-5 col-12 column justify-center items-start q-pl-sm q-pr-md">
 			<div>
-				<template v-if="$props.message === undefined">
-					<h2 class="q-ma-none q-pb-md orkney-medium">
-						{{ $capitalize($t('error.unauthorized.title')) }}
-					</h2>
-					<span class="text-body1 text-weight-regular">
-						{{ $capitalize($t('error.unauthorized.subtitle')) }}
-					</span>
-				</template>
-				<template v-else>
+				<template v-if="$props.message && $props.message !== null">
 					<h2 class="q-ma-none q-pb-md orkney-medium">
 						{{ $capitalize($props.message) }}
 					</h2>
 					<span class="text-body1 text-weight-regular">
 						{{ $capitalize($t('error.brotli.description')) }}
+					</span>
+				</template>
+				<template v-else>
+					<h2 class="q-ma-none q-pb-md orkney-medium">
+						{{ $capitalize($t('error.unauthorized.title')) }}
+					</h2>
+					<span class="text-body1 text-weight-regular">
+						{{ $capitalize($t('error.unauthorized.subtitle')) }}
 					</span>
 				</template>
 			</div>
