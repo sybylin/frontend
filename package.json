@@ -14,7 +14,7 @@
     "dev:ssr": "quasar dev -m ssr",
     "build": "quasar build",
     "build:ssr": "quasar build -m ssr",
-    "icon": "icongenie generate -m \"spa,ssr\" -i ./public/favicon.ico"
+    "icon": "icongenie generate -m \"spa,ssr\" -i ./public/imgs/logo/snake_without_tongue.png"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.6",

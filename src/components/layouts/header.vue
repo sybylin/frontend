@@ -6,7 +6,7 @@
 		<div class="titlebar">
 			<router-link to="/" aria-label="Go to home page">
 				<img
-					src="/imgs/icon.png"
+					src="/icons/favicon-128x128.png"
 					alt="Logo of Sibyllin"
 					width="60"
 					height="60"
