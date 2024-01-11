@@ -1,48 +1,52 @@
 <template>
-	<Particles
-		:id="tsParticlesContainerId"
-		:options="$props.options"
-		:particles-init="particleInit"
-	/>
+	<div
+		:id="$props.id"
+		style="width: 100%; height: 500px;"
+	></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { PropType, defineComponent, nextTick, onUnmounted, onMounted, ref } from 'vue';
 import { loadFull } from 'tsparticles';
-import { loadConfettiPreset } from 'tsparticles-preset-confetti';
-import type { Engine, ISourceOptions } from 'tsparticles-engine';
+import { tsParticles } from '@tsparticles/engine';
+import type { Container, ISourceOptions } from '@tsparticles/engine';
 
 export default defineComponent({
 	name: 'Particles',
 	props: {
+		id: {
+			type: String,
+			required: false,
+			default: Math.random().toString(32).substring(2, 16)
+		},
 		options: {
 			type: Object as PropType<ISourceOptions>,
 			required: false,
-			default: () => {}
+			default: {} as ISourceOptions
 		}
 	},
-	setup () {
-		const tsParticlesContainerId = Math.random().toString(32).substring(2, 16);
+	emits: ['loaded'],
+	setup (props, { emit }) {
+		const container = ref<Container | undefined>(undefined);
 
-		return {
-			tsParticlesContainerId
-		};
-	},
-	methods: {
-		async particleInit (engine: Engine) {
-			if (!this.$props.options)
+		onMounted(() => {
+			nextTick(async () => {
+				tsParticles.init();
+				loadFull(tsParticles);
+				container.value = await tsParticles.load({
+					id: props.id,
+					options: props.options
+				});
+				emit('loaded', container);
+			});
+		});
+
+		onUnmounted(() => {
+			if (!container.value)
 				return;
-			if (
-				this.$props.options.preset &&
-				(
-					(Array.isArray(this.$props.options.preset) && this.$props.options.preset.includes('confetti')) ||
-					(typeof this.$props.options.preset === 'string' && this.$props.options.preset.localeCompare('confetti') === 0)
-				)
-			)
-				await loadConfettiPreset(engine);
-			else
-				await loadFull(engine);
-		}
+			container.value.destroy();
+			container.value = undefined;
+		});
 	}
 });
 </script>

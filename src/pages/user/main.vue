@@ -48,6 +48,7 @@ import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
 import meta from 'src/meta';
 import { api } from 'src/boot/axios';
+import { globalStore } from 'src/stores/global';
 import ComponentsPagesUserProfil from 'src/components/pages/user/profil.vue';
 import ComponentsPagesSeries from 'src/components/pages/user/series.vue';
 import ComponentsAchievementList from 'components/achievement/list.vue';
@@ -66,6 +67,7 @@ export default defineComponent({
 	},
 	setup () {
 		const { t } = useI18n();
+		const store = globalStore();
 		const splitter = ref<number>(20);
 		const user = ref<user>({} as user);
 		const tab = ref<'series' | 'achievement' | 'edition'>('achievement');
@@ -102,6 +104,7 @@ export default defineComponent({
 			api.get('/user')
 				.then((d) => {
 					user.value = d.data.user;
+					store.setUser(d.data.user);
 				});
 		});
 

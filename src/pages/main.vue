@@ -1,7 +1,19 @@
 <template>
 	<main-header @to-anchor="toReadMore()" />
 	<div id="read-more" ref="readMore" class="column items-center">
-		<h3>Start course</h3>
+		<main-row
+			:title="$t('main.body.1.title')"
+			:description="$t('main.body.1.description')"
+		/>
+		<main-row
+			:title="$t('main.body.2.title')"
+			:description="$t('main.body.2.description')"
+			inverse
+		/>
+		<main-row
+			:title="$t('main.body.3.title')"
+			:description="$t('main.body.3.description')"
+		/>
 	</div>
 </template>
 
@@ -11,12 +23,14 @@ import { useMeta } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import meta from 'src/meta';
 
-import mainHeader from '../components/pages/main/header.vue';
+import mainHeader from 'src/components/pages/main/header.vue';
+import mainRow from 'src/components/pages/main/row.vue';
 
 export default defineComponent({
 	name: 'PageMain',
 	components: {
-		mainHeader
+		mainHeader,
+		mainRow
 	},
 	setup () {
 		const { t } = useI18n();

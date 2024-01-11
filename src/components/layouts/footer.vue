@@ -5,7 +5,7 @@
 				<div class="col-md-6 col-sm-4 col-12 q-pa-sm">
 					<span class="text-h3 orkney-medium">{{ $t('title') }}</span>
 					<lang is-dark />
-					<div class="row no-wrap items-center">
+					<div class="q-mt-sm row no-wrap items-center">
 						<span>{{ $t('menu.dark') }}</span>
 						<dark-mode />
 					</div>

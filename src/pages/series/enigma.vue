@@ -230,7 +230,6 @@ export default defineComponent({
 					else if (Object.prototype.hasOwnProperty.call(d.data.enigma, 'empty'))
 						error.value = 'empty';
 					else {
-						console.log(d.data);
 						enigma.value = {
 							title: d.data.info.title,
 							image: d.data.info.image,

@@ -283,6 +283,7 @@ export default defineComponent({
 }
 .rounded {
 	border-radius: 50%;
-	width: 9em;
+	height: 8em;
+	width: 8em;
 }
 </style>

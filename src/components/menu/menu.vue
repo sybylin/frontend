@@ -16,6 +16,21 @@
 					}"
 				>
 					<q-btn
+						v-if="route.name.localeCompare('user') === 0 && storeInstance.user !== null"
+						square flat color="white"
+						:label="storeInstance.user.name"
+						:class="{
+							'drawer-btn-content': $props.inDrawer,
+							'btn-content': !$props.inDrawer
+						}"
+						:to="$generatePath({ name: route.name })"
+					>
+						<template v-slot:default>
+							<q-img class="q-ml-sm avatar" :src="`${baseURL}${storeInstance.user.avatar}`" />
+						</template>
+					</q-btn>
+					<q-btn
+						v-else
 						square flat color="white"
 						:label="$t(route.label)"
 						:icon="route.icon"
@@ -42,6 +57,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, watch } from 'vue';
 import { globalStore } from 'src/stores/global';
+import { baseURL } from 'src/boot/axios';
 import { storeToRefs } from 'pinia';
 
 interface routeList {
@@ -119,6 +135,7 @@ export default defineComponent({
 		});
 
 		return {
+			baseURL,
 			storeInstance,
 			routes,
 			isShow,
@@ -163,5 +180,11 @@ export default defineComponent({
 	height: .2em;
 	width: 100%;
 	background-color: white;
+}
+
+.avatar {
+	border-radius: 50%;
+	width: 2.8em;
+	height: 2.8em;
 }
 </style>

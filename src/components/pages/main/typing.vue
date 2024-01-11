@@ -20,9 +20,9 @@ export default defineComponent({
 		}
 	},
 	setup (props) {
+		const { locale } = useI18n({ useScope: 'global' });
 		const isAnim = ref<boolean>(false);
 		const textRef = ref<string | null>(null);
-		const { locale } = useI18n({ useScope: 'global' });
 		let index = 0, isAdding = true, textIndex = 0;
 
 		const cssList = computed(() => {
@@ -67,6 +67,7 @@ export default defineComponent({
 		});
 
 		return {
+			isAnim,
 			textRef,
 			cssList
 		};
