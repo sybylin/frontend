@@ -38,6 +38,8 @@ export default defineComponent({
 					try {
 						localStorage.removeItem(xsrfName);
 						store.setIsConnected(false);
+						store.setUser(null);
+						store.setRole('user');
 						await router.push(generatePath({ name: 'home' }, store.lang));
 					} catch {
 						// console.error('router push to home failed');

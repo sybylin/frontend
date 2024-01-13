@@ -44,7 +44,7 @@
 					'q-pl-md': true
 				}"
 			>
-				<q-img src="/imgs/background.jpg" style="max-width: 40vw" :ration="1" />
+				<q-img src="/imgs/screen_size.png" style="max-width: 40vw" :ration="1" />
 			</div>
 		</div>
 	</div>

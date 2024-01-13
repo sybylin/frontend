@@ -69,6 +69,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
 import { capitalize } from 'src/boot/custom';
+import { globalStore } from 'src/stores/global';
 import type { user } from 'src/types';
 
 export default defineComponent({
@@ -83,6 +84,7 @@ export default defineComponent({
 		const $q = useQuasar();
 		const router = useRouter();
 		const { t } = useI18n();
+		const storeInstance = globalStore();
 		const expanded = ref<boolean>(false);
 		const deleteName = ref<string | null>(null);
 
@@ -91,6 +93,9 @@ export default defineComponent({
 				return;
 			api.delete('/user')
 				.then(() => {
+					storeInstance.setIsConnected(false);
+					storeInstance.setRole('user');
+					storeInstance.setUser(null);
 					$q.notify({ type: 'info', message: capitalize(t('user.delete.ok')) });
 					router.push({ name: 'home' });
 				})

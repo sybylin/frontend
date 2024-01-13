@@ -26,7 +26,10 @@
 						:to="$generatePath({ name: route.name })"
 					>
 						<template v-slot:default>
-							<q-img class="q-ml-sm avatar" :src="`${baseURL}${storeInstance.user.avatar}`" />
+							<q-img
+								class="q-ml-sm avatar"
+								:src="(storeInstance.user.avatar) ? `${baseURL}${storeInstance.user.avatar}` : '/imgs/background.jpg'"
+							/>
 						</template>
 					</q-btn>
 					<q-btn
