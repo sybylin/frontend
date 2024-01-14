@@ -77,19 +77,19 @@ export default defineComponent({
 				meta: {
 					title: t('user.meta.main.title'),
 					description: t('user.meta.main.description'),
-					keywords: ['Sibyllin', 'user', 'manage']
+					keywords: ['Sybilin', 'user', 'manage']
 				},
 				og: {
-					url: 'https://sibyllin.app/user',
+					url: 'https://sybyl.in/user',
 					title: t('user.meta.main.title'),
 					description: t('user.meta.main.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/user',
+					url: 'https://sybyl.in/user',
 					title: t('user.meta.main.title'),
 					description: t('user.meta.main.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

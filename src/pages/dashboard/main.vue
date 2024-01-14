@@ -21,16 +21,16 @@ export default defineComponent({
 					description: capitalize(t('dashboard.main.desc'))
 				},
 				og: {
-					url: 'https://sibyllin.app/dashboard/users',
+					url: 'https://sybyl.in/dashboard/users',
 					title: capitalize(t('dashboard.main.title')),
 					description: capitalize(t('dashboard.main.desc')),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/dashboard/users',
+					url: 'https://sybyl.in/dashboard/users',
 					title: capitalize(t('dashboard.main.title')),
 					description: capitalize(t('dashboard.main.desc')),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

@@ -8,7 +8,7 @@ import builder from './builder';
 import dashboard from './dashboard';
 
 export default {
-	title: 'Sibyllin',
+	title: 'Sybylin',
 	searchError: 'Une erreur s\'est produite lors de la recherche',
 	unauthorized: 'Vous ne disposez pas des droits nécessaires pour accéder à ce contenu',
 	menu: {

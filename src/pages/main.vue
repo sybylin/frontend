@@ -49,16 +49,16 @@ export default defineComponent({
 					keywords: ['enigmas', 'series', 'mystery', 'riddle', 'problem']
 				},
 				og: {
-					url: 'https://sibyllin.app',
+					url: 'https://sybyl.in',
 					title: t('menu.home'),
 					description: t('main.header.desc'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app',
+					url: 'https://sybyl.in',
 					title: t('menu.home'),
 					description: t('main.header.desc'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

@@ -9,7 +9,7 @@ export default {
 	body: {
 		1: {
 			title: 'Solve enigmas',
-			description: 'Become the master of Sybillin by solving a series of enigmas of all kinds and levels'
+			description: 'Become the master of Sybylin by solving a series of enigmas of all kinds and levels'
 		},
 		2: {
 			title: 'Gaining levels and successes',

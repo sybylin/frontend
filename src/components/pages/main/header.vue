@@ -22,7 +22,7 @@
 						color="green-7"
 						:label="$t('main.header.play')"
 						icon="videogame_asset"
-						:to="(storeInstance.isConnected) ? $generatePath({ name: 'series' }) : $generatePath({ name: 'user' })"
+						:to="(storeInstance.isConnected) ? $generatePath({ name: 'series' }) : $generatePath({ name: 'login' })"
 					/>
 					<q-btn
 						class="q-pa-md q-ma-sm"

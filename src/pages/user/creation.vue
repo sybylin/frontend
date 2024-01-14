@@ -250,19 +250,19 @@ export default defineComponent({
 				meta: {
 					title: t('user.meta.creation.title'),
 					description: t('user.meta.creation.description'),
-					keywords: ['Sibyllin', 'user', 'creation']
+					keywords: ['Sybilin', 'user', 'creation']
 				},
 				og: {
-					url: 'https://sibyllin.app/user/creation',
+					url: 'https://sybyl.in/user/creation',
 					title: t('user.meta.creation.title'),
 					description: t('user.meta.creation.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/user/creation',
+					url: 'https://sybyl.in/user/creation',
 					title: t('user.meta.creation.title'),
 					description: t('user.meta.creation.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

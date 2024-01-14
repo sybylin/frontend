@@ -9,7 +9,7 @@ export default {
 	body: {
 		1: {
 			title: 'Résolvez des énigmes',
-			description: 'Devenez le maître de Sybillin en résolvant des séries d\'énigmes de tout genre et niveaux'
+			description: 'Devenez le maître de Sybylin en résolvant des séries d\'énigmes de tout genre et niveaux'
 		},
 		2: {
 			title: 'Gagner des niveaux et des succès',

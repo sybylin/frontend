@@ -168,19 +168,19 @@ export default defineComponent({
 				meta: {
 					title: t('user.meta.login.title'),
 					description: t('user.meta.login.description'),
-					keywords: ['Sibyllin', 'user', 'login']
+					keywords: ['Sybilin', 'user', 'login']
 				},
 				og: {
-					url: 'https://sibyllin.app/user/login',
+					url: 'https://sybyl.in/user/login',
 					title: t('user.meta.login.title'),
 					description: t('user.meta.login.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/user/login',
+					url: 'https://sybyl.in/user/login',
 					title: t('user.meta.login.title'),
 					description: t('user.meta.login.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

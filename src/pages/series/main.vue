@@ -137,16 +137,16 @@ export default defineComponent({
 					keywords: ['series', 'list', 'search']
 				},
 				og: {
-					url: 'https://sibyllin.app/series',
+					url: 'https://sybyl.in/series',
 					title: t('series.meta.main.title'),
 					description: t('series.meta.main.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/series',
+					url: 'https://sybyl.in/series',
 					title: t('series.meta.main.title'),
 					description: t('series.meta.main.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

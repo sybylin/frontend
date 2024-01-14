@@ -47,7 +47,7 @@
 					aria-label="Go to home page"
 				>
 					<div class="flex items-center q-pa-xs">
-						<img src="/icons/favicon-128x128.png" alt="Logo of Sybillin" />
+						<img src="/icons/favicon-128x128.png" alt="Logo of sybyl.in" />
 						<span class="q-pl-sm text-h4 orkney-light">{{ $t('title') }}</span>
 					</div>
 				</router-link>

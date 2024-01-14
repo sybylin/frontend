@@ -7,7 +7,7 @@
 			<router-link :to="$generatePath({ name: 'home' })" aria-label="Go to home page">
 				<img
 					src="/icons/favicon-128x128.png"
-					alt="Logo of Sibyllin"
+					alt="Logo of Sybylin"
 					width="60"
 					height="60"
 				/>

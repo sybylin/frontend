@@ -203,16 +203,16 @@ export default defineComponent({
 					keywords: ['enigma']
 				},
 				og: {
-					url: 'https://sibyllin.app/series',
+					url: 'https://sybyl.in/series',
 					title: computedTitle.value,
 					description: computedDesc.value,
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/series',
+					url: 'https://sybyl.in/series',
 					title: computedTitle.value,
 					description: computedDesc.value,
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

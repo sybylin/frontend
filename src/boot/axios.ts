@@ -6,10 +6,10 @@ export type serverAchievement = { name: string, timestamp: Date };
 export const xsrfName = 'x-xsrf-token';
 export const frontBaseUrl = (import.meta.env.DEV)
 	? 'http://localhost:9100'
-	: 'https://sibyllin.app';
+	: 'https://sybyl.in';
 export const baseURL = (import.meta.env.DEV)
 	? 'http://localhost:3000'
-	: 'https://api.sibyllin.app';
+	: 'https://api.sybyl.in';
 export const api = axios.create({
 	baseURL,
 	proxy: (import.meta.env.DEV)

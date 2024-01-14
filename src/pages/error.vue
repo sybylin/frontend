@@ -62,13 +62,13 @@ export default defineComponent({
 					keywords: ['error', '400']
 				},
 				og: {
-					url: 'https://sibyllin.app/error',
-					title: `sibyllin - ${t('error.meta.title')}`,
+					url: 'https://sybyl.in/error',
+					title: `Sybylin - ${t('error.meta.title')}`,
 					description: t('error.description')
 				},
 				twitter: {
-					url: 'https://sibyllin.app/error',
-					title: `sibyllin - ${t('error.meta.title')}`,
+					url: 'https://sybyl.in/error',
+					title: `Sybylin - ${t('error.meta.title')}`,
 					description: t('error.description')
 				}
 			});

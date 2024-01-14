@@ -263,16 +263,16 @@ export default defineComponent({
 					keywords: ['account', 'password', 'reset']
 				},
 				og: {
-					url: 'https://sibyllin.app/reset',
+					url: 'https://sybyl.in/reset',
 					title: t('user.meta.reset.title'),
 					description: t('user.meta.reset.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/reset',
+					url: 'https://sybyl.in/reset',
 					title: t('user.meta.reset.title'),
 					description: t('user.meta.reset.description'),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});

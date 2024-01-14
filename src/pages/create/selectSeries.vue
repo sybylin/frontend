@@ -105,16 +105,16 @@ export default defineComponent({
 					keywords: ['select', 'series']
 				},
 				og: {
-					url: 'https://sibyllin.app/series',
+					url: 'https://sybyl.in/series',
 					title: capitalize(t('create.main.list.title')),
 					description: capitalize(t('create.main.list.description')),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				},
 				twitter: {
-					url: 'https://sibyllin.app/series',
+					url: 'https://sybyl.in/series',
 					title: capitalize(t('create.main.list.title')),
 					description: capitalize(t('create.main.list.description')),
-					image: 'https://sibyllin.app/img/background.png'
+					image: 'https://sybyl.in/img/background.png'
 				}
 			});
 		});
