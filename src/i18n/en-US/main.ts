@@ -19,5 +19,9 @@ export default {
 			title: 'Invent and share your own enigmas',
 			description: 'Express your creativity and originality by creating unique enigmas and sharing them with others'
 		}
+	},
+	end: {
+		title: 'Shall we go ?',
+		description: 'Join other players from all over the world and have fun !'
 	}
 };

@@ -6,7 +6,7 @@
 		<div class="titlebar">
 			<router-link :to="$generatePath({ name: 'home' })" aria-label="Go to home page">
 				<img
-					src="/icons/favicon-128x128.png"
+					:src="`${themeInstance.linkToSnakeIcon}favicon-128x128.png`"
 					alt="Logo of Sybylin"
 					width="60"
 					height="60"
@@ -45,6 +45,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { themeStore } from 'src/stores/theme';
 import logoutVue from '../menu/logout.vue';
 import menuVue from '../menu/menu.vue';
 import popup from '../menu/popup.vue';
@@ -57,12 +58,14 @@ export default defineComponent({
 		popup
 	},
 	setup () {
+		const themeInstance = themeStore();
 		const openDrawer = ref(false);
 		const mobileScreen = 920;
 
 		const toggleDrawer = () => { openDrawer.value = !openDrawer.value; };
 
 		return {
+			themeInstance,
 			openDrawer,
 			mobileScreen,
 			toggleDrawer

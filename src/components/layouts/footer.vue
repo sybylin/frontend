@@ -47,7 +47,10 @@
 					aria-label="Go to home page"
 				>
 					<div class="flex items-center q-pa-xs">
-						<img src="/icons/favicon-128x128.png" alt="Logo of sybyl.in" />
+						<img
+							:src="`${themeInstance.linkToSnakeIcon}favicon-128x128.png`"
+							alt="Logo of sybyl.in"
+						/>
 						<span class="q-pl-sm text-h4 orkney-light">{{ $t('title') }}</span>
 					</div>
 				</router-link>
@@ -69,6 +72,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { globalStore } from 'src/stores/global';
+import { themeStore } from 'src/stores/theme';
 import lang from '../menu/lang.vue';
 import darkMode from '../menu/darkMode.vue';
 
@@ -80,9 +84,11 @@ export default defineComponent({
 	},
 	setup () {
 		const storeInstance = globalStore();
+		const themeInstance = themeStore();
 
 		return {
-			storeInstance
+			storeInstance,
+			themeInstance
 		};
 	}
 });

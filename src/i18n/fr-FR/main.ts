@@ -19,5 +19,9 @@ export default {
 			title: 'Inventez et partagez vos énigmes',
 			description: 'Exprimez votre créativité et votre originalité en créant des énigmes uniques et en les partageants'
 		}
+	},
+	end: {
+		title: 'On y va ?',
+		description: 'Rejoignez d\'autres joueurs du monde entier et amusez-vous !'
 	}
 };

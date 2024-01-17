@@ -4,17 +4,26 @@
 		<main-row
 			:title="$t('main.body.1.title')"
 			:description="$t('main.body.1.description')"
+			:video="'/video/solve_enigma_sd.mp4'"
 		/>
 		<main-row
 			:title="$t('main.body.2.title')"
 			:description="$t('main.body.2.description')"
+			:video="'/video/levels_success_sd.mp4'"
 			inverse
 		/>
 		<main-row
 			:title="$t('main.body.3.title')"
 			:description="$t('main.body.3.description')"
+			:video="'/video/create_sd.mp4'"
 		/>
 	</div>
+	<main-row
+		bottom
+		inverse
+		:title="$t('main.end.title')"
+		:description="$t('main.end.description')"
+	/>
 </template>
 
 <script lang="ts">

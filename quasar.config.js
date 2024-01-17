@@ -3,7 +3,7 @@
 const { configure } = require('quasar/wrappers');
 const { resolve } = require('path');
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure((/* ctx */) => {
 	return {
 		eslint: {
 			fix: false,

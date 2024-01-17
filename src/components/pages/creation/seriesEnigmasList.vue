@@ -75,7 +75,7 @@
 				>
 					<q-card-section class="full-width full-height row justify-center items-center">
 						<q-icon name="add" size="6em" />
-						<span style="position: absolute; bottom: 5em" class="text-h6">{{ $capitalize($t('create.dialogCreateSerie.name')) }}</span>
+						<span style="position: absolute; bottom: 5em" class="text-h6">{{ $capitalize($t('create.dialogCreateEnigma.name')) }}</span>
 					</q-card-section>
 				</q-card>
 			</div>

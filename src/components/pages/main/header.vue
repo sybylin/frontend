@@ -1,13 +1,24 @@
 <template>
 	<div class="text-weight-light header">
 		<div class="row justify-around items-center no-wrap">
-			<div class="col-md-6 col-sm-12 column items-center q-pl-xl q-pr-md">
+			<div
+				:class="{
+					'col-md-6': true,
+					'col-sm-12': true,
+					'column': true,
+					'items-center': true,
+					'q-pl-xl': $q.screen.gt.sm,
+					'q-pr-md': $q.screen.gt.sm,
+					'q-pa-sm': !$q.screen.gt.sm
+				}"
+			>
 				<div class="row justify-center items-center no-wrap">
 					<q-img
 						no-spinner
-						src="/icons/favicon-96x96.png" width="7em" height="7em"
+						:src="`${themeInstance.linkToSnakeIcon}favicon-96x96.png`" width="7em" height="7em"
 						class="header-snake"
 						@load="titleLoad = true"
+						@dblclick="themeInstance.switchSnakeAppearance()"
 					/>
 					<span class="text-h1 orkney-light text-center header-title">
 						{{ (titleLoad) ? $t('title').slice(1) : $t('title') }}
@@ -44,7 +55,7 @@
 					'q-pl-md': true
 				}"
 			>
-				<q-img src="/imgs/screen_size.png" style="max-width: 40vw" :ration="1" />
+				<q-img src="/imgs/screen_size.png" class="header-image" :ration="1" />
 			</div>
 		</div>
 	</div>
@@ -53,16 +64,19 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { globalStore } from 'src/stores/global';
+import { themeStore } from 'src/stores/theme';
 
 export default defineComponent({
 	name: 'MainHeader',
 	emits: ['toAnchor'],
 	setup () {
 		const storeInstance = globalStore();
+		const themeInstance = themeStore();
 		const titleLoad = ref<boolean>(false);
 
 		return {
 			storeInstance,
+			themeInstance,
 			titleLoad
 		};
 	}
@@ -79,21 +93,7 @@ export default defineComponent({
 	position: relative;
 	color: #fff;
 	background: rgb(106,27,154);
-	background: linear-gradient(90deg, rgb(53, 14, 78) 0%, rgb(40, 22, 75) 51%, rgb(41, 28, 81) 100%);
-}
-.header-old {
-	z-index: 1;
-	height: calc(100vh - 5em);
-	background-image: url('/imgs/background.jpg');
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	color: #fff !important;
-	position: relative;
+	background: linear-gradient(90deg, rgb(65, 16, 96) 0%, rgb(42, 25, 74) 51%, rgb(36, 25, 68) 100%);
 }
 .header-filter {
 	z-index: 2;
@@ -112,5 +112,8 @@ export default defineComponent({
 }
 .header-snake {
 	margin-right: -.5em;
+}
+.header-image {
+	max-width: 40vw;
 }
 </style>
