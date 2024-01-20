@@ -4,6 +4,7 @@ export default {
 		title: 'accueil',
 		desc: 'page principale du tableau de bord'
 	},
+	development: 'en cours de développement',
 	users: {
 		title: 'utilisateurs',
 		desc: 'gérer les utilisateurs',

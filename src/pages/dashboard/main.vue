@@ -1,5 +1,9 @@
 <template>
-	Main
+	<div class="full-width text-center q-pt-xl">
+		<span class="text-h4">
+			{{ $capitalize($t('dashboard.development')) }}
+		</span>
+	</div>
 </template>
 
 <script lang="ts">

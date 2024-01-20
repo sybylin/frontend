@@ -4,6 +4,7 @@ export default {
 		title: 'main',
 		desc: 'main page of dashboard'
 	},
+	development: 'under development',
 	users: {
 		title: 'users',
 		desc: 'manage users',
