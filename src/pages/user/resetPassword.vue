@@ -31,11 +31,8 @@
 						v-model="password"
 						bottom-slots
 						:label="$capitalize($t('user.connection.newPassword'))"
-						:error="incorrectPassword === true || incorrectPassword === 'notTheSame'"
-						:error-message="(incorrectPassword === 'notTheSame')
-							? $capitalize($t('user.connection.different', { key: $t('user.connection.passwords') }))
-							: $capitalize($t('user.connection.mandatory', { key: $t('user.connection.passwords') }))
-						"
+						:error="passwordError"
+						:error-message="passwordErrorMessage"
 						:type="togglePassword ? 'password' : 'text'"
 						:disable="apiCall"
 					>
@@ -48,6 +45,10 @@
 							/>
 						</template>
 					</q-input>
+					<components-pages-user-check-password
+						v-model="notFormatedPassword"
+						:password="password"
+					/>
 					<q-input
 						v-model="repeatPassword"
 						bottom-slots
@@ -144,11 +145,15 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { api } from 'src/boot/axios';
 import isEmail from 'validator/lib/isEmail';
+import ComponentsPagesUserCheckPassword from 'components/pages/user/checkPassword.vue';
 
 type errorType = 'resetTokenIsInvalid' | 'differentPassword' | 'updateError' | 'mailError' | null;
 
 export default defineComponent({
 	name: 'PagesResetPassword',
+	components: {
+		ComponentsPagesUserCheckPassword
+	},
 	setup () {
 		const { t } = useI18n();
 		const route = useRoute();
@@ -158,12 +163,26 @@ export default defineComponent({
 		const password = ref<string | null>(null);
 		const repeatPassword = ref<string | null>(null);
 		const incorrectPassword = ref<boolean | 'notTheSame'>(false);
+		const notFormatedPassword = ref<boolean | null>(null);
 		const togglePassword = ref<boolean>(true);
 		const toggleRepeatPassword = ref<boolean>(true);
 
 		const apiCall = ref<boolean>(false);
 		const success = ref<boolean>(false);
 		const error = ref<errorType>(null);
+
+		const passwordError = computed(() => (notFormatedPassword.value === false || incorrectPassword.value === true || incorrectPassword.value === 'notTheSame'));
+		const passwordErrorMessage = computed(() => {
+			if (notFormatedPassword.value === false)
+				return capitalize(t('user.checkPassword.ko'));
+			switch (incorrectPassword.value) {
+			case true:
+				return capitalize(t('user.connection.different', { key: t('user.connection.passwords') }));
+			case 'notTheSame':
+			default:
+				return capitalize(t('user.connection.mandatory', { key: t('user.connection.passwords') }));
+			}
+		});
 
 		const onSubmit = () => {
 			if (route.params.token && password.value && repeatPassword.value) {
@@ -299,6 +318,7 @@ export default defineComponent({
 			password,
 			repeatPassword,
 			incorrectPassword,
+			notFormatedPassword,
 			togglePassword,
 			toggleRepeatPassword,
 			apiCall,
@@ -309,7 +329,9 @@ export default defineComponent({
 			onSubmitStart,
 			onResetStart,
 			isToken,
-			emailError
+			emailError,
+			passwordError,
+			passwordErrorMessage
 		};
 	}
 });

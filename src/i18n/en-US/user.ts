@@ -21,6 +21,8 @@ export default {
 	verify: 'this account is verified',
 	unverify: 'this account is unverified',
 	update: 'update',
+	accountUpdate: 'your account has been successfully modified',
+	forbiddenUsername: 'this username cannot be used',
 	connection: {
 		username: 'pseudonym',
 		lastName: 'last name',
@@ -65,6 +67,14 @@ export default {
 				btn: 'redirect to account connection'
 			}
 		}
+	},
+	checkPassword: {
+		ko: 'password does not meet minimum requirements',
+		size: 'password length',
+		lower: 'lowercase',
+		upper: 'uppercase',
+		number: 'number',
+		special: 'special character'
 	},
 	delete: {
 		title: 'delete my account',

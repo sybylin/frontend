@@ -3,6 +3,23 @@
 		v-if="!fullUser || !Object.keys(fullUser).length"
 		color="primary" size="6em"
 	/>
+	<q-banner
+		v-if="isModified"
+		inline-actions :class="{
+			'text-white': true,
+			'bg-green': true,
+			'partial': $q.screen.gt.sm,
+			'full': !$q.screen.gt.sm
+		}"
+	>
+		<span>{{ $capitalize($t('user.accountUpdate')) }}</span>
+		<template v-slot:action>
+			<q-btn
+				flat round icon="close"
+				@click="isModified = false"
+			/>
+		</template>
+	</q-banner>
 	<q-form
 		class="q-gutter-md"
 		@submit="onSubmit"
@@ -12,9 +29,12 @@
 			<q-input
 				v-model="name"
 				bottom-slots
+				:maxlength="255"
 				:label="$capitalize($t('user.connection.username'))"
 				:class="size"
 				:debounce="500"
+				:error="incorrectName !== false"
+				:error-message="nameErrorMessage"
 				:rules="[val => !!val || $capitalize($t('user.connection.incorrect', { key: $t('user.connection.username') }))]"
 			>
 				<template v-slot:before>
@@ -85,7 +105,7 @@
 				:class="size"
 				:label="$capitalize($t('user.connection.newPassword'))"
 				:error="incorrectNewPassword"
-				:error-message="$capitalize($t('user.connection.mandatory', { key: $t('user.connection.newPassword') }))"
+				:error-message="passwordErrorMessage"
 				:type="toggleRepeatNewPassword ? 'password' : 'text'"
 				:disable="apiCall"
 			>
@@ -101,6 +121,11 @@
 					/>
 				</template>
 			</q-input>
+			<components-pages-user-check-password
+				v-model="notFormatedPassword"
+				:password="newPassword"
+				:class="size"
+			/>
 		</div>
 		<div :class="size">
 			<q-btn
@@ -119,9 +144,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, onMounted, PropType } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
 import { api, xsrfName } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
 import tokenValidation from './tokenValidation.vue';
+import componentsPagesUserCheckPassword from 'components/pages/user/checkPassword.vue';
 import type { user } from 'src/types';
 
 interface FullUser {
@@ -137,7 +165,8 @@ interface FullUser {
 export default defineComponent({
 	name: 'ComponentsPagesUserEdit',
 	components: {
-		tokenValidation
+		tokenValidation,
+		componentsPagesUserCheckPassword
 	},
 	props: {
 		user: {
@@ -151,10 +180,13 @@ export default defineComponent({
 	},
 	setup (_props, { emit }) {
 		const $q = useQuasar();
+		const { t } = useI18n();
+
+		const isModified = ref<boolean>(false);
 		const apiCall = ref<boolean>(false);
 		const fullUser = ref<FullUser | null>(null);
 		const name = ref<string | null>(null);
-		const incorrectName = ref<boolean>(false);
+		const incorrectName = ref<boolean | 'forbidden'>(false);
 		const email = ref<string | null>(null);
 		const incorrectEmail = ref<boolean>(false);
 		const emailIsChanged = ref<boolean>(false);
@@ -173,8 +205,23 @@ export default defineComponent({
 		const incorrectNewPassword = ref<boolean>(false);
 		const toggleNewPassword = ref<boolean>(true);
 		const toggleRepeatNewPassword = ref<boolean>(true);
+		const notFormatedPassword = ref<boolean | null>(null);
+
+		const nameErrorMessage = computed(() => {
+			if (incorrectName.value === 'forbidden')
+				return capitalize(t('user.forbiddenUsername'));
+			return capitalize(t('user.connection.alreadyTaken', { key: t('user.connection.username') }));
+		});
+
+		const passwordError = computed(() => (notFormatedPassword.value === false || incorrectNewPassword.value === true));
+		const passwordErrorMessage = computed(() => {
+			if (notFormatedPassword.value === false)
+				return capitalize(t('user.checkPassword.ko'));
+			return capitalize(t('user.connection.mandatory', { key: t('user.connection.passwords') }));
+		});
 
 		const onSubmit = () => {
+			isModified.value = false;
 			incorrectName.value = false;
 			incorrectEmail.value = false;
 			incorrectOldPassword.value = false;
@@ -223,8 +270,11 @@ export default defineComponent({
 						email: (d.data.user as FullUser).email,
 						verify: (d.data.user as FullUser).verify
 					});
+					isModified.value = true;
 				})
 				.catch((e) => {
+					if (e.response.data.info.code === 'US_031')
+						incorrectName.value = 'forbidden';
 					if (e.response.data.info.code === 'US_002')
 						incorrectOldPassword.value = 'incorrect';
 					else if (e.response.data.info.code === 'US_005')
@@ -274,6 +324,7 @@ export default defineComponent({
 		});
 
 		return {
+			isModified,
 			apiCall,
 			fullUser,
 			name,
@@ -290,6 +341,11 @@ export default defineComponent({
 			incorrectNewPassword,
 			toggleNewPassword,
 			toggleRepeatNewPassword,
+			notFormatedPassword,
+
+			nameErrorMessage,
+			passwordError,
+			passwordErrorMessage,
 			onSubmit,
 			onReset,
 			emailIsVerified

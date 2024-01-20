@@ -21,6 +21,8 @@ export default {
 	verify: 'ce compte est vérifié',
 	unverify: 'ce compte n\'est pas vérifié',
 	update: 'mettre à jour',
+	accountUpdate: 'votre compte a été modifié avec succès',
+	forbiddenUsername: 'ce nom d\'utilisateur ne peut pas être utilisé',
 	connection: {
 		username: 'pseudonyme',
 		lastName: 'nom de famille',
@@ -65,6 +67,14 @@ export default {
 				btn: 'redirection vers la connexion au compte'
 			}
 		}
+	},
+	checkPassword: {
+		ko: 'le mot de passe ne répond pas aux exigences minimales',
+		size: 'longueur du mot de passe',
+		lower: 'lowercase',
+		upper: 'uppercase',
+		number: 'number',
+		special: 'special character'
 	},
 	delete: {
 		title: 'supprimer mon compte',

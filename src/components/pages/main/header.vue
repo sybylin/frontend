@@ -52,10 +52,14 @@
 					'items-center': true,
 					'justify-center': true,
 					'q-pr-xl': true,
-					'q-pl-md': true
+					'q-pl-md': true,
 				}"
 			>
-				<q-img src="/imgs/screen_size.png" class="header-image" :ration="1" />
+				<div class="header-image">
+					<q-img class="desktop" src="/imgs/main/desktop.jpg" />
+					<q-img class="tablet" src="/imgs/main/tablet.jpg" />
+					<q-img class="mobile" src="/imgs/main/mobile.jpg" />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -86,12 +90,12 @@ export default defineComponent({
 <style scoped>
 .header {
 	z-index: 1;
-	height: calc(100vh - 5em);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	position: relative;
 	color: #fff;
+	height: calc(100vh - 5em);
 	background: rgb(106,27,154);
 	background: linear-gradient(90deg, rgb(65, 16, 96) 0%, rgb(42, 25, 74) 51%, rgb(36, 25, 68) 100%);
 }
@@ -114,6 +118,30 @@ export default defineComponent({
 	margin-right: -.5em;
 }
 .header-image {
-	max-width: 40vw;
+	position: relative;
+	min-height: 40vh;
+  min-width: 40vw;
+  max-height: 40vh;
+  max-width: 40vw;
+  left: .8em;
+}
+.desktop {
+	position: absolute;
+	transform: skewY(15deg);
+	width: 90%;
+	left: .8em;
+	box-shadow: rgba(123, 31, 162, 0.4) 5px -5px, rgba(123, 31, 162, 0.3) 10px -10px, rgba(123, 31, 162, 0.2) 15px -15px, rgba(123, 31, 162, 0.1) 20px -20px, rgba(123, 31, 162, 0.05) 25px -25px;
+}
+.tablet {
+	position: absolute;
+	transform: skewY(15deg);
+	width: 55%;
+	left: 0;
+}
+.mobile {
+	position: absolute;
+	transform: skewY(15deg);
+	width: 20%;
+	left: -.8em;
 }
 </style>

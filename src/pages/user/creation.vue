@@ -32,12 +32,10 @@
 						<q-input
 							v-model="name"
 							bottom-slots
+							:maxlength="255"
 							:label="$capitalize($t('user.connection.username'))"
-							:error="incorrectName === true || incorrectName === 'alreadyTaken'"
-							:error-message="(incorrectName === 'alreadyTaken'
-								? $capitalize($t('user.connection.alreadyTaken', { key: $t('user.connection.username') }))
-								: $capitalize($t('user.connection.incorrect', { key: $t('user.connection.username') }))
-							)"
+							:error="incorrectName !== false"
+							:error-message="nameError"
 							:disable="apiCall"
 						/>
 						<q-input
@@ -55,12 +53,10 @@
 						<q-input
 							v-model="password"
 							bottom-slots
+							:maxlength="255"
 							:label="$capitalize($t('user.connection.password'))"
-							:error="incorrectPassword === true || incorrectPassword === 'notTheSame'"
-							:error-message="(incorrectPassword === 'notTheSame')
-								? $capitalize($t('user.connection.different', { key: $t('user.connection.passwords') }))
-								: $capitalize($t('user.connection.mandatory', { key: $t('user.connection.passwords') }))
-							"
+							:error="passwordError"
+							:error-message="passwordErrorMessage"
 							:type="togglePassword ? 'password' : 'text'"
 							:disable="apiCall"
 						>
@@ -73,9 +69,14 @@
 								/>
 							</template>
 						</q-input>
+						<components-pages-user-check-password
+							v-model="notFormatedPassword"
+							:password="password"
+						/>
 						<q-input
 							v-model="repeatPassword"
 							bottom-slots
+							:maxlength="255"
 							:label="$capitalize($t('user.connection.repeatPassword'))"
 							:error="incorrectRepeatPassword === true || incorrectRepeatPassword === 'notTheSame'"
 							:error-message="(incorrectRepeatPassword === 'notTheSame')
@@ -154,13 +155,16 @@ import { useMeta } from 'quasar';
 import meta from 'src/meta';
 import isEmail from 'validator/lib/isEmail';
 import { api } from 'src/boot/axios';
+import { capitalize } from 'src/boot/custom';
 
 import ComponentsPagesUserTokenValidation from 'components/pages/user/tokenValidation.vue';
+import ComponentsPagesUserCheckPassword from 'components/pages/user/checkPassword.vue';
 
 export default defineComponent({
 	name: 'PageUserCreation',
 	components: {
-		ComponentsPagesUserTokenValidation
+		ComponentsPagesUserTokenValidation,
+		ComponentsPagesUserCheckPassword
 	},
 	setup () {
 		const { t } = useI18n();
@@ -175,11 +179,31 @@ export default defineComponent({
 		const toggleRepeatPassword = ref<boolean>(true);
 
 		const apiCall = ref<boolean>(false);
-		const incorrectName = ref<boolean | 'alreadyTaken'>(false);
+		const incorrectName = ref<boolean | 'alreadyTaken' | 'forbidden'>(false);
 		const incorrectEmail = ref<boolean | 'alreadyTaken'>(false);
 		const incorrectPassword = ref<boolean | 'notTheSame'>(false);
+		const notFormatedPassword = ref<boolean | null>(null);
 		const incorrectRepeatPassword = ref<boolean | 'notTheSame'>(false);
 		const incorrectPost = ref<any | null>(null);
+
+		const nameError = computed(() => {
+			if (incorrectName.value === 'alreadyTaken')
+				return capitalize(t('user.connection.alreadyTaken', { key: t('user.connection.username') }));
+			return capitalize(t('user.forbiddenUsername'));
+		});
+
+		const passwordError = computed(() => (notFormatedPassword.value === false || incorrectPassword.value === true || incorrectPassword.value === 'notTheSame'));
+		const passwordErrorMessage = computed(() => {
+			if (notFormatedPassword.value === false)
+				return capitalize(t('user.checkPassword.ko'));
+			switch (incorrectPassword.value) {
+			case true:
+				return capitalize(t('user.connection.different', { key: t('user.connection.passwords') }));
+			case 'notTheSame':
+			default:
+				return capitalize(t('user.connection.mandatory', { key: t('user.connection.passwords') }));
+			}
+		});
 
 		const activateSubmitButton = computed(() =>
 			name.value && email.value && password.value && repeatPassword.value
@@ -192,6 +216,7 @@ export default defineComponent({
 				incorrectEmail.value = false;
 				incorrectPassword.value = false;
 				incorrectRepeatPassword.value = false;
+				notFormatedPassword.value = false;
 
 				if (!isEmail(email.value)) {
 					isError = true;
@@ -218,10 +243,10 @@ export default defineComponent({
 						step.value = 2;
 					})
 					.catch((e) => {
-						if (e.response.data.info.code === 'US_007')
+						if (e.response.data.info.code === 'US_007' || e.response.data.info.code === 'US_006')
 							incorrectEmail.value = 'alreadyTaken';
-						if (e.response.data.info.code === 'US_006')
-							incorrectName.value = 'alreadyTaken';
+						if (e.response.data.info.code === 'US_031')
+							incorrectName.value = 'forbidden';
 						if (e.response.data.incorrectPassword)
 							incorrectPassword.value = true;
 						if (!incorrectEmail.value && !incorrectName.value && !incorrectPassword.value)
@@ -243,6 +268,7 @@ export default defineComponent({
 			email.value = null;
 			password.value = null;
 			repeatPassword.value = null;
+			notFormatedPassword.value = false;
 		};
 
 		useMeta(() => {
@@ -283,8 +309,13 @@ export default defineComponent({
 			incorrectName,
 			incorrectEmail,
 			incorrectPassword,
+			notFormatedPassword,
 			incorrectRepeatPassword,
 			incorrectPost,
+			nameError,
+
+			passwordError,
+			passwordErrorMessage,
 
 			activateSubmitButton,
 			onSubmit,
