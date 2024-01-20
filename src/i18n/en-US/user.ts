@@ -23,6 +23,7 @@ export default {
 	update: 'update',
 	accountUpdate: 'your account has been successfully modified',
 	forbiddenUsername: 'this username cannot be used',
+	invalidToken: 'the reset link is incorrect',
 	connection: {
 		username: 'pseudonym',
 		lastName: 'last name',
@@ -48,7 +49,7 @@ export default {
 		reset: {
 			newPassword: 'enter your new password',
 			start: 'to reset your password, enter the e-mail address linked to your account',
-			startBanner: 'you will received an e-mail containing the link to reset your password',
+			startBanner: 'if an account is linked to this address, you will received an e-mail containing the link to reset your password',
 			banner: 'your password has been successfully modified'
 		},
 		step: {

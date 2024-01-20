@@ -48,7 +48,7 @@ export default {
 		reset: {
 			newPassword: 'entrez votre nouveau mot de passe',
 			start: 'pour réinitialiser votre mot de passe, entrez l\'adresse e-mail liée à votre compte',
-			startBanner: 'vous recevrez un e-mail contenant le lien pour réinitialiser votre mot de passe',
+			startBanner: 'si un compte est lié à cette adresse, vous recevrez un e-mail contenant le lien pour réinitialiser votre mot de passe',
 			banner: 'votre mot de passe a été modifié avec succès'
 		},
 		step: {

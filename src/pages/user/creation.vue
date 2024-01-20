@@ -181,7 +181,7 @@ export default defineComponent({
 		const apiCall = ref<boolean>(false);
 		const incorrectName = ref<boolean | 'alreadyTaken' | 'forbidden'>(false);
 		const incorrectEmail = ref<boolean | 'alreadyTaken'>(false);
-		const incorrectPassword = ref<boolean | 'notTheSame'>(false);
+		const incorrectPassword = ref<boolean | 'notTheSame' | 'malformed'>(false);
 		const notFormatedPassword = ref<boolean | null>(null);
 		const incorrectRepeatPassword = ref<boolean | 'notTheSame'>(false);
 		const incorrectPost = ref<any | null>(null);
@@ -192,13 +192,15 @@ export default defineComponent({
 			return capitalize(t('user.forbiddenUsername'));
 		});
 
-		const passwordError = computed(() => (notFormatedPassword.value === false || incorrectPassword.value === true || incorrectPassword.value === 'notTheSame'));
+		const passwordError = computed(() => (notFormatedPassword.value === false || incorrectPassword.value !== false));
 		const passwordErrorMessage = computed(() => {
 			if (notFormatedPassword.value === false)
 				return capitalize(t('user.checkPassword.ko'));
 			switch (incorrectPassword.value) {
 			case true:
 				return capitalize(t('user.connection.different', { key: t('user.connection.passwords') }));
+			case 'malformed':
+				return capitalize(t('user.checkPassword.ko'));
 			case 'notTheSame':
 			default:
 				return capitalize(t('user.connection.mandatory', { key: t('user.connection.passwords') }));
@@ -216,7 +218,6 @@ export default defineComponent({
 				incorrectEmail.value = false;
 				incorrectPassword.value = false;
 				incorrectRepeatPassword.value = false;
-				notFormatedPassword.value = false;
 
 				if (!isEmail(email.value)) {
 					isError = true;
@@ -247,6 +248,8 @@ export default defineComponent({
 							incorrectEmail.value = 'alreadyTaken';
 						if (e.response.data.info.code === 'US_031')
 							incorrectName.value = 'forbidden';
+						if (e.response.data.info.code === 'US_012')
+							incorrectPassword.value = 'malformed';
 						if (e.response.data.incorrectPassword)
 							incorrectPassword.value = true;
 						if (!incorrectEmail.value && !incorrectName.value && !incorrectPassword.value)
