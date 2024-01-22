@@ -319,7 +319,7 @@ export default defineComponent({
 					avatar.value = d.data.user.avatar;
 				})
 				.catch((e) => {
-					console.error(e);
+					$q.notify({ type: 'error', message: e.response.data.info.message });
 				});
 		});
 

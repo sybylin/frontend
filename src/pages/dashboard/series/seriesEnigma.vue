@@ -194,7 +194,6 @@ export default defineComponent({
 					}
 				})
 				.catch((e) => {
-					console.log(e);
 					if (typeof e === 'string' && (e as string).includes('Brotli'))
 						error.value = 'brotliError';
 					else

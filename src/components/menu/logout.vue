@@ -15,6 +15,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import { api, xsrfName } from 'src/boot/axios';
 import { generatePath } from 'src/boot/route';
 import { globalStore } from 'src/stores/global';
@@ -29,6 +30,7 @@ export default defineComponent({
 		}
 	},
 	setup () {
+		const $q = useQuasar();
 		const store = globalStore();
 		const router = useRouter();
 
@@ -42,7 +44,7 @@ export default defineComponent({
 						store.setRole('user');
 						await router.push(generatePath({ name: 'home' }, store.lang));
 					} catch {
-						// console.error('router push to home failed');
+						$q.notify({ type: 'error', message: 'router push to home failed' });
 					}
 				})
 				.catch(() => {
