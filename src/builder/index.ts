@@ -89,10 +89,12 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 				'save-template': {
 					run: (editor: Editor, sender: any) => {
 						sender && sender.set('active');
+						/*
 						console.log({
 							components: editor.getComponents(),
 							style: editor.getStyle()
 						});
+						*/
 					}
 				}
 			}
