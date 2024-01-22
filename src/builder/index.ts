@@ -1,7 +1,7 @@
 import GrapesJs, { Editor, ProjectData } from 'grapesjs';
 import { useI18n } from 'vue-i18n';
-import enUS from 'grapesjs/locale/en';
-import frFR from 'grapesjs/locale/fr';
+import enUS from './lang/en';
+import frFR from './lang/fr';
 import plugin from './plugin';
 import { api, baseURL } from 'src/boot/axios';
 import { Notify } from 'quasar';
