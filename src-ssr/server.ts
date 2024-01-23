@@ -1,4 +1,6 @@
 /* eslint-disable quotes */
+/* eslint-disable no-console */
+
 import { extname } from 'path/posix';
 import express from 'express';
 import compression from 'compression';
@@ -14,7 +16,7 @@ export const create = ssrCreate(() => {
 	app.disable('x-powered-by');
 	app.use(express.urlencoded({ extended: true }));
 	app.use(express.json());
-	if (process.env.PROD) {
+	if (process.env.NODE_ENV === 'production') {
 		app.use(helmet({
 			contentSecurityPolicy: {
 				directives: {
@@ -60,9 +62,10 @@ export const create = ssrCreate(() => {
 });
 
 export const listen = ssrListen(async ({ app, port, isReady }) => {
+	console.log(process.env);
 	await isReady();
 	return app.listen(port, () => {
-		process.stdout.write(`Server listening at port ${port}`);
+		console.log(`Server listening at port ${port}`);
 	});
 });
 
