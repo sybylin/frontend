@@ -28,6 +28,7 @@ export const create = ssrCreate(() => {
 					'img-src': ["'self'", "data:"],
 					'object-src': ["'none'"],
 					'script-src': [
+						"'wasm-unsafe-eval'",
 						"'self'",
 						"'sha256-xi5rgniNOoeyNrwc4nNnT5M9VH6vshWY6h6UiqrJbWg='",
 						"'sha256-tcSA7Xuj7IZe9u84SsbRFykuMwYO8lVoPenRPBbLQMk='",
@@ -62,8 +63,6 @@ export const create = ssrCreate(() => {
 });
 
 export const listen = ssrListen(async ({ app, port, isReady }) => {
-	console.log('hello', process.env.PORT, process.env.FRONT_PORT, port);
-
 	await isReady();
 	return app.listen(port, () => {
 		console.log(`Server listening at port ${port}`);
