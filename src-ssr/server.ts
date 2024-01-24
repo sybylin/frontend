@@ -28,12 +28,9 @@ export const create = ssrCreate(() => {
 					'img-src': ["'self'", "data:"],
 					'object-src': ["'none'"],
 					'script-src': [
+						"https:",
 						"'wasm-unsafe-eval'",
-						"'self'",
-						"'sha256-xi5rgniNOoeyNrwc4nNnT5M9VH6vshWY6h6UiqrJbWg='",
-						"'sha256-tcSA7Xuj7IZe9u84SsbRFykuMwYO8lVoPenRPBbLQMk='",
-						"'unsafe-inline'",
-						"https:"
+						"'self'"
 					],
 					'script-src-attr': ["'none'"],
 					'style-src': ["'self'", "https:", "'unsafe-inline'"],
