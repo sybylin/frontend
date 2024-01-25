@@ -3,13 +3,21 @@
 		square flat color="white"
 		label="Options" icon="settings"
 	>
-		<q-popup-proxy style="box-shadow: none" :offset="[-10, 10]">
+		<q-popup-proxy class="popup" :offset="[-10, 10]">
 			<q-card square flat class="card">
 				<lang />
 				<div class="row no-wrap justify-between items-center">
-					<span>{{ $t('menu.dark') }}</span>
-					<dark-mode />
+					<span>{{ $capitalize($t('menu.dark')) }}</span>
+					<dark-mode class="q-pt-xs" />
 				</div>
+				<q-btn
+					class="full-width"
+					outline
+					:color="($q.dark.isActive) ? 'white' : 'grey-10'"
+					:label="$t('main.gdpr')"
+					icon="cookie"
+					@click="gdpr"
+				/>
 			</q-card>
 		</q-popup-proxy>
 	</q-btn>
@@ -25,6 +33,18 @@ export default defineComponent({
 	components: {
 		darkMode,
 		lang
+	},
+	setup () {
+		return {
+			gdpr: () => {
+				document.dispatchEvent(
+					new CustomEvent('gdpr', {
+						bubbles: true,
+						cancelable: false
+					})
+				);
+			}
+		};
 	}
 });
 </script>

@@ -6,6 +6,7 @@ export default {
 	},
 	resume: 'Recommencer',
 	start: 'Commencer',
+	gdpr: 'Rgpd',
 	body: {
 		1: {
 			title: 'Résolvez des énigmes',

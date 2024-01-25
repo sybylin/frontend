@@ -19,7 +19,6 @@ module.exports = configure((/* ctx */) => {
 			'axios',
 			'brotli',
 			'custom',
-			'gdrp',
 			'hydratation',
 			'i18n',
 			'route',
@@ -42,6 +41,9 @@ module.exports = configure((/* ctx */) => {
 		// Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
 		build: {
 			extendViteConf: (config) => {
+				config.optimizeDeps.include = (!config.optimizeDeps.include)
+					? ['vanilla-cookieconsent']
+					: config.optimizeDeps.include.push(['vanilla-cookieconsent']);
 				config.optimizeDeps.exclude = (!config.optimizeDeps.exclude)
 					? [
 						'brotli-wasm',

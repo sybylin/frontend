@@ -7,8 +7,8 @@ import { useQuasar } from 'quasar';
 import { defineComponent, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import 'material-symbols/outlined.css';
 import localeOptions from 'src/i18n/options';
+import 'material-symbols/outlined.css';
 
 export default defineComponent({
 	name: 'AppVue',

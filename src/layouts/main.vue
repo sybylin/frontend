@@ -20,6 +20,9 @@
 		</q-page-container>
 		<footer-layout />
 	</q-layout>
+	<q-no-ssr>
+		<gdpr />
+	</q-no-ssr>
 </template>
 
 <script lang="ts">
@@ -27,15 +30,17 @@ import { computed, defineComponent, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
-import HeaderLayout from '../components/layouts/header.vue';
-import FooterLayout from '../components/layouts/footer.vue';
+import HeaderLayout from 'src/components/layouts/header.vue';
+import FooterLayout from 'src/components/layouts/footer.vue';
+import Gdpr from 'src/components/gdpr.vue';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 export default defineComponent({
 	name: 'MainLayouts',
 	components: {
 		HeaderLayout,
-		FooterLayout
+		FooterLayout,
+		Gdpr
 	},
 	setup () {
 		const route = useRoute();

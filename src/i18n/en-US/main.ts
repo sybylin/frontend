@@ -6,6 +6,7 @@ export default {
 	},
 	resume: 'Restart',
 	start: 'Start',
+	gdpr: 'Gdpr',
 	body: {
 		1: {
 			title: 'Solve enigmas',
