@@ -30,7 +30,8 @@ export const create = ssrCreate(() => {
 					'script-src': [
 						"https:",
 						"'wasm-unsafe-eval'",
-						"'self'"
+						"'self'",
+						"'unsafe-eval'" // remove this rule with sha256 of files
 					],
 					'script-src-attr': ["'none'"],
 					'style-src': ["'self'", "https:", "'unsafe-inline'"],

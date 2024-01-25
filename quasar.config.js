@@ -19,6 +19,7 @@ module.exports = configure((/* ctx */) => {
 			'axios',
 			'brotli',
 			'custom',
+			'gdrp',
 			'hydratation',
 			'i18n',
 			'route',
