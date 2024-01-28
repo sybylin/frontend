@@ -22,6 +22,7 @@
 	</q-layout>
 	<q-no-ssr>
 		<gdpr />
+		<captcha debug />
 	</q-no-ssr>
 </template>
 
@@ -33,6 +34,7 @@ import { useQuasar } from 'quasar';
 import HeaderLayout from 'src/components/layouts/header.vue';
 import FooterLayout from 'src/components/layouts/footer.vue';
 import Gdpr from 'src/components/gdpr.vue';
+import Captcha from 'src/components/captcha.vue';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 export default defineComponent({
@@ -40,7 +42,8 @@ export default defineComponent({
 	components: {
 		HeaderLayout,
 		FooterLayout,
-		Gdpr
+		Gdpr,
+		Captcha
 	},
 	setup () {
 		const route = useRoute();

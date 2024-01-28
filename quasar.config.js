@@ -54,6 +54,13 @@ module.exports = configure((/* ctx */) => {
 						'brotli-wasm/pkg.bundler/brotli_wasm_bg.wasm'
 					]);
 			},
+			viteVuePluginOptions: {
+				template: {
+					compilerOptions: {
+						isCustomElement: (tag) => ['altcha-widget'].includes(tag)
+					}
+				}
+			},
 			polyfillModulePreload: true,
 			target: {
 				browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],

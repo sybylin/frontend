@@ -19,6 +19,7 @@
   "dependencies": {
     "@quasar/extras": "^1.16.6",
     "@quasar/icongenie": "^3.1.1",
+    "altcha": "^0.1.5",
     "axios": "^1.5.0",
     "brotli-wasm": "^2.0.1",
     "grapesjs": "0.21.6",
