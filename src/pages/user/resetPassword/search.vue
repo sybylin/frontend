@@ -20,11 +20,17 @@
 			:error-message="isErrorMessage"
 			:disable="apiCall"
 		/>
+		<div class="row justify-center">
+			<captcha
+				v-model="captcha"
+				:error="captchaError"
+			/>
+		</div>
 		<div class="row justify-end">
 			<q-btn
 				:label="$capitalize($t('user.connection.step.1.submit'))" type="submit"
 				color="primary" size="md"
-				:disable="!email || !isEmail(email)"
+				:disable="!email || !isEmail(email) || !captcha"
 				:loading="apiCall"
 			/>
 			<q-btn
@@ -50,15 +56,22 @@ import { useI18n } from 'vue-i18n';
 import isEmail from 'validator/lib/isEmail';
 import { api } from 'src/boot/axios';
 import { capitalize } from 'src/boot/custom';
+import Captcha from 'src/components/captcha.vue';
+import type { captchaError } from 'src/components/captcha.vue';
 
 export default defineComponent({
 	name: 'PagesUserResetPassowrdSearch',
+	components: {
+		Captcha
+	},
 	setup () {
 		const { t } = useI18n();
 
 		const apiCall = ref<boolean>(false);
 		const email = ref<string | null>(null);
+		const captcha = ref<string | null>(null);
 		const error = ref<null | 'incorrect' | 'notExist' | false>(null);
+		const captchaError = ref<captchaError>(null);
 		const success = ref<boolean>(false);
 
 		const isError = computed(() => error.value !== null);
@@ -73,7 +86,7 @@ export default defineComponent({
 		});
 
 		const onSubmit = () => {
-			if (!email.value)
+			if (!email.value || !captcha.value || captchaError.value === 'invalid')
 				return;
 			if (!isEmail(email.value)) {
 				error.value = 'incorrect';
@@ -82,7 +95,8 @@ export default defineComponent({
 			error.value = null;
 			apiCall.value = true;
 			api.post('/user/reset/init', {
-				email: email.value
+				email: email.value,
+				captcha: captcha.value
 			})
 				.then(() => {
 					success.value = true;
@@ -95,6 +109,9 @@ export default defineComponent({
 					case 'US_005':
 						error.value = 'incorrect';
 						break;
+					case 'CA_001':
+						captchaError.value = 'invalid';
+						break;
 					case 'US_020':
 						error.value = false;
 					}
@@ -105,14 +122,19 @@ export default defineComponent({
 		};
 
 		const onReset = () => {
+			success.value = false;
 			email.value = null;
 			error.value = null;
+			captchaError.value = 'reset';
+			captchaError.value = null;
 		};
 
 		return {
 			apiCall,
 			email,
+			captcha,
 			error,
+			captchaError,
 			success,
 
 			isError,

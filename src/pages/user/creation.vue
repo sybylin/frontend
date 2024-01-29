@@ -11,14 +11,15 @@
 					title="" icon="person_add"
 				>
 					<q-banner
-						v-if="incorrectPost || incorrectCaptcha === true"
+						v-if="incorrectPost"
 						class="text-white bg-red text-center"
 					>
-						<span v-if="!incorrectCaptcha">
-							{{ (incorrectPost.info.code === 'GE_002') ? $t('error.api.mail') : $t('error.api.db') }}
-						</span>
-						<span v-else>
-							{{ $t('error.captcha') }}
+						<span>
+							{{
+								(incorrectPost.info.code === 'GE_002')
+									? $t('error.api.mail')
+									: $t('error.api.db')
+							}}
 						</span>
 					</q-banner>
 					<div class="row justify-center">
@@ -294,6 +295,7 @@ export default defineComponent({
 			incorrectPassword.value = false;
 			incorrectRepeatPassword.value = false;
 			incorrectPost.value = null;
+			incorrectCaptcha.value = null;
 			name.value = null;
 			email.value = null;
 			password.value = null;

@@ -123,7 +123,12 @@ export default defineComponent({
 						(seriesList.value as seriesList[])?.push(...d.data.series.map(setElement));
 					done(d.data.series.length < size);
 				})
-				.catch((e) => $q.notify(e.response.data.info.message))
+				.catch((e) => {
+					if (e.response.data.info.message)
+						$q.notify(e.response.data.info.message);
+					else
+						seriesList.value = [];
+				})
 				.finally(() => {
 					apiGetSeries.value = false;
 				});
