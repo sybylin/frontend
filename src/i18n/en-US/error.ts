@@ -18,5 +18,6 @@ export default {
 	brotli: {
 		title: 'An error has occurred while decompressing data sent by the server',
 		description: 'It would be a good idea to try and contact the enigma\'s creator to let him know.'
-	}
+	},
+	captcha: 'The captcha is incorrect, please try again'
 };

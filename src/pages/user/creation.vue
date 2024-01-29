@@ -10,8 +10,16 @@
 					:name="1" :done="step > 1"
 					title="" icon="person_add"
 				>
-					<q-banner v-if="incorrectPost" class="text-white bg-red text-center">
-						<span>{{ (incorrectPost.info.code === 'GE_002') ? $t('error.api.mail') : $t('error.api.db') }}</span>
+					<q-banner
+						v-if="incorrectPost || incorrectCaptcha === true"
+						class="text-white bg-red text-center"
+					>
+						<span v-if="!incorrectCaptcha">
+							{{ (incorrectPost.info.code === 'GE_002') ? $t('error.api.mail') : $t('error.api.db') }}
+						</span>
+						<span v-else>
+							{{ $t('error.captcha') }}
+						</span>
 					</q-banner>
 					<div class="row justify-center">
 						<span class="text-h5">{{ $capitalize($t('user.connection.step.1.title')) }}</span>
@@ -95,6 +103,12 @@
 								/>
 							</template>
 						</q-input>
+						<div class="row justify-center full-width">
+							<captcha
+								v-model="captcha"
+								:error="incorrectCaptcha"
+							/>
+						</div>
 						<div class="row justify-end">
 							<q-btn
 								:label="$capitalize($t('user.connection.step.1.submit'))" type="submit"
@@ -159,12 +173,14 @@ import { capitalize } from 'src/boot/custom';
 
 import ComponentsPagesUserTokenValidation from 'components/pages/user/tokenValidation.vue';
 import ComponentsPagesUserCheckPassword from 'components/pages/user/checkPassword.vue';
+import Captcha from 'src/components/captcha.vue';
 
 export default defineComponent({
 	name: 'PageUserCreation',
 	components: {
 		ComponentsPagesUserTokenValidation,
-		ComponentsPagesUserCheckPassword
+		ComponentsPagesUserCheckPassword,
+		Captcha
 	},
 	setup () {
 		const { t } = useI18n();
@@ -177,6 +193,7 @@ export default defineComponent({
 		const repeatPassword = ref<string | null>(null);
 		const togglePassword = ref<boolean>(true);
 		const toggleRepeatPassword = ref<boolean>(true);
+		const captcha = ref<string | null>(null);
 
 		const apiCall = ref<boolean>(false);
 		const incorrectName = ref<boolean | 'alreadyTaken' | 'forbidden'>(false);
@@ -185,6 +202,7 @@ export default defineComponent({
 		const notFormatedPassword = ref<boolean | null>(null);
 		const incorrectRepeatPassword = ref<boolean | 'notTheSame'>(false);
 		const incorrectPost = ref<any | null>(null);
+		const incorrectCaptcha = ref<boolean | null>(null);
 
 		const nameError = computed(() => {
 			if (incorrectName.value === 'alreadyTaken')
@@ -208,7 +226,7 @@ export default defineComponent({
 		});
 
 		const activateSubmitButton = computed(() =>
-			name.value && email.value && password.value && repeatPassword.value
+			name.value && email.value && password.value && repeatPassword.value && captcha.value
 		);
 
 		const onSubmit = () => {
@@ -218,6 +236,7 @@ export default defineComponent({
 				incorrectEmail.value = false;
 				incorrectPassword.value = false;
 				incorrectRepeatPassword.value = false;
+				incorrectCaptcha.value = null;
 
 				if (!isEmail(email.value)) {
 					isError = true;
@@ -238,7 +257,8 @@ export default defineComponent({
 				api.post('/user/create', {
 					name: name.value,
 					password: password.value,
-					email: email.value
+					email: email.value,
+					captcha: captcha.value
 				})
 					.then(() => {
 						step.value = 2;
@@ -250,9 +270,16 @@ export default defineComponent({
 							incorrectName.value = 'forbidden';
 						if (e.response.data.info.code === 'US_012')
 							incorrectPassword.value = 'malformed';
+						if (e.response.data.info.code === 'CA_001')
+							incorrectCaptcha.value = true;
 						if (e.response.data.incorrectPassword)
 							incorrectPassword.value = true;
-						if (!incorrectEmail.value && !incorrectName.value && !incorrectPassword.value)
+						if (
+							!incorrectCaptcha.value &&
+							!incorrectEmail.value &&
+							!incorrectName.value &&
+							!incorrectPassword.value
+						)
 							incorrectPost.value = e.response.data;
 					})
 					.finally(() => {
@@ -307,6 +334,7 @@ export default defineComponent({
 			repeatPassword,
 			togglePassword,
 			toggleRepeatPassword,
+			captcha,
 
 			apiCall,
 			incorrectName,
@@ -316,6 +344,7 @@ export default defineComponent({
 			incorrectRepeatPassword,
 			incorrectPost,
 			nameError,
+			incorrectCaptcha,
 
 			passwordError,
 			passwordErrorMessage,
