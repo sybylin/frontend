@@ -124,7 +124,7 @@ export default defineComponent({
 					done(d.data.series.length < size);
 				})
 				.catch((e) => {
-					if (e.response.data.info.message)
+					if (e.response)
 						$q.notify(e.response.data.info.message);
 					else
 						seriesList.value = [];
