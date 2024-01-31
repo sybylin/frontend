@@ -19,5 +19,11 @@ export default {
 		title: 'Une erreur s\'est produite lors de la décompression des données envoyées par le serveur',
 		description: 'Il serait bon d\'essayer de contacter le créateur de l\'énigme pour le mettre au courant'
 	},
-	captcha: 'Le captcha est incorrect, veuillez réessayer'
+	captcha: 'Le captcha est incorrect, veuillez réessayer',
+	report: {
+		title: 'Rapport',
+		description: 'Avez-vous trouvé un bug ? Vous pensez que l\'interface est mal conçue ? Avez-vous une idée pour améliorer le site ?',
+		type: 'Type du rapport',
+		message: 'Message'
+	}
 };

@@ -54,6 +54,7 @@ export default defineComponent({
 		const tabs: { name: string, icon: string, to: string, admin?: boolean, root?: boolean }[] = [
 			{ name: 'main', icon: 'home', to: 'dashboard', root: true },
 			{ name: 'users', icon: 'group', to: 'dashboardUsers', admin: true },
+			{ name: 'report', icon: 'bug_report', to: 'dashboardReport', admin: true },
 			{ name: 'series', icon: 'list_alt', to: 'dashboardSeries' }
 		];
 

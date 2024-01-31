@@ -33,8 +33,11 @@
 						<router-link :to="$generatePath({ name: 'series' })">
 							<span>{{ $t('menu.series') }}</span>
 						</router-link>
-						<router-link :to="$generatePath({ name: 'user' })">
+						<router-link :to="(storeInstance.isConnected) ? $generatePath({ name: 'user' }) : $generatePath({ name: 'login' })">
 							<span>{{ $capitalize($t('user.account')) }}</span>
+						</router-link>
+						<router-link :to="$generatePath({ name: 'report' })">
+							<span>{{ $capitalize($t('error.report.title')) }}</span>
 						</router-link>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
 import { hasAchievement } from './custom';
+import { globalStore } from 'src/stores/global';
 
 export type serverAchievement = { name: string, timestamp: Date };
 export const xsrfName = 'x-xsrf-token';
@@ -23,9 +24,19 @@ export const api = axios.create({
  */
 api.interceptors.request.use(
 	(c) => {
+		const { lang } = globalStore();
 		const xsrfHeader = (typeof localStorage !== 'undefined')
 			? localStorage.getItem(xsrfName) ?? undefined
 			: undefined;
+		if (c.method) {
+			if (c.method.localeCompare('get') === 0) {
+				if (!c.params)
+					c.params = { lang };
+				else
+					c.params.lang = lang;
+			} else
+				c.data.lang = lang;
+		}
 		if (xsrfHeader !== undefined)
 			c.headers.set(xsrfName, JSON.parse(xsrfHeader));
 		return c;

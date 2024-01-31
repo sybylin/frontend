@@ -19,5 +19,11 @@ export default {
 		title: 'An error has occurred while decompressing data sent by the server',
 		description: 'It would be a good idea to try and contact the enigma\'s creator to let him know.'
 	},
-	captcha: 'The captcha is incorrect, please try again'
+	captcha: 'The captcha is incorrect, please try again',
+	report: {
+		title: 'Report',
+		description: 'Have you found a bug ? Do you think the interface is poorly designed ? Do you have an idea for improving the site ?',
+		type: 'Type of report',
+		message: 'Message'
+	}
 };

@@ -50,5 +50,29 @@ export default {
 		seriesCreator: 'créateur de la série',
 		solutionType: 'type de la solution',
 		rejectionReason: 'motif du rejet'
+	},
+	report: {
+		title: 'rapport',
+		desc: 'lire les rapports envoyer',
+		table: {
+			id: 'id',
+			tags: 'étiquettes',
+			date: 'date de création',
+			message: 'message',
+			status: 'status'
+		},
+		type: {
+			title: 'type',
+			bug: 'bug',
+			improvement: 'amélioration',
+			ui: 'ui'
+		},
+		status: {
+			title: 'status',
+			open: 'ouvert',
+			progress: 'en progression',
+			complete: 'complété',
+			refused: 'refusé'
+		}
 	}
 };

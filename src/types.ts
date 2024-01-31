@@ -3,6 +3,19 @@ export type Published = 'UNPUBLISHED' | 'PENDING' | 'PUBLISHED';
 export type Finished = 'START' | 'RESUME' | 'UNAUTHORIZED';
 export type Solution = 'STRING' | 'ARRAY' | 'OBJECT';
 
+export enum ReportType {
+	BUG = 'BUG',
+	IMPROVEMENT = 'IMPROVEMENT',
+	UI = 'UI'
+}
+
+export enum ReportStatus {
+	OPEN = 'OPEN',
+	PROGRESS = 'PROGRESS',
+	COMPLETE = 'COMPLETE',
+	REFUSED = 'REFUSED'
+}
+
 export interface user {
 	id: number;
   name: string;

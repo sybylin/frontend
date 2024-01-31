@@ -50,5 +50,29 @@ export default {
 		seriesCreator: 'series creator',
 		solutionType: 'solution type',
 		rejectionReason: 'rejection reason'
+	},
+	report: {
+		title: 'report',
+		desc: 'read send report',
+		table: {
+			id: 'id',
+			tags: 'tags',
+			date: 'creation date',
+			message: 'message',
+			status: 'status'
+		},
+		type: {
+			title: 'type',
+			bug: 'bug',
+			improvement: 'improvement',
+			ui: 'ui'
+		},
+		status: {
+			title: 'status',
+			open: 'open',
+			progress: 'progress',
+			complete: 'complete',
+			refused: 'refused'
+		}
 	}
 };

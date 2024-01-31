@@ -16,6 +16,11 @@ const routes: RouteRecordRaw[] = [
 				component: () => import('pages/unauthorized.vue')
 			},
 			{
+				path: 'report',
+				name: 'report',
+				component: () => import('pages/report.vue')
+			},
+			{
 				path: 'dashboard',
 				name: 'dashboardMain',
 				meta: { requiresAuth: true, level: 'moderator' },
@@ -31,6 +36,12 @@ const routes: RouteRecordRaw[] = [
 						name: 'dashboardUsers',
 						meta: { requiresAuth: true, level: 'administrator' },
 						component: () => import('pages/dashboard/users.vue')
+					},
+					{
+						path: 'report',
+						name: 'dashboardReport',
+						meta: { requiresAuth: true, level: 'administrator' },
+						component: () => import('pages/dashboard/report.vue')
 					},
 					{
 						path: 'series',

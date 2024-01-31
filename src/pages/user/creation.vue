@@ -107,7 +107,7 @@
 						<div class="row justify-center full-width">
 							<captcha
 								v-model="captcha"
-								:error="incorrectCaptcha"
+								:error="captchaError"
 							/>
 						</div>
 						<div class="row justify-end">
@@ -175,6 +175,7 @@ import { capitalize } from 'src/boot/custom';
 import ComponentsPagesUserTokenValidation from 'components/pages/user/tokenValidation.vue';
 import ComponentsPagesUserCheckPassword from 'components/pages/user/checkPassword.vue';
 import Captcha from 'src/components/captcha.vue';
+import type { captchaError } from 'src/components/captcha.vue';
 
 export default defineComponent({
 	name: 'PageUserCreation',
@@ -203,7 +204,7 @@ export default defineComponent({
 		const notFormatedPassword = ref<boolean | null>(null);
 		const incorrectRepeatPassword = ref<boolean | 'notTheSame'>(false);
 		const incorrectPost = ref<any | null>(null);
-		const incorrectCaptcha = ref<boolean | null>(null);
+		const captchaError = ref<captchaError>(null);
 
 		const nameError = computed(() => {
 			if (incorrectName.value === 'alreadyTaken')
@@ -227,17 +228,16 @@ export default defineComponent({
 		});
 
 		const activateSubmitButton = computed(() =>
-			name.value && email.value && password.value && repeatPassword.value && captcha.value
+			name.value && email.value && password.value && repeatPassword.value && captchaError.value !== 'invalid'
 		);
 
 		const onSubmit = () => {
-			if (name.value && email.value && password.value && repeatPassword.value) {
+			if (name.value && email.value && password.value && repeatPassword.value && captchaError.value !== 'invalid') {
 				let isError = false;
 				incorrectName.value = false;
 				incorrectEmail.value = false;
 				incorrectPassword.value = false;
 				incorrectRepeatPassword.value = false;
-				incorrectCaptcha.value = null;
 
 				if (!isEmail(email.value)) {
 					isError = true;
@@ -272,11 +272,11 @@ export default defineComponent({
 						if (e.response.data.info.code === 'US_012')
 							incorrectPassword.value = 'malformed';
 						if (e.response.data.info.code === 'CA_001')
-							incorrectCaptcha.value = true;
+							captchaError.value = 'invalid';
 						if (e.response.data.incorrectPassword)
 							incorrectPassword.value = true;
 						if (
-							!incorrectCaptcha.value &&
+							!captchaError.value &&
 							!incorrectEmail.value &&
 							!incorrectName.value &&
 							!incorrectPassword.value
@@ -295,7 +295,7 @@ export default defineComponent({
 			incorrectPassword.value = false;
 			incorrectRepeatPassword.value = false;
 			incorrectPost.value = null;
-			incorrectCaptcha.value = null;
+			captchaError.value = 'reset';
 			name.value = null;
 			email.value = null;
 			password.value = null;
@@ -346,7 +346,7 @@ export default defineComponent({
 			incorrectRepeatPassword,
 			incorrectPost,
 			nameError,
-			incorrectCaptcha,
+			captchaError,
 
 			passwordError,
 			passwordErrorMessage,

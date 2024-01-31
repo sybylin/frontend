@@ -178,9 +178,12 @@ export default defineComponent({
 
 		const date = (date: Date, hours = false) => {
 			const _date = new Date(date);
+			const pad = (n: number) => (n < 10)
+				? `0${n}`
+				: n;
 			return (hours)
-				? `${_date.getUTCHours()}:${_date.getUTCMinutes()}`
-				: `${_date.getUTCDate()}/${_date.getUTCMonth() + 1}/${_date.getUTCFullYear()}`;
+				? `${pad(_date.getUTCHours())}:${pad(_date.getUTCMinutes())}`
+				: `${pad(_date.getUTCDate())}/${pad(_date.getUTCMonth() + 1)}/${_date.getUTCFullYear()}`;
 		};
 
 		/**

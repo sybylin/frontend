@@ -63,7 +63,7 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar, useMeta } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { api, baseURL } from 'src/boot/axios';
+import { api } from 'src/boot/axios';
 import { capitalize } from 'src/boot/custom';
 import list from 'src/components/pages/dashboard/users/list.vue';
 import meta from 'src/meta';
@@ -114,7 +114,6 @@ export default defineComponent({
 		});
 
 		return {
-			baseURL,
 			currentUser,
 			apiGetUsers,
 			search,

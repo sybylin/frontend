@@ -21,7 +21,7 @@ export default {
 			},
 			{
 				title: 'Cookies strictement nécessaires',
-				description: 'Ces cookies sont essentiels au bon fonctionnement de notre site web. Sans ceux-ci, le site ne fonctionnerait pas correctement',
+				description: 'Ces cookies sont essentiels au bon fonctionnement de notre site web. Sans ceux-ci, celui-ci ne fonctionnerait pas correctement',
 				linkedCategory: 'necessary'
 			},
 			{
