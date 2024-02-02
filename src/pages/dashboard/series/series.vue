@@ -14,12 +14,7 @@
 				:src="(serie.image) ? `${baseURL}${serie.image}` : '/imgs/background.jpg' "
 			>
 				<div class="absolute-top transparent row reverse">
-					<q-avatar
-						v-if="!serie.avatar"
-						color="secondary"
-						icon="person"
-					/>
-					<q-avatar v-else>
+					<q-avatar>
 						<q-img
 							loading="lazy"
 							class="border"

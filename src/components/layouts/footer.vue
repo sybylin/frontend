@@ -6,7 +6,7 @@
 					<span class="text-h3 orkney-medium">{{ $t('title') }}</span>
 					<lang is-dark />
 					<div class="q-mt-sm row no-wrap items-center">
-						<span>{{ $t('menu.dark') }}</span>
+						<span class="q-pr-sm">{{ $t('menu.dark') }}</span>
 						<dark-mode />
 					</div>
 				</div>

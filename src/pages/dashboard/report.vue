@@ -35,7 +35,7 @@
 				<span class="col-1 text-h6 text-center orkney-regular">
 					{{ report.id }}
 				</span>
-				<div class="row justify-around col-2">
+				<div class="row justify-between col-2">
 					<q-chip
 						class="fit-content"
 						:ripple="false"
@@ -141,7 +141,7 @@ export default defineComponent({
 			case ReportType.UI:
 				return 'orange-7';
 			case ReportType.IMPROVEMENT:
-				return 'deep-purpler-8';
+				return 'purple-8';
 			case ReportType.BUG:
 			default:
 				return 'red-7';

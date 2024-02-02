@@ -8,7 +8,12 @@
 			class="q-mt-sm"
 		>
 			<div class="absolute-full flex flex-center">
-				<q-badge color="white" text-color="black" :label="`${Math.round(progress * 100)} %`" />
+				<q-badge color="white" text-color="black" :label="`${Math.round(progress * 100)} %`">
+					<q-tooltip class="bg-deep-purple-7 text-body2 row items-center" anchor="bottom middle" self="top middle">
+						<span>{{ $props.points }}</span>
+						<q-icon class="q-pl-xs" name="token" />
+					</q-tooltip>
+				</q-badge>
 			</div>
 		</q-linear-progress>
 		<div class="row justify-between full-width q-pl-md q-pr-md q-pt-xs">
@@ -48,7 +53,7 @@ export default defineComponent({
 		const level = ref<number>(0);
 
 		const calc = (points: number) => {
-			const delta = 1.8;
+			const delta = 3;
 			let min = 0, max = 0;
 
 			level.value = 0;

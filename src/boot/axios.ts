@@ -20,7 +20,7 @@ export const api = axios.create({
 });
 
 /**
- * Automatically add xsrf header to request
+ * Automatically add xsrf header and lang to request
  */
 api.interceptors.request.use(
 	(c) => {
@@ -29,13 +29,22 @@ api.interceptors.request.use(
 			? localStorage.getItem(xsrfName) ?? undefined
 			: undefined;
 		if (c.method) {
-			if (c.method.localeCompare('get') === 0) {
+			if (
+				['get', 'delete'].includes(c.method.toLowerCase()) ||
+				!c.data
+			) {
 				if (!c.params)
 					c.params = { lang };
 				else
 					c.params.lang = lang;
-			} else
-				c.data.lang = lang;
+			} else {
+				if (c.data instanceof FormData)
+					(c.data as FormData).append('lang', lang);
+				else if (!Object.keys(c.data).length)
+					c.data = { lang };
+				else
+					c.data.lang = lang;
+			}
 		}
 		if (xsrfHeader !== undefined)
 			c.headers.set(xsrfName, JSON.parse(xsrfHeader));

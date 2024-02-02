@@ -1,8 +1,8 @@
 {
-  "name": "sybillin",
+  "name": "sybylin",
   "version": "1.0.0",
   "description": "A treasure hunting",
-  "productName": "Sybyllin",
+  "productName": "Sybylin",
   "author": "c-bertran <clement.bertrand22@gmail.com>",
   "private": true,
   "scripts": {

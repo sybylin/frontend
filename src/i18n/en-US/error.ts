@@ -24,6 +24,7 @@ export default {
 		title: 'Report',
 		description: 'Have you found a bug ? Do you think the interface is poorly designed ? Do you have an idea for improving the site ?',
 		type: 'Type of report',
-		message: 'Message'
+		message: 'Message',
+		success: 'The report was sent successfully, thank you'
 	}
 };

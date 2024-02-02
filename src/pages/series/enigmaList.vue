@@ -71,7 +71,7 @@
 								{{ $capitalize($t('create.main.series.createdBy')) }}
 							</span>
 							<q-img
-								:src="series.series_creator.length > 0 ? `${baseURL}${series.series_creator[0].avatar ?? ''}` : '/imgs/background.jpg'"
+								:src="series.series_creator.length > 0 && series.series_creator[0].avatar ? `${baseURL}${series.series_creator[0].avatar ?? ''}` : '/imgs/background.jpg'"
 								class="rounded"
 							/>
 							<span class="text-h5 text-center">

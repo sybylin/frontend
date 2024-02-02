@@ -103,7 +103,7 @@ export default defineComponent({
 				? 'putForm'
 				: 'postForm'](
 				props.apiPath,
-				Object.assign({ image: file.value.files[0] }, props.apiData)
+				{ ...props.apiData, image: file.value.files[0] }
 			)
 				.then((d) => {
 					inputUrl.value = d.data.path;

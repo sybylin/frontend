@@ -9,12 +9,21 @@
 			{{ $capitalize($t('error.report.description')) }}
 		</p>
 	</div>
+
 	<q-form
 		class="q-pa-md"
 		@submit="onSubmit"
 		@reset="onReset"
 	>
 		<q-card flat bordered>
+			<q-card-section v-if="isSend">
+				<q-banner class="text-white bg-green text-center">
+					<span>
+						{{ $capitalize($t('error.report.success')) }}
+					</span>
+					<span class="q-pl-xs">❤️</span>
+				</q-banner>
+			</q-card-section>
 			<q-card-section>
 				<q-select
 					v-model="type"
@@ -58,6 +67,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useQuasar } from 'quasar';
 import { api } from 'src/boot/axios';
 import { ReportType } from 'src/types';
 import Captcha from 'src/components/captcha.vue';
@@ -70,6 +80,7 @@ export default defineComponent({
 	},
 	setup () {
 		const { locale } = useI18n();
+		const $q = useQuasar();
 		const typeTrad = computed(() => {
 			switch (locale.value) {
 			case 'fr-FR':
@@ -91,6 +102,7 @@ export default defineComponent({
 		const message = ref<string | null>(null);
 		const captcha = ref<string | null>(null);
 		const captchaError = ref<captchaError>(null);
+		const isSend = ref<boolean>(false);
 
 		const onSubmit = () => {
 			if (!message.value || !message.value.length || captchaError.value === 'invalid')
@@ -100,18 +112,18 @@ export default defineComponent({
 				type: type.value.value,
 				message: message.value
 			})
-				.then((d) => d.data)
-				.then((d) => {
-					console.log(d, 'message send');
+				.then(() => {
+					isSend.value = true;
 				})
 				.catch((e) => {
-					console.error(e);
+					$q.notify(e.response.data.info.message);
 				});
 		};
 
 		const onReset = () => {
 			message.value = null;
 			type.value = typeTrad.value[0];
+			isSend.value = false;
 		};
 
 		onMounted(() => {
@@ -126,6 +138,7 @@ export default defineComponent({
 			message,
 			captcha,
 			captchaError,
+			isSend,
 
 			onSubmit,
 			onReset

@@ -113,12 +113,12 @@ export default defineComponent({
 		});
 
 		onBeforeMount(() => {
-			api.post('/enigmas/createByUser', { id: route.params.enigmaId })
+			api.post('/enigmas/createByUser', { id: Number(route.params.enigmaId) })
 				.then((d) => {
 					isNotCreatedByUser.value = d.data.isCreator ?? false;
 					isCheck.value = true;
 					if (isNotCreatedByUser.value) {
-						api.post('/enigmas/one', { id: route.params.enigmaId })
+						api.post('/enigmas/one', { id: Number(route.params.enigmaId) })
 							.then((d) => {
 								enigma.value = d.data.enigma;
 							})

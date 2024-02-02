@@ -308,7 +308,7 @@ export default defineComponent({
 				meta: {
 					title: t('user.meta.creation.title'),
 					description: t('user.meta.creation.description'),
-					keywords: ['Sybilin', 'user', 'creation']
+					keywords: ['user', 'creation']
 				},
 				og: {
 					url: 'https://sybyl.in/user/creation',

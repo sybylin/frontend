@@ -1,4 +1,4 @@
-import GrapesJs, { Editor, ProjectData } from 'grapesjs';
+import GrapesJs, { ProjectData } from 'grapesjs';
 import { useI18n } from 'vue-i18n';
 import enUS from './lang/en';
 import frFR from './lang/fr';
@@ -8,6 +8,14 @@ import { Notify } from 'quasar';
 import { brotliDecompress } from 'src/boot/brotli';
 
 const uploadCheckMimetype = (mimetype: string) => ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype.trim().toLowerCase());
+
+interface attribute {
+	height: number;
+	src: string;
+	type: 'image' | string;
+	unitDim: 'px' | 'em';
+	width: number;
+}
 
 export default (container: HTMLElement, id: number, series_id: number) => {
 	const { t } = useI18n();
@@ -40,16 +48,13 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 				}
 				if (!filesRet.length)
 					return;
-				if (filesRet.length < 2)
-					formData.append('image', filesRet[0]);
-				else
-					filesRet.forEach((f, i) => formData.append(`image-${i + 1}`, f));
-				api.post('/content/image', formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				})
-					.then((d) => editor.AssetManager.add(`${baseURL}${d.data.path}`))
+				for (const file of filesRet)
+					formData.append('images', file);
+
+				api.postForm('enigmas/content', formData)
+					.then((d) => {
+						editor.AssetManager.add(d.data.paths.map((f: string) => `${baseURL}${f}`));
+					})
 					.catch((e) => Notify.create({ type: 'negative', message: e.response.data.info.message }));
 			},
 			autoAdd: false
@@ -83,22 +88,6 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 				}
 			]
 		},
-		commands: {
-			stylePrefix: 'sib',
-			defaults: {
-				'save-template': {
-					run: (editor: Editor, sender: any) => {
-						sender && sender.set('active');
-						/*
-						console.log({
-							components: editor.getComponents(),
-							style: editor.getStyle()
-						});
-						*/
-					}
-				}
-			}
-		},
 		plugins: [
 			plugin
 		],
@@ -118,7 +107,6 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 		}
 	});
 
-	editor.Commands.add('save-template', {});
 	editor.Panels.removeButton('options', 'export-template');
 	editor.Storage.add('remote', {
 		async load () {
@@ -127,7 +115,7 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 
 			try {
 				const serverData = await api.post('/enigmas/page/dev', { enigma_id: id, series_id });
-				serveAssets = (await api.get('/enigmas/content/list')).data.files.map((e: string) => `${baseURL}${e}`);
+				serveAssets = (await api.get('/enigmas/content')).data.files.map((e: string) => `${baseURL}${e}`);
 
 				if (serverData.data.enigma && (serverData.data.enigma as string).length) {
 					const parse = JSON.parse(await brotliDecompress(serverData.data.enigma) ?? '');
@@ -159,6 +147,19 @@ export default (container: HTMLElement, id: number, series_id: number) => {
 			})
 				.catch((e) => Notify.create({ type: 'failed', message: e.response.data.info.message }));
 		}
+	});
+
+	editor.on('asset:remove', (e: { attributes: attribute }) => {
+		const url = new URL(e.attributes.src);
+		api.delete('enigmas/content', {
+			params: {
+				f: url.pathname.substring(url.pathname.lastIndexOf('/') + 1)
+			}
+		})
+			.catch((error) => {
+				editor.AssetManager.add(e.attributes.src);
+				Notify.create({ type: 'negative', message: error.response.data.info.message });
+			});
 	});
 
 	return editor;
