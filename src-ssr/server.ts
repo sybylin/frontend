@@ -26,7 +26,7 @@ export const create = ssrCreate(() => {
 					'form-action': ["'self'"],
 					'frame-ancestors': ["'self'"],
 					'img-src': ["'self'", "data:"],
-					'object-src': ["'none'"],
+					'object-src': ["'self'", "blob:"],
 					'script-src': [
 						"https:",
 						"'wasm-unsafe-eval'",
