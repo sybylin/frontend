@@ -25,7 +25,7 @@ export const create = ssrCreate(() => {
 					'font-src': ["'self'", "https:", "data:"],
 					'form-action': ["'self'"],
 					'frame-ancestors': ["'self'"],
-					'img-src': ["'self'", "data:"],
+					'img-src': ["'self'", "data:", "https://api.sybyl.in"],
 					'object-src': ["'self'", "blob:"],
 					'script-src': [
 						"https:",
