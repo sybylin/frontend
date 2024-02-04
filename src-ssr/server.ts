@@ -20,7 +20,7 @@ export const create = ssrCreate(() => {
 		app.use(helmet({
 			contentSecurityPolicy: {
 				directives: {
-					'default-src': ["'self'"],
+					'default-src': ["'self'", "api.sybyl.in"],
 					'base-uri': ["'none'"],
 					'font-src': ["'self'", "https:", "data:"],
 					'form-action': ["'self'"],
