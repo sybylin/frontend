@@ -31,6 +31,7 @@ export const create = ssrCreate(() => {
 						"https:",
 						"'wasm-unsafe-eval'",
 						"'self'",
+						"blob:",
 						"'unsafe-eval'" // remove this rule with sha256 of files
 					],
 					'script-src-attr': ["'none'"],
