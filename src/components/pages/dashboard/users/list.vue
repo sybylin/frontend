@@ -259,4 +259,8 @@ export default defineComponent({
 .rounded {
 	border-radius: 20%;
 }
+.overflow-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 </style>

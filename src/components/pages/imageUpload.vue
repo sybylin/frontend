@@ -1,36 +1,79 @@
 <template>
-	<div class="main">
+	<div
+		:class="{
+			main: true,
+			rounded: $props.rounded
+		}"
+		@dragover="manageBorder.add"
+		@mouseenter="manageBorder.add"
+		@mouseleave="manageBorder.remove"
+		@dragleave="manageBorder.remove"
+	>
+		<div
+			v-show="requestSend"
+			:class="{
+				loader: true,
+				rounded: $props.rounded,
+				row: true,
+				'items-center': true,
+				'justify-center': true,
+			}"
+		>
+			<q-spinner-rings
+				color="white"
+				size="5em"
+			/>
+		</div>
+		<div
+			v-show="isOverWithFile && !requestSend"
+			:class="{
+				over: true,
+				rounded: $props.rounded,
+				row: true,
+				'items-center': true,
+				'justify-center': true,
+			}"
+			@click="() => true"
+		>
+			<q-spinner-cube
+				v-if="requestSend"
+				color="white"
+				size="4em"
+			/>
+			<q-icon
+				v-else
+				class="icon"
+				name="add_photo_alternate"
+				size="4em"
+			/>
+		</div>
 		<q-img
 			ref="image"
 			loading="lazy"
 			:ratio="1"
 			:alt="$props.alt"
 			fit="cover"
-			:class="{ rounded: $props.rounded }"
+			:class="{
+				rounded: $props.rounded,
+				img: true
+			}"
 			:src="inputUrl ? `${baseURL}${inputUrl}` : '/imgs/background.jpg'"
 		/>
-		<div
+		<input
+			ref="file"
+			type="file"
+			name="file"
+			accept="image/png, image/jpeg"
+			:disabled="requestSend"
 			:class="{
-				select: true,
-				row: true,
-				'justify-center': true,
-				'items-center': true,
 				rounded: $props.rounded,
-				disable: $props.disable
+				'request-send': requestSend,
+				input: true,
 			}"
-			@click="click"
-		>
-			<q-icon class="icon" name="add_photo_alternate" size="4em" />
-		</div>
+			@change="onChange"
+			@drop="onDrop"
+		/>
 	</div>
-	<input
-		ref="file"
-		type="file"
-		class="hidden"
-		name="file"
-		accept="image/png, image/jpeg"
-		@change="onChange"
-	/>
 </template>
 
 <script lang="ts">
@@ -80,35 +123,71 @@ export default defineComponent({
 	emits: ['forbidden', 'update:modelValue'],
 	setup (props, { emit }) {
 		const $q = useQuasar();
-
 		const image = ref<QImg | null>(null);
 		const file = ref<HTMLInputElement | null>(null);
 		const inputUrl = ref<string | null>(props.modelValue ?? null);
+		const isOverWithFile = ref<boolean>(false);
+		const requestSend = ref<boolean>(false);
 
-		const click = () => {
-			if (props.disable)
-				return emit('forbidden');
-			if (!file.value)
-				return;
-			file.value.click();
+		const manageBorder = {
+			add: () => {
+				if (!isOverWithFile.value)
+					isOverWithFile.value = true;
+			},
+			remove: () => {
+				if (isOverWithFile.value)
+					isOverWithFile.value = false;
+			}
 		};
 
-		const onChange = () => {
-			if (!file.value || !file.value.files) {
-				inputUrl.value = null;
-				return;
+		const uploadImage = (files: FileList) => {
+			for (const file of (files as unknown as File[])) {
+				if (file.type && !file.type.includes('image'))
+					return;
 			}
-
+			requestSend.value = true;
 			api[props.putMethod
 				? 'putForm'
 				: 'postForm'](
 				props.apiPath,
-				{ ...props.apiData, image: file.value.files[0] }
+				{
+					...props.apiData,
+					image: files[0]
+				}
 			)
 				.then((d) => {
 					inputUrl.value = d.data.path;
 				})
-				.catch((e) => $q.notify({ type: 'negative', message: e.response.data.info.message }));
+				.catch((e) => $q.notify({ type: 'negative', message: e.response.data.info.message }))
+				.finally(() => {
+					requestSend.value = false;
+				});
+		};
+
+		const onDrop = (e: DragEvent) => {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			if (requestSend.value)
+				return;
+			if (props.disable)
+				return emit('forbidden');
+			if (!e.dataTransfer || !e.dataTransfer.files) {
+				inputUrl.value = null;
+				return;
+			}
+			uploadImage(e.dataTransfer.files);
+		};
+
+		const onChange = () => {
+			if (requestSend.value)
+				return;
+			if (props.disable)
+				return emit('forbidden');
+			if (!file.value || !file.value.files) {
+				inputUrl.value = null;
+				return;
+			}
+			uploadImage(file.value.files);
 		};
 
 		onMounted(() => {
@@ -120,8 +199,11 @@ export default defineComponent({
 			image,
 			file,
 			inputUrl,
-			click,
-			onChange
+			isOverWithFile,
+			requestSend,
+			manageBorder,
+			onChange,
+			onDrop
 		};
 	}
 });
@@ -132,32 +214,49 @@ export default defineComponent({
 	position: relative;
 	width: 100%;
 	max-width: 25em;
+	height: 100%;
 }
 .rounded {
 	border-radius: 50%;
 }
-.select {
+.img {
 	position: absolute;
+	pointer-events: none;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+.input {
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+.input:disabled {
+	opacity: 0 !important;
+}
+
+.over {
+	position: absolute;
+	pointer-events: none;
 	z-index: 2;
 	top: 0;
 	height: 100%;
 	width: 100%;
-	cursor: pointer;
-}
-.select i {
-	display: none;
-}
-.select:hover i {
-	display: block;
-	color: rgb(220, 220, 220);
-}
-.select:hover {
 	background-color: rgba(0, 0, 0, .2);
-	border: .5em dashed rgb(220, 220, 220);
 	color: rgb(220, 220, 220);
+	border: .5em dashed rgb(220, 220, 220);
 }
-
-.disable {
-	cursor: not-allowed !important;
+.loader {
+	position: absolute;
+	pointer-events: none;
+	z-index: 2;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, .2);
+}
+.request-send {
+	cursor: wait !important;
 }
 </style>

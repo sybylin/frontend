@@ -250,4 +250,7 @@ export default defineComponent({
 .fit-content {
 	width: fit-content;
 }
+.overflow-text {
+	text-overflow: ellipsis;
+}
 </style>
