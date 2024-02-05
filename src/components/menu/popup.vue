@@ -1,10 +1,16 @@
 <template>
 	<q-btn
 		square flat color="white"
-		label="Options" icon="settings"
+		:label="$capitalize($t('menu.options'))" icon="settings"
 	>
 		<q-popup-proxy class="popup" :offset="[-10, 10]">
-			<q-card square flat class="card">
+			<q-card
+				square flat :class="{
+					card: true,
+					'card-mobile': $q.platform.is.mobile,
+					'card-mobile--dark': $q.platform.is.mobile && $q.dark.isActive
+				}"
+			>
 				<lang />
 				<div class="row no-wrap justify-between items-center">
 					<span>{{ $capitalize($t('menu.dark')) }}</span>
@@ -49,12 +55,18 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .popup {
 	box-shadow: none;
 }
 .card {
 	padding: 1em;
 	background-color: rgba(0,0,0,.1);
+}
+.card-mobile {
+	background-color: white;
+}
+.card-mobile--dark {
+	background-color: var(--q-dark-page);
 }
 </style>

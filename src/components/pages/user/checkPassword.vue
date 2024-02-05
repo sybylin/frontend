@@ -47,6 +47,13 @@
 			:ripple="false"
 		>
 			{{ $capitalize($t('user.checkPassword.special')) }}
+			<q-tooltip class="bg-indigo text-body2" anchor="bottom middle" self="top middle">
+				<span>
+					{{ $capitalize($t('user.checkPassword.accepted')) }}
+					:
+					{{ characterList }}
+				</span>
+			</q-tooltip>
 		</q-chip>
 	</div>
 </template>
@@ -69,6 +76,7 @@ export default defineComponent({
 	},
 	emits: ['update:model-value'],
 	setup (props, { emit }) {
+		const characterList = '!"#$%&\'|()*+,-.\\/:;<=>?@[]^_`{}~';
 		const length = computed(() => (
 			props.password &&
 			props.password.length >= 8 &&
@@ -89,6 +97,7 @@ export default defineComponent({
 		});
 
 		return {
+			characterList,
 			length,
 			lowercase,
 			uppercase,

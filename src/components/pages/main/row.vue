@@ -207,14 +207,16 @@ export default defineComponent({
 	padding-top: 2.1em;
 }
 .video {
-	height: calc(100% - 7em);
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+  width: inherit;
 	background-color: #fff;
 }
 .video-small {
-	max-width: 250px;
+	max-width: 17rem;
 }
 .video-large {
-	max-width: 500px;
+	max-width: 25rem;
 }
 .skew {
 	transform: skewY(-15deg);

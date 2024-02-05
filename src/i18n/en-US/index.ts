@@ -21,7 +21,8 @@ export default {
 		documentation: 'Documentation',
 		discord: 'Discord',
 		github: 'Github',
-		dark: 'Dark mode'
+		dark: 'Dark mode',
+		options: 'Options'
 	},
 	main,
 	error,

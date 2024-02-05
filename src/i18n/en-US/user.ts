@@ -18,6 +18,7 @@ export default {
 		}
 	},
 	account: 'account',
+	myAccount: 'my account',
 	verify: 'this account is verified',
 	unverify: 'this account is unverified',
 	update: 'update',
@@ -75,7 +76,8 @@ export default {
 		lower: 'lowercase',
 		upper: 'uppercase',
 		number: 'number',
-		special: 'special character'
+		special: 'special character',
+		accepted: 'accepted character'
 	},
 	delete: {
 		title: 'delete my account',

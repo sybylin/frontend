@@ -27,7 +27,7 @@
 				<h5 class="orkney-regular text-center">
 					{{ $t('main.header.desc') }}
 				</h5>
-				<div>
+				<div class="row items-center justify-center">
 					<q-btn
 						class="q-pa-md q-ma-sm"
 						color="green-7"

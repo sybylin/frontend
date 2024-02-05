@@ -4,7 +4,7 @@
 			color="secondary"
 			unelevated
 			icon="add"
-			label="Add keywords"
+			:label="$capitalize($t('create.main.solution.buttonKeywords'))"
 			@click="add('')"
 		/>
 	</div>

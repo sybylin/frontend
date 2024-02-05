@@ -18,6 +18,7 @@ export default {
 		}
 	},
 	account: 'compte',
+	myAccount: 'mon compte',
 	verify: 'ce compte est vérifié',
 	unverify: 'ce compte n\'est pas vérifié',
 	update: 'mettre à jour',
@@ -71,10 +72,11 @@ export default {
 	checkPassword: {
 		ko: 'le mot de passe ne répond pas aux exigences minimales',
 		size: 'longueur du mot de passe',
-		lower: 'lowercase',
-		upper: 'uppercase',
-		number: 'number',
-		special: 'special character'
+		lower: 'minuscule',
+		upper: 'majuscules',
+		number: 'nombre',
+		special: 'caractère spécial',
+		accepted: 'caractère accepté'
 	},
 	delete: {
 		title: 'supprimer mon compte',

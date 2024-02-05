@@ -9,7 +9,11 @@
 		>
 			<div class="absolute-full flex flex-center">
 				<q-badge color="white" text-color="black" :label="`${Math.round(progress * 100)} %`">
-					<q-tooltip class="bg-deep-purple-7 text-body2 row items-center" anchor="bottom middle" self="top middle">
+					<q-tooltip
+						class="bg-deep-purple-7 text-body2 row items-center"
+						anchor="top middle"
+						self="bottom middle"
+					>
 						<span>{{ $props.points }}</span>
 						<q-icon class="q-pl-xs" name="token" />
 					</q-tooltip>

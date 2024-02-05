@@ -61,11 +61,13 @@ export default {
 			sentenceBanner: 'this sentence is needed from user for complete enigma',
 			keywords: 'keywords',
 			sentenceKeywords: 'the list of keywords must be complete, and can either be in order or not',
+			buttonKeywords: 'add keyword',
 			toggleHelpKeywords: 'users must enter the keywords exactly in this order for the solution to be valid',
 			toggleKeywords: 'keep keywords order',
 			key: 'key',
 			value: 'value',
-			keyvalues: 'key values',
+			keyvalues: 'key value',
+			buttonKeyValues: 'add key value',
 			sentenceKeyvalues: 'an object that can contain as many key/values pairs as required, the order within an object is not mandatory'
 		}
 	},

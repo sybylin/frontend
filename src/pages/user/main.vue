@@ -13,9 +13,9 @@
 				active-color="secondary"
 				indicator-color="secondary"
 			>
-				<q-tab name="achievement" label="Achievement" />
-				<q-tab name="series" label="Series" />
-				<q-tab name="edition" label="Edition" />
+				<q-tab name="achievement" :label="$capitalize($t('achievement.title'))" />
+				<q-tab name="series" :label="$capitalize($t('series.meta.main.title'))" />
+				<q-tab name="edition" :label="$capitalize($t('user.myAccount'))" />
 			</q-tabs>
 		</template>
 		<template v-slot:after>

@@ -6,7 +6,10 @@
 					<image-upload
 						v-model="image"
 						api-path="/enigmas/update/image"
-						:api-data="{ enigma_id: $props.modelValue.id }"
+						:api-data="{
+							series_id: $props.modelValue.series_id as number,
+							enigma_id: $props.modelValue.id
+						}"
 					/>
 				</div>
 			</div>

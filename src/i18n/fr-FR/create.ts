@@ -61,11 +61,13 @@ export default {
 			sentenceBanner: 'cette phrase doit être écrite par l\'utilisateur pour que l\'énigme soit complète',
 			keywords: 'mots-clés',
 			sentenceKeywords: 'la liste des mots-clés doit être complète et peut être ordonnée ou non',
+			buttonKeywords: 'ajouter un mot-clé',
 			toggleHelpKeywords: 'les utilisateurs doivent saisir les mots-clés exactement dans cet ordre pour que la solution soit valide',
 			toggleKeywords: 'maintenir l\'ordre des mots-clés',
 			key: 'clé',
 			value: 'valeur',
-			keyvalues: 'clés valeurs',
+			keyvalues: 'clés valeur',
+			buttonKeyValues: 'ajouter une valeur clé',
 			sentenceKeyvalues: 'un objet qui peut contenir autant de couples clé/valeur que nécessaire, l\'ordre à l\'intérieur d\'un objet n\'est pas obligatoire'
 		}
 	},
