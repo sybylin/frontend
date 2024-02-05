@@ -1,7 +1,9 @@
 <template>
 	<div class="full-width text-center q-pt-xl">
-		<span class="text-h4">
+		<span class="text-h4 orkney-regular">
+			<q-icon name="build" />
 			{{ $capitalize($t('dashboard.development')) }}
+			<q-icon name="build" />
 		</span>
 	</div>
 </template>
