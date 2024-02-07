@@ -113,6 +113,12 @@ const routes: RouteRecordRaw[] = [
 						name: 'verify',
 						meta: { noSSR: true },
 						component: () => import('pages/user/verify.vue')
+					},
+					{
+						path: 'profil/:username',
+						name: 'profil',
+						meta: { requiresAuth: true, level: 'user' },
+						component: () => import('pages/profil/main.vue')
 					}
 				]
 			},

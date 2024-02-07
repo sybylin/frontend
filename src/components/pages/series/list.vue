@@ -21,7 +21,10 @@
 						color="secondary"
 						icon="person"
 					/>
-					<q-avatar v-else>
+					<q-avatar
+						v-else
+						@click="$router.push({ name: 'profil', params: { lang: $route.params.lang, username: serie.name } })"
+					>
 						<q-img
 							loading="lazy"
 							class="border"
@@ -98,6 +101,7 @@ export default defineComponent({
 	max-width: 25em;
 }
 .border {
+	cursor: pointer;
 	border: 2px solid $grey-8;
 	border-radius: 50%;
 	width: 2em;

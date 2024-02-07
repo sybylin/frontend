@@ -225,6 +225,7 @@ export default defineComponent({
 	top: 0;
 	left: 0;
 	height: 100%;
+	max-height: 25em;
 }
 .input {
 	width: 100%;

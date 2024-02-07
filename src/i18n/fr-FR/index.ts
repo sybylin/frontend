@@ -6,6 +6,7 @@ import achievement from './achievement';
 import create from './create';
 import builder from './builder';
 import dashboard from './dashboard';
+import profil from './profil';
 
 export default {
 	title: 'Sybylin',
@@ -31,5 +32,6 @@ export default {
 	achievement,
 	create,
 	builder,
-	dashboard
+	dashboard,
+	profil
 };

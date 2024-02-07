@@ -73,6 +73,7 @@
 							<q-img
 								:src="series.series_creator.length > 0 && series.series_creator[0].avatar ? `${baseURL}${series.series_creator[0].avatar ?? ''}` : '/imgs/background.jpg'"
 								class="rounded"
+								@click="$router.push({ name: 'profil', params: { lang: $route.params.lang, username: series.series_creator[0].name } })"
 							/>
 							<span class="text-h5 text-center">
 								{{ $capitalize(series.series_creator[0].name) }}
@@ -282,6 +283,7 @@ export default defineComponent({
 	width: 14%;
 }
 .rounded {
+	cursor: pointer;
 	border-radius: 50%;
 	height: 8em;
 	width: 8em;

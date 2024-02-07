@@ -5,7 +5,7 @@
 	</div>
 	<template v-else>
 		<unauthorized v-if="error === 'brotliError'" :code="422" :message="$t('error.brotli.title')" />
-		<unauthorized v-else-if="error === 'notAuthorized'" :code="401" />
+		<unauthorized v-else-if="error === 'notAuthorized' || error === 'empty'" :code="401" />
 		<error v-else-if="error === 'notExist'" />
 		<template v-else-if="enigma">
 			<q-img

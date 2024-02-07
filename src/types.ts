@@ -72,6 +72,30 @@ export interface seriesList {
 	completion_date: Date | null;
 }
 
+export interface profilSeries {
+	title: string;
+	image: string;
+	description: string;
+	series_creator: {
+		user: {
+			name: string;
+			avatar: string;
+		}
+	}[]
+}
+
+export interface profil extends Omit<user, 'id' | 'email' | 'blocked' | 'creation_date'> {
+	last_connection: Date;
+	series_finished: {
+		completion_date: Date;
+		series: profilSeries;
+	}[];
+	series_started: {
+		started_date: Date;
+		series: profilSeries;
+	}[];
+}
+
 export interface devArraySolution {
 	keepOrder: boolean;
 	list: {
