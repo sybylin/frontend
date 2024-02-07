@@ -107,7 +107,9 @@
 						<div class="row justify-center full-width">
 							<captcha
 								v-model="captcha"
-								:error="captchaError"
+								:incorrect="captchaIncorrect"
+								:reset="captchaReset"
+								@is-reset="captchaReset = false;"
 							/>
 						</div>
 						<div class="row justify-end">
@@ -175,7 +177,6 @@ import { capitalize } from 'src/boot/custom';
 import ComponentsPagesUserTokenValidation from 'components/pages/user/tokenValidation.vue';
 import ComponentsPagesUserCheckPassword from 'components/pages/user/checkPassword.vue';
 import Captcha from 'src/components/captcha.vue';
-import type { captchaError } from 'src/components/captcha.vue';
 
 export default defineComponent({
 	name: 'PageUserCreation',
@@ -195,7 +196,6 @@ export default defineComponent({
 		const repeatPassword = ref<string | null>(null);
 		const togglePassword = ref<boolean>(true);
 		const toggleRepeatPassword = ref<boolean>(true);
-		const captcha = ref<string | null>(null);
 
 		const apiCall = ref<boolean>(false);
 		const incorrectName = ref<boolean | 'alreadyTaken' | 'forbidden'>(false);
@@ -204,7 +204,10 @@ export default defineComponent({
 		const notFormatedPassword = ref<boolean | null>(null);
 		const incorrectRepeatPassword = ref<boolean | 'notTheSame'>(false);
 		const incorrectPost = ref<any | null>(null);
-		const captchaError = ref<captchaError>(null);
+
+		const captcha = ref<string | null>(null);
+		const captchaReset = ref<boolean>(false);
+		const captchaIncorrect = ref<boolean>(false);
 
 		const nameError = computed(() => {
 			if (incorrectName.value === 'alreadyTaken')
@@ -228,11 +231,11 @@ export default defineComponent({
 		});
 
 		const activateSubmitButton = computed(() =>
-			name.value && email.value && password.value && repeatPassword.value && captchaError.value !== 'invalid'
+			name.value && email.value && password.value && repeatPassword.value && captcha.value
 		);
 
 		const onSubmit = () => {
-			if (name.value && email.value && password.value && repeatPassword.value && captchaError.value !== 'invalid') {
+			if (name.value && email.value && password.value && repeatPassword.value && captcha.value) {
 				let isError = false;
 				incorrectName.value = false;
 				incorrectEmail.value = false;
@@ -272,11 +275,11 @@ export default defineComponent({
 						if (e.response.data.info.code === 'US_012')
 							incorrectPassword.value = 'malformed';
 						if (e.response.data.info.code === 'CA_001')
-							captchaError.value = 'invalid';
+							captchaIncorrect.value = true;
 						if (e.response.data.incorrectPassword)
 							incorrectPassword.value = true;
 						if (
-							!captchaError.value &&
+							!captchaIncorrect.value &&
 							!incorrectEmail.value &&
 							!incorrectName.value &&
 							!incorrectPassword.value
@@ -295,7 +298,8 @@ export default defineComponent({
 			incorrectPassword.value = false;
 			incorrectRepeatPassword.value = false;
 			incorrectPost.value = null;
-			captchaError.value = 'reset';
+			captchaIncorrect.value = false;
+			captchaReset.value = true;
 			name.value = null;
 			email.value = null;
 			password.value = null;
@@ -336,7 +340,6 @@ export default defineComponent({
 			repeatPassword,
 			togglePassword,
 			toggleRepeatPassword,
-			captcha,
 
 			apiCall,
 			incorrectName,
@@ -346,7 +349,10 @@ export default defineComponent({
 			incorrectRepeatPassword,
 			incorrectPost,
 			nameError,
-			captchaError,
+
+			captcha,
+			captchaIncorrect,
+			captchaReset,
 
 			passwordError,
 			passwordErrorMessage,

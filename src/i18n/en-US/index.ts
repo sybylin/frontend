@@ -23,7 +23,8 @@ export default {
 		discord: 'Discord',
 		github: 'Github',
 		dark: 'Dark mode',
-		options: 'Options'
+		options: 'Options',
+		gdpr: 'Privacy Policy'
 	},
 	main,
 	error,

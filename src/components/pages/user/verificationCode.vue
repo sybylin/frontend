@@ -1,5 +1,10 @@
 <template>
-	<div class="input">
+	<div
+		:class="{
+			'input': $q.screen.gt.xs,
+			'input-small': !$q.screen.gt.xs,
+		}"
+	>
 		<template v-for="(_v, i) in codes" :key="i">
 			<q-input
 				:ref="setItemRef"
@@ -7,6 +12,10 @@
 				square
 				outlined
 				mask="#"
+				:class="{
+					'input-width': $q.screen.gt.xs,
+					'input-width-small': !$q.screen.gt.xs
+				}"
 				class="input-width"
 				input-style="text-align: center"
 				:autofocus="i === autofocusIndex"
@@ -137,7 +146,16 @@ export default defineComponent({
 	justify-content: center;
 	gap: 10px;
 }
+.input-small {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 5px;
+}
 .input-width {
-	width: 3.2em
+	width: 3.2em;
+}
+.input-width-small {
+	width: 2.3em;
 }
 </style>

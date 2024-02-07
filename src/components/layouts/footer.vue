@@ -39,6 +39,9 @@
 						<router-link :to="$generatePath({ name: 'report' })">
 							<span>{{ $capitalize($t('error.report.title')) }}</span>
 						</router-link>
+						<router-link :to="$generatePath({ name: 'gdpr' })">
+							<span>{{ $capitalize($t('menu.gdpr')) }}</span>
+						</router-link>
 					</div>
 				</div>
 			</div>

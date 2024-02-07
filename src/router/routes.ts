@@ -21,6 +21,11 @@ const routes: RouteRecordRaw[] = [
 				component: () => import('pages/report.vue')
 			},
 			{
+				path: 'gdpr',
+				name: 'gdpr',
+				component: () => import('pages/gdpr.vue')
+			},
+			{
 				path: 'dashboard',
 				name: 'dashboardMain',
 				meta: { requiresAuth: true, level: 'moderator' },

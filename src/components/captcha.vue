@@ -3,13 +3,13 @@
 		<div
 			:class="{
 				border: true,
-				'border-success': !$props.error && payload,
-				'border-error': unverified || $props.error === 'invalid'
+				'border-success': captchaIsValidate === true,
+				'border-error': captchaIsValidate === false
 			}"
 		>
 			<altcha-widget
 				v-if="altcha !== null"
-				ref="captcha"
+				ref="captchaDiv"
 				:challengeurl="$props.challengeUrl"
 				:strings="lang"
 				auto
@@ -23,7 +23,7 @@
 			name="link_off"
 		/>
 		<span
-			v-if="$props.error && $props.error === 'invalid'"
+			v-if="payload === 'error'"
 			class="q-pt-xs text-body2 text-red-7"
 		>
 			{{ $t('error.captcha') }}
@@ -35,6 +35,8 @@
 import { computed, defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { baseURL } from 'src/boot/axios';
+import enUS from 'src/i18n/en-US/captcha';
+import frFR from 'src/i18n/fr-FR/captcha';
 import type { ComputedRef, PropType } from 'vue';
 
 interface captchaLang {
@@ -51,7 +53,6 @@ interface payload {
 	state: string;
 }
 
-export type captchaError = 'invalid' | 'reset' | null;
 export default defineComponent({
 	name: 'Captcha',
 	props: {
@@ -65,53 +66,49 @@ export default defineComponent({
 			required: false,
 			default: `${baseURL}/rights/captcha`
 		},
-		error: {
-			type: String as PropType<captchaError>,
+		incorrect: {
+			type: Boolean,
 			required: false,
-			default: null
+			default: false
+		},
+		reset: {
+			type: Boolean,
+			required: false,
+			default: false
 		}
 	},
-	emits: ['update:modelValue'],
+	emits: ['update:modelValue', 'isReset'],
 	setup (props, { emit }) {
 		const { locale } = useI18n();
-
-		const captcha = ref<HTMLDivElement | null>(null);
-		const altcha = ref<any | null>(null);
-		const payload = ref<string | null>(props.modelValue);
-		const unverified = ref<boolean>(false);
-
-		const verified = (e: any) => {
-			payload.value = (e.detail as payload).payload;
-		};
-
-		const state = (e: any) => {
-			if ((e.detail as payload).state === 'verified')
-				unverified.value = true;
-		};
+		const altcha = ref<unknown | null>(null);
+		const captchaDiv = ref<HTMLDivElement | null>(null);
+		const payload = ref<null | 'error' | 'pending' | string>(null);
 
 		const lang: ComputedRef<string> = computed(() => {
 			switch (locale.value) {
 			case 'fr-FR':
-				return JSON.stringify({
-					error: 'La vérification a échoué. Réessayez plus tard',
-					footer: 'Protégé par <a href="https://altcha.org/" target="_blank">ALTCHA</a>',
-					label: 'Je ne suis pas un robot',
-					verified: 'Vérifié',
-					verifying: 'Vérification...',
-					waitAlert: 'Vérification... veuillez patienter'
-				} as captchaLang);
+				return JSON.stringify(frFR as captchaLang);
 			case 'en-US':
 			default:
-				return JSON.stringify({
-					error: 'Verification failed. Try again later',
-					footer: 'Protected by <a href="https://altcha.org/" target="_blank">ALTCHA</a>',
-					label: 'I\'m not a robot',
-					verified: 'Verified',
-					verifying: 'Verifying...',
-					waitAlert: 'Verifying... please wait'
-				} as captchaLang);
+				return JSON.stringify(enUS as captchaLang);
 			}
 		});
+
+		const captchaIsValidate = computed(() => {
+			if (!payload.value || payload.value.localeCompare('pending') === 0)
+				return undefined;
+			return payload.value.localeCompare('error') !== 0;
+		});
+
+		const state = (e: any) => {
+			switch ((e.detail as payload).state) {
+			case 'verifying':
+				payload.value = 'pending';
+				break;
+			case 'verified':
+				payload.value = (e.detail as payload).payload;
+			}
+		};
 
 		onMounted(async () => {
 			await import('altcha')
@@ -121,31 +118,42 @@ export default defineComponent({
 				.catch(() => {
 					altcha.value = null;
 				});
+			captchaDiv.value?.addEventListener('statechange', state);
 
-			captcha.value?.addEventListener('verified', verified);
-			captcha.value?.addEventListener('statechange', state);
+			watch(() => props.incorrect, (n) => {
+				if (n)
+					payload.value = 'error';
+			});
 
-			watch(() => props.error, (newVal) => {
-				if (newVal === 'reset') {
+			watch(() => props.reset, (n) => {
+				if (n) {
 					payload.value = null;
-					unverified.value = false;
+					emit('isReset');
 				}
 			});
 
-			watch(payload, (v) => emit('update:modelValue', v));
+			watch(payload, (n) => {
+				if (
+					n &&
+					n.localeCompare('error') !== 0 &&
+					n.localeCompare('pending') !== 0
+				)
+					emit('update:modelValue', n as string);
+				else
+					emit('update:modelValue', null);
+			});
 		});
 
 		onUnmounted(() => {
-			captcha.value?.removeEventListener('verified', verified);
-			captcha.value?.removeEventListener('statechange', state);
+			captchaDiv.value?.removeEventListener('statechange', state);
 		});
 
 		return {
 			altcha,
-			captcha,
+			captchaDiv,
 			payload,
-			unverified,
-			lang
+			lang,
+			captchaIsValidate
 		};
 	}
 });
