@@ -15,6 +15,12 @@ export const checkUserRights = async (role: authorizationLevel): Promise<boolean
 				if (d.data.info.code === 'JW_101') {
 					globalStore().setIsConnected(true);
 					globalStore().setRole(d.data.role);
+					if (!globalStore().user) {
+						api.get('/user')
+							.then((d) => {
+								globalStore().setUser(d.data.user);
+							});
+					}
 				}
 				resolve(true);
 			})

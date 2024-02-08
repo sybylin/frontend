@@ -32,7 +32,8 @@ export const create = ssrCreate(() => {
 						"'wasm-unsafe-eval'",
 						"'self'",
 						"blob:",
-						"'unsafe-eval'" // remove this rule with sha256 of files
+						"sha256-WxCiaJH8DE/0YgiOQgNsZH3qrHA0L54J1DNTmx04i0U=",
+						"sha256-dMwiao63QNYYgb+/22UVmqiW9lH4uPWH2Tbi3KHM7EE="
 					],
 					'script-src-attr': ["'none'"],
 					'style-src': ["'self'", "https:", "'unsafe-inline'"],
@@ -74,7 +75,7 @@ export const close = ssrClose(({ listenResult }) => {
 
 const maxAge = process.env.DEV
 	? 0
-	: 1000 * 60 * 60 * 24 * 30;
+	: 1000 * 60 * 60 * 24 * 365;
 
 export const serveStaticContent = ssrServeStaticContent((path, opts) => {
 	return express.static(path, {

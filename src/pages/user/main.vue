@@ -101,11 +101,14 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			api.get('/user')
-				.then((d) => {
-					user.value = d.data.user;
-					store.setUser(d.data.user);
-				});
+			if (!store.user) {
+				api.get('/user')
+					.then((d) => {
+						user.value = d.data.user;
+						store.setUser(d.data.user);
+					});
+			} else
+				user.value = store.user;
 		});
 
 		return {

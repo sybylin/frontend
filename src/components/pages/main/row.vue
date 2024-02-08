@@ -44,6 +44,7 @@
 					muted
 					loop
 				>
+					<source :src="`${$props.video}#t=1`" type="video/mp4">
 					<source :src="$props.video" type="video/mp4" />
 					Your browser does not support the video tag
 				</video>
@@ -74,7 +75,13 @@
 				{{ description }}
 			</p>
 			<div class="column items-center justify-center full-width q-pt-lg q-pb-xl">
-				<img class="img-start" src="/imgs/star.svg" :alt="title" />
+				<q-img
+					class="img-start"
+					loading="lazy"
+					fetchpriority="low"
+					:alt="title"
+					src="/imgs/star.svg"
+				/>
 				<q-btn
 					class="q-pa-md q-ma-sm"
 					color="green-7"
@@ -208,7 +215,7 @@ export default defineComponent({
 }
 .video {
   margin-top: 2.5em;
-  margin-bottom: 2.5em;
+  margin-bottom: 4.1em;
   width: inherit;
 	background-color: #fff;
 }

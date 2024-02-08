@@ -45,9 +45,9 @@
 				</div>
 			</div>
 			<div
+				v-if="$q.screen.gt.sm"
 				:class="{
-					'col-md-6': $q.screen.gt.sm,
-					'hidden': !$q.screen.gt.sm,
+					'col-md-6': true,
 					'row': true,
 					'items-center': true,
 					'justify-center': true,
@@ -56,9 +56,24 @@
 				}"
 			>
 				<div class="header-image">
-					<q-img class="desktop" src="/imgs/main/desktop.jpg" />
-					<q-img class="tablet" src="/imgs/main/tablet.jpg" />
-					<q-img class="mobile" src="/imgs/main/mobile.jpg" />
+					<q-img
+						class="desktop"
+						src="/imgs/main/desktop.min.webp"
+						loading="eager"
+						fetchpriority="high"
+					/>
+					<q-img
+						class="tablet"
+						src="/imgs/main/tablet.min.webp"
+						loading="lazy"
+						fetchpriority="low"
+					/>
+					<q-img
+						class="mobile"
+						src="/imgs/main/mobile.min.webp"
+						loading="lazy"
+						fetchpriority="low"
+					/>
 				</div>
 			</div>
 		</div>
@@ -95,6 +110,7 @@ export default defineComponent({
 	justify-content: center;
 	position: relative;
 	color: #fff;
+	min-height: 35em;
 	height: calc(100vh - 5em);
 	background: rgb(106,27,154);
 	background: linear-gradient(90deg, rgb(65, 16, 96) 0%, rgb(42, 25, 74) 51%, rgb(36, 25, 68) 100%);
@@ -118,6 +134,9 @@ export default defineComponent({
 	margin-right: -.5em;
 }
 .header-image {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
 	position: relative;
 	min-height: 40vh;
   min-width: 40vw;
@@ -128,7 +147,7 @@ export default defineComponent({
 .desktop {
 	position: absolute;
 	transform: skewY(15deg);
-	width: 90%;
+	width: 85%;
 	left: .8em;
 	box-shadow: rgba(123, 31, 162, 0.4) 5px -5px, rgba(123, 31, 162, 0.3) 10px -10px, rgba(123, 31, 162, 0.2) 15px -15px, rgba(123, 31, 162, 0.1) 20px -20px, rgba(123, 31, 162, 0.05) 25px -25px;
 }
@@ -141,7 +160,7 @@ export default defineComponent({
 .mobile {
 	position: absolute;
 	transform: skewY(15deg);
-	width: 20%;
+	width: 19%;
 	left: -.8em;
 }
 </style>

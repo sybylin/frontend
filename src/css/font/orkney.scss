@@ -3,7 +3,8 @@
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
-	src:	url(./orkney-font/Orkney-Light.woff2) format('woff2'),
+	src:	local('Orkney Light')
+				url(./orkney-font/Orkney-Light.woff2) format('woff2'),
 				url(./orkney-font/Orkney-Light.woff) format('woff'),
 				url(./orkney-font/Orkney-Light.ttf) format('truetype');
 }
@@ -13,7 +14,8 @@
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
-	src:	url(./orkney-font/Orkney-Regular.woff2) format('woff2'),
+	src:	local('Orkney Regular')
+				url(./orkney-font/Orkney-Regular.woff2) format('woff2'),
 				url(./orkney-font/Orkney-Regular.woff) format('woff'),
 				url(./orkney-font/Orkney-Regular.ttf) format('truetype');
 }
@@ -23,7 +25,8 @@
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
-	src:	url(./orkney-font/Orkney-Medium.woff2) format('woff2'),
+	src:	local('Orkney Medium')
+				url(./orkney-font/Orkney-Medium.woff2) format('woff2'),
 				url(./orkney-font/Orkney-Medium.woff) format('woff'),
 				url(./orkney-font/Orkney-Medium.ttf) format('truetype');
 }

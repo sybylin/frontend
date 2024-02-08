@@ -55,6 +55,8 @@
 					<div class="flex items-center q-pa-xs">
 						<img
 							:src="`${themeInstance.linkToSnakeIcon}favicon-128x128.png`"
+							width="128"
+							height="128"
 							alt="Logo of sybyl.in"
 						/>
 						<span class="q-pl-sm text-h4 orkney-light">{{ $t('title') }}</span>
