@@ -47,3 +47,16 @@ export const globalStore = defineStore('global', () => {
 		setUser
 	};
 });
+
+export const hydrate = () => {
+	const darkMode = window.localStorage.getItem('darkMode');
+	const lang = window.localStorage.getItem('lang') as lang;
+	const isConnected = window.localStorage.getItem('isConnected');
+
+	if (darkMode)
+		globalStore().setDarkMode(darkMode === 'true');
+	if (lang)
+		globalStore().setLang(lang);
+	if (isConnected)
+		globalStore().setIsConnected(isConnected === 'true');
+};

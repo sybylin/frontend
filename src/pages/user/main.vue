@@ -15,6 +15,7 @@
 			>
 				<q-tab name="achievement" :label="$capitalize($t('achievement.title'))" />
 				<q-tab name="series" :label="$capitalize($t('series.meta.main.title'))" />
+				<q-tab name="options" :label="$capitalize($t('user.options.title'))" />
 				<q-tab name="edition" :label="$capitalize($t('user.myAccount'))" />
 			</q-tabs>
 		</template>
@@ -32,6 +33,9 @@
 				</q-tab-panel>
 				<q-tab-panel name="series">
 					<components-pages-series :user="user" />
+				</q-tab-panel>
+				<q-tab-panel name="options">
+					<components-user-options :user="user" />
 				</q-tab-panel>
 				<q-tab-panel name="edition">
 					<components-user-edit :user="user" @change="userChange" />
@@ -54,6 +58,7 @@ import ComponentsPagesSeries from 'src/components/pages/user/series.vue';
 import ComponentsAchievementList from 'components/achievement/list.vue';
 import ComponentsUserEdit from 'components/pages/user/edit.vue';
 import ComponentsUserDelete from 'components/pages/user/delete.vue';
+import ComponentsUserOptions from 'src/components/pages/user/options.vue';
 import type { user } from 'src/types';
 
 export default defineComponent({
@@ -63,14 +68,15 @@ export default defineComponent({
 		ComponentsPagesSeries,
 		ComponentsAchievementList,
 		ComponentsUserEdit,
-		ComponentsUserDelete
+		ComponentsUserDelete,
+		ComponentsUserOptions
 	},
 	setup () {
 		const { t } = useI18n();
 		const store = globalStore();
 		const splitter = ref<number>(20);
 		const user = ref<user>({} as user);
-		const tab = ref<'series' | 'achievement' | 'edition'>('achievement');
+		const tab = ref<'series' | 'achievement' | 'options' | 'edition'>('achievement');
 
 		useMeta(() => {
 			return meta({

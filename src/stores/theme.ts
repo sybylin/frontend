@@ -8,6 +8,10 @@ export const themeStore = defineStore('theme', () => {
 		? '/icons/'
 		: '/iconsTongue/');
 
+	function setSnakeAppearance (v: snake) {
+		snakeAppearance.value = v;
+	}
+
 	function switchSnakeAppearance () {
 		if (snakeAppearance.value === 'withTongue')
 			snakeAppearance.value = 'withoutTongue';
@@ -19,6 +23,13 @@ export const themeStore = defineStore('theme', () => {
 	return {
 		snakeAppearance,
 		linkToSnakeIcon,
+		setSnakeAppearance,
 		switchSnakeAppearance
 	};
 });
+
+export const hydrate = () => {
+	const snakeAppearance = window.localStorage.getItem('themeSnake') as snake;
+	if (snakeAppearance)
+		themeStore().setSnakeAppearance(snakeAppearance);
+};

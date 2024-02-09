@@ -87,5 +87,12 @@ export default {
 		label: 'enter your pseudonym',
 		error: 'the pseudonym doesn\'t match',
 		ok: 'you\'re account is deleted'
+	},
+	options: {
+		title: 'options',
+		music: {
+			title: 'music',
+			ost: 'music starts automatically when a enigma is started'
+		}
 	}
 };

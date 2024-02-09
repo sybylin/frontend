@@ -2,7 +2,7 @@ import type { soundtrack } from './types';
 
 export default {
 	name: 'Peril at End House',
-	path: '/public/soundtrack/peril_at_end_house',
+	path: '/soundtrack/peril_at_end_house',
 	cover: 'cover.webp',
 	songs: [
 		{

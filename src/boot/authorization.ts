@@ -46,6 +46,12 @@ const checkUserRightsAndVerify = async (role: authorizationLevel): Promise<{ has
 				if (d.data.info.code === 'JW_101') {
 					globalStore().setIsConnected(true);
 					globalStore().setRole(d.data.role);
+					if (!globalStore().user) {
+						api.get('/user')
+							.then((d) => {
+								globalStore().setUser(d.data.user);
+							});
+					}
 				}
 				resolve({ hasRight: true, isVerify: d.data.verify });
 			})

@@ -86,5 +86,12 @@ export default {
 		label: 'entrez votre pseudonyme',
 		error: 'le pseudonyme ne correspond pas',
 		ok: 'votre compte est supprimé'
+	},
+	options: {
+		title: 'options',
+		music: {
+			title: 'musique',
+			ost: 'la musique démarre automatiquement lorsqu\'une énigme est lancée'
+		}
 	}
 };

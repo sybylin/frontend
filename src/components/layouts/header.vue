@@ -5,11 +5,12 @@
 	>
 		<div class="titlebar">
 			<router-link :to="$generatePath({ name: 'home' })" aria-label="Go to home page">
-				<img
-					:src="`${themeInstance.linkToSnakeIcon}favicon-128x128.png`"
+				<q-img
+					class="img"
+					:src="`${themeInstance.linkToSnakeIcon}favicon-96x96.png`"
+					width="60px"
+					height="60px"
 					alt="Logo of Sybylin"
-					width="60"
-					height="60"
 				/>
 			</router-link>
 			<template v-if="$q.screen.width > mobileScreen">
@@ -82,7 +83,7 @@ export default defineComponent({
 	flex-wrap: nowrap;
 	justify-content: space-between;
 }
-.titlebar img {
+.titlebar .img {
 	margin: .4em;
 }
 .flex {

@@ -53,13 +53,14 @@
 					aria-label="Go to home page"
 				>
 					<div class="flex items-center q-pa-xs">
-						<img
-							:src="`${themeInstance.linkToSnakeIcon}favicon-128x128.png`"
-							width="128"
-							height="128"
-							alt="Logo of sybyl.in"
+						<q-img
+							class="img"
+							:src="`${themeInstance.linkToSnakeIcon}favicon-96x96.png`"
+							width="96px"
+							height="96px"
+							alt="Logo of Sybylin"
 						/>
-						<span class="q-pl-sm text-h4 orkney-light">{{ $t('title') }}</span>
+						<span v-if="$q.screen.gt.xs" class="q-pl-sm text-h4 orkney-light">{{ $t('title') }}</span>
 					</div>
 				</router-link>
 				<div class="q-pa-xs">

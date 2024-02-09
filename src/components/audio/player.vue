@@ -3,25 +3,41 @@
 		v-if="selectedOST && selectedMusic"
 		flat
 		bordered
-		class="audio"
+		:class="{
+			'audio': true,
+			'audio--desktop': $q.screen.md,
+			'audio--tablet': $q.screen.sm,
+			'audio--mobile': $q.screen.xs
+		}"
 	>
-		<div class="column items-center justify-evenly">
+		<div class="column items-center justify-evenly q-pl-sm q-pr-sm">
 			<q-img
-				class="image q-pt-sm" width="7em" height="7em"
+				width="7em" height="7em"
+				class="image q-pt-sm"
 				:src="coverPath(selectedOST.path, selectedOST.cover)"
 			/>
-			<span class="full-width text-center text-body2 orkney-light q-pt-sm text">
+			<span
+				:class="{
+					'full-width': true,
+					'text-center': true,
+					'text-body2': true,
+					'orkney-regular': true,
+					'q-pt-sm': true,
+					'text': true,
+					'text--dark': $q.dark.isActive
+				}"
+			>
 				{{ selectedMusic.name }} - {{ selectedOST.name }}
 			</span>
 			<q-slider
 				v-model="currentTime"
-				class="q-pl-md q-pr-md q-pt-sm q-pb-sm"
+				class="q-pt-sm q-pb-sm"
 				color="light-blue-6"
 				:min="0"
 				:max="audio?.duration ?? 0"
 				@pan="(p) => userChangeTimeline = (p === 'start')"
 			/>
-			<div class="full-width row justify-evenly items-center q-pb-sm">
+			<div class="full-width row justify-between items-center q-pb-sm">
 				<q-btn
 					round
 					size="1.3em"
@@ -51,17 +67,27 @@
 					@click="selectRandomOST()"
 				/>
 			</div>
-			<div class="row full-width items-center justify-between q-pl-md q-pr-md">
-				<q-icon name="volume_off" size="1.4em" color="light-blue-3" />
+			<div class="row no-wrap full-width items-center justify-between">
+				<q-btn
+					flat round color="light-blue-6"
+					size=".8em"
+					icon="volume_off"
+					@click="() => volumeMusic = 0"
+				/>
 				<q-slider
 					v-model="volumeMusic"
-					style="width: 80%;"
 					color="light-blue-6"
+					class="q-pl-sm q-pr-sm"
 					:min="0"
 					:max="1"
 					:step="0.01"
 				/>
-				<q-icon name="volume_up" size="1.4em" color="light-blue-3" />
+				<q-btn
+					flat round color="light-blue-6"
+					size=".8em"
+					icon="volume_up"
+					@click="() => volumeMusic = 1"
+				/>
 			</div>
 		</div>
 		<audio
@@ -69,7 +95,7 @@
 			class="audioTag"
 			controls
 			loop
-			autoplay
+			:autoplay="store.autoStartMusic"
 			preload="metadata"
 			@timeupdate="manageTime"
 			@play="() => musicPlay = true"
@@ -88,12 +114,14 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue';
 import { frontBaseUrl } from 'src/boot/axios';
+import { optionsStore } from 'src/stores/options';
 import soundtrackList from 'src/soundtrack';
 import type { soundtrack, songs } from 'src/soundtrack/types';
 
 export default defineComponent({
 	name: 'AudioPlayer',
 	setup () {
+		const store = optionsStore();
 		const audio = ref<HTMLAudioElement | null>(null);
 		const selectedOST = ref<soundtrack | null>(null);
 		const selectedMusic = ref<songs | null>(null);
@@ -108,7 +136,7 @@ export default defineComponent({
 				? soundtrackList.findIndex((e) => e.name.localeCompare(selectedOST.value?.name ?? '') === 0)
 				: -1;
 			let ostID = -1;
-			if (oldIndexOST === -1)
+			if (oldIndexOST === -1 || soundtrackList.length >= 1)
 				ostID = Math.floor(Math.random() * soundtrackList.length);
 			else {
 				while (ostID === -1 || ostID === oldIndexOST)
@@ -186,6 +214,7 @@ export default defineComponent({
 		});
 
 		return {
+			store,
 			audio,
 			selectedOST,
 			selectedMusic,
@@ -209,8 +238,16 @@ export default defineComponent({
 	display: none;
 }
 .audio {
-	width: 30em;
 	padding: .5em;
+}
+.audio--desktop {
+	width: 35vw;
+}
+.audio--tablet {
+	width: 45vw;
+}
+.audio--mobile {
+	width: 80vw;
 }
 .image {
 	border-radius: .7em;
@@ -218,5 +255,9 @@ export default defineComponent({
 .text {
 	overflow: hidden;
 	text-overflow: ellipsis;
+	color: black;
+}
+.text--dark {
+	color: white;
 }
 </style>

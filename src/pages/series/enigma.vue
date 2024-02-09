@@ -14,8 +14,19 @@
 				style="height: 30em;"
 				:src="(enigma.image) ? `${baseURL}${enigma.image}` : '/imgs/background.jpg' "
 			>
-				<div class="absolute-bottom">
+				<div class="absolute-bottom row no-wrap justify-between items-center">
 					<span class="text-h5">{{ enigma.title }}</span>
+					<q-fab
+						v-model="audioPlayer"
+						direction="up"
+						color="secondary"
+						icon="music_note"
+						vertical-actions-align="right"
+						unelevated
+						padding=".7em"
+					>
+						<audio-player class="q-mb-sm" />
+					</q-fab>
 				</div>
 			</q-img>
 			<div class="q-pa-sm" v-html="enigma.html"></div>
@@ -84,7 +95,6 @@
 					</q-btn>
 				</div>
 			</div>
-			<audio-player />
 		</template>
 	</template>
 	<components-confetti
@@ -141,6 +151,7 @@ export default defineComponent({
 		const error = ref<'notExist' | 'notAuthorized' | 'brotliError' |'empty' | false>(false);
 		const enigma = ref<enigma | null>(null);
 		const checkSolution = ref<boolean>(false);
+		const audioPlayer = ref<boolean>(false);
 
 		const statusSolution = ref<'valid' | 'invalid' | null>(null);
 		const confetti = ref<boolean>(false);
@@ -255,6 +266,7 @@ export default defineComponent({
 			baseURL,
 			enigma,
 			checkSolution,
+			audioPlayer,
 			error,
 			statusSolution,
 			genColor,
