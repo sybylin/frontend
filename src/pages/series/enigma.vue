@@ -84,6 +84,7 @@
 					</q-btn>
 				</div>
 			</div>
+			<audio-player />
 		</template>
 	</template>
 	<components-confetti
@@ -105,8 +106,9 @@ import componentsStringSolution from 'src/components/pages/series/string.vue';
 import componentsArraySolution from 'src/components/pages/series/array.vue';
 import componentsObjectSolution from 'src/components/pages/series/object.vue';
 import componentsConfetti from 'src/components/pages/confetti.vue';
-import Error from 'pages/error.vue';
 import Unauthorized from 'components/error/unauthorized.vue';
+import Error from 'pages/error.vue';
+import AudioPlayer from 'src/components/audio/player.vue';
 import type { NamedColor } from 'quasar';
 import type { Solution } from 'src/types';
 
@@ -127,7 +129,8 @@ export default defineComponent({
 		componentsObjectSolution,
 		componentsConfetti,
 		Error,
-		Unauthorized
+		Unauthorized,
+		AudioPlayer
 	},
 	setup () {
 		const $q = useQuasar();
