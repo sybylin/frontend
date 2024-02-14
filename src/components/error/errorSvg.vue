@@ -25,7 +25,7 @@
 				height="51.035"
 			/>
 		</g>
-		<g transform="translate(-8.2728 -9.0975)">
+		<g transform="translate(-8.2728 -9.0975)" @click="playFile">
 			<circle
 				cx="43.007" cy="39.86" r="1.1756"
 				fill="#808080"
@@ -72,7 +72,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
 	name: 'PageError',
@@ -82,6 +83,32 @@ export default defineComponent({
 			required: false,
 			default: 401
 		}
+	},
+	setup () {
+		const { locale } = useI18n();
+		let audio: { 'fr-FR': HTMLAudioElement, 'en-US': HTMLAudioElement } | undefined;
+
+		const playFile = () => {
+			if (!audio)
+				return;
+			if (locale.value === 'fr-FR')
+				audio['fr-FR'].play();
+			else
+				audio['en-US'].play();
+		};
+
+		onMounted(() => {
+			audio = {
+				'fr-FR': new Audio('/audio/itsClosed.fr.mp3'),
+				'en-US': new Audio('/audio/itsClosed.en.mp3')
+			};
+			audio['en-US'].volume = 0.3;
+			audio['fr-FR'].volume = 0.3;
+		});
+
+		return {
+			playFile
+		};
 	}
 });
 </script>
